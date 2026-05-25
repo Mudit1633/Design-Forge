@@ -1,591 +1,442 @@
-cat > /mnt/user-data/outputs/DesignForge/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DesignForge — 3D Product Design Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<title>DesignForge — 3D Design Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-/* ═══════ RESET & VARS ═══════ */
 :root{
-  --bg:#0a0a0f; --surface:#12121a; --surface2:#1c1c28; --border:#2a2a3a;
-  --accent:#ff3c00; --accent2:#00d4ff; --gold:#ffd200; --green:#39d353;
-  --text:#f0f0f5; --muted:#6b6b80;
+  --bg:#08080f;--surface:#111119;--s2:#191926;--border:#252535;
+  --accent:#ff3c00;--a2:#00d4ff;--gold:#ffd200;--green:#00e676;
+  --text:#eeeef5;--muted:#5a5a70;
   --ff:'Bebas Neue',sans-serif;
   --fb:'DM Sans',sans-serif;
   --fm:'JetBrains Mono',monospace;
-  --nav:60px;
+  --nav:62px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{background:var(--bg);color:var(--text);font-family:var(--fb);overflow-x:hidden}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:var(--fb)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* ═══════ NAV ═══════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:300;height:var(--nav);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 2rem;
-  background:rgba(10,10,15,.97);backdrop-filter:blur(20px);
+/* ── TOPBAR ── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  height:var(--nav);display:flex;align-items:center;
+  justify-content:space-between;padding:0 1.8rem;
+  background:rgba(8,8,15,.96);backdrop-filter:blur(24px);
   border-bottom:1px solid var(--border);
 }
-.logo{font-family:var(--ff);font-size:1.9rem;letter-spacing:2px;cursor:pointer;color:var(--text);user-select:none}
-.logo span{color:var(--accent)}
-.nav-r{display:flex;gap:.65rem;align-items:center}
+.logo{font-family:var(--ff);font-size:1.85rem;letter-spacing:3px;cursor:pointer;color:var(--text)}
+.logo b{color:var(--accent)}
+.topbar-r{display:flex;gap:.6rem;align-items:center}
 
-/* ═══════ BUTTONS ═══════ */
-.btn{
-  padding:.42rem 1.05rem;border-radius:6px;
-  font-family:var(--fb);font-size:.83rem;font-weight:500;
-  cursor:pointer;border:none;transition:all .18s;
-}
-.btn-g{background:transparent;color:var(--muted);border:1px solid var(--border)}
-.btn-g:hover{color:var(--text);border-color:var(--accent)}
-.btn-p{background:var(--accent);color:#fff}
-.btn-p:hover{background:#ff5520;transform:translateY(-1px)}
-.btn-b{background:var(--accent2);color:#000;font-weight:600}
-.btn-b:hover{opacity:.88}
-.btn-green{background:var(--green);color:#000;font-weight:600}
-.btn-green:hover{opacity:.88;transform:translateY(-1px)}
-.btn-lg{padding:.75rem 2rem;font-size:.98rem}
+/* ── BUTTONS ── */
+.btn{padding:.4rem 1rem;border-radius:6px;font-family:var(--fb);font-size:.82rem;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
+.btn-o{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-o:hover{color:var(--text);border-color:var(--a2)}
+.btn-r{background:var(--accent);color:#fff}
+.btn-r:hover{background:#ff5020;transform:translateY(-1px)}
+.btn-c{background:var(--a2);color:#000;font-weight:700}
+.btn-c:hover{opacity:.88}
+.btn-g{background:var(--green);color:#000;font-weight:700}
+.btn-g:hover{opacity:.88;transform:translateY(-1px)}
+.btn-lg{padding:.72rem 1.9rem;font-size:.96rem}
 
-/* ═══════ VIEWS ═══════ */
-#app{padding-top:var(--nav)}
-.view{display:none;min-height:calc(100vh - var(--nav))}
-.view.active{display:block}
-#v-editor.active{display:flex;flex-direction:column;height:calc(100vh - var(--nav))}
-#v-picker.active{display:flex;flex-direction:column;height:calc(100vh - var(--nav))}
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;top:var(--nav);display:none;flex-direction:column;overflow:hidden}
+.screen.on{display:flex}
 
-/* ═══════ HERO ═══════ */
-#v-hero{
-  display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;
-  padding:4rem 2rem;overflow:hidden;position:relative;
-}
-.hgrid{
-  position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,60,0,.055) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,60,0,.055) 1px,transparent 1px);
-  background-size:58px 58px;animation:gm 22s linear infinite;
-}
-@keyframes gm{to{background-position:58px 58px}}
-.hglow{
-  position:absolute;width:700px;height:700px;border-radius:50%;
-  background:radial-gradient(circle,rgba(255,60,0,.09) 0%,transparent 68%);
-  top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;
-}
-.htag{position:relative;font-family:var(--fm);font-size:.72rem;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:1.3rem}
-.htitle{position:relative;font-family:var(--ff);font-size:clamp(3.5rem,10vw,8.5rem);line-height:.88;letter-spacing:4px;margin-bottom:1.3rem}
-.htitle .acc{color:var(--accent)}
-.hsub{position:relative;font-size:1.05rem;color:var(--muted);max-width:500px;line-height:1.7;margin-bottom:2.5rem;font-weight:300}
-.hctas{position:relative;display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center}
-.hstats{position:relative;display:flex;gap:3rem;margin-top:3.5rem}
-.stn{font-family:var(--ff);font-size:2.4rem;color:var(--accent2)}
-.stl{font-size:.68rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+#s-hero{align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;overflow:auto}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,60,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,60,0,.05) 1px,transparent 1px);background-size:56px 56px;animation:gm 24s linear infinite}
+@keyframes gm{to{background-position:56px 56px}}
+.hglow{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(255,60,0,.09) 0%,transparent 68%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.htag{font-family:var(--fm);font-size:.7rem;letter-spacing:5px;color:var(--accent);text-transform:uppercase;margin-bottom:1.2rem}
+.htitle{font-family:var(--ff);font-size:clamp(3.5rem,10vw,8rem);line-height:.88;letter-spacing:4px;margin-bottom:1.2rem}
+.htitle em{color:var(--accent);font-style:normal}
+.hsub{font-size:1.05rem;color:var(--muted);max-width:480px;line-height:1.7;margin:0 auto 2.5rem;font-weight:300}
+.hbtns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.hstats{display:flex;gap:2.8rem;margin-top:3.5rem;justify-content:center}
+.stat .n{font-family:var(--ff);font-size:2.3rem;color:var(--a2)}
+.stat .l{font-size:.68rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 
-/* ═══════ PICKER ═══════ */
-#v-picker{overflow:hidden}
-.pk-hd{
-  padding:1.4rem 2rem 1rem;background:var(--surface);
-  border-bottom:1px solid var(--border);flex-shrink:0;
-}
-.pk-top{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:1rem;gap:.8rem;flex-wrap:wrap}
-.pk-lbl{font-family:var(--fm);font-size:.63rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.3rem}
-.pk-title{font-family:var(--ff);font-size:clamp(1.6rem,4vw,2.4rem);letter-spacing:2px}
-.pk-title span{color:var(--accent2)}
-.pk-back{background:none;border:1px solid var(--border);color:var(--muted);padding:.38rem .85rem;border-radius:5px;cursor:pointer;font-family:var(--fb);font-size:.8rem;transition:all .18s}
+/* ════════════════════════════════
+   PICKER
+════════════════════════════════ */
+#s-picker{overflow:hidden}
+.pk-head{padding:1.3rem 2rem .9rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.pk-row1{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.9rem;gap:.8rem;flex-wrap:wrap}
+.pk-tag{font-family:var(--fm);font-size:.62rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.25rem}
+.pk-title{font-family:var(--ff);font-size:clamp(1.5rem,4vw,2.3rem);letter-spacing:2px}
+.pk-title span{color:var(--a2)}
+.pk-back{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .8rem;border-radius:5px;cursor:pointer;font-family:var(--fb);font-size:.8rem;transition:all .17s}
 .pk-back:hover{color:var(--text);border-color:var(--accent)}
-.srch-wrap{position:relative;margin-bottom:.9rem}
-.srch-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-#srch{
-  width:100%;padding:.62rem .9rem .62rem 2.3rem;
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--text);border-radius:7px;font-size:.9rem;
-  font-family:var(--fb);transition:border-color .2s;
-}
-#srch:focus{outline:none;border-color:var(--accent2)}
-#srch::placeholder{color:var(--muted)}
-.ftabs{display:flex;gap:.38rem;flex-wrap:wrap}
-.ftab{padding:.28rem .75rem;border-radius:20px;font-size:.73rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--fb);transition:all .15s}
+.srch{position:relative;margin-bottom:.85rem}
+.srch span{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted);font-size:.9rem}
+#srch-input{width:100%;padding:.6rem .9rem .6rem 2.3rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-size:.88rem;font-family:var(--fb);transition:border-color .2s}
+#srch-input:focus{outline:none;border-color:var(--a2)}
+#srch-input::placeholder{color:var(--muted)}
+.ftabs{display:flex;gap:.35rem;flex-wrap:wrap}
+.ftab{padding:.26rem .72rem;border-radius:20px;font-size:.72rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--fb);transition:all .14s}
 .ftab:hover{color:var(--text)}
 .ftab.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.pk-body{flex:1;overflow-y:auto;padding:1.4rem 2rem 3rem}
-.pop-row{display:flex;gap:.65rem;overflow-x:auto;padding-bottom:.5rem;margin-bottom:1.8rem}
+.pk-body{flex:1;overflow-y:auto;padding:1.3rem 2rem 3rem}
+.pop-row{display:flex;gap:.6rem;overflow-x:auto;padding-bottom:.4rem;margin-bottom:1.6rem}
 .pop-row::-webkit-scrollbar{height:3px}
-.pop-chip{flex-shrink:0;display:flex;align-items:center;gap:.4rem;padding:.5rem .9rem;border-radius:7px;cursor:pointer;background:var(--surface);border:1px solid var(--border);font-size:.8rem;transition:all .18s;white-space:nowrap}
+.pop-chip{flex-shrink:0;display:flex;align-items:center;gap:.38rem;padding:.45rem .85rem;border-radius:7px;cursor:pointer;background:var(--surface);border:1px solid var(--border);font-size:.78rem;transition:all .17s;white-space:nowrap}
 .pop-chip:hover{border-color:var(--accent);color:var(--accent)}
-.sec-hd{font-family:var(--fm);font-size:.63rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:.85rem;display:flex;align-items:center;gap:.6rem}
-.sec-hd::after{content:'';flex:1;height:1px;background:var(--border)}
-.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.7rem;margin-bottom:2rem}
-.di{background:var(--surface);border:2px solid transparent;border-radius:10px;padding:1rem .9rem;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
-.di:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.45)}
-.di-glow{position:absolute;inset:0;opacity:0;transition:opacity .2s}
+.shd{font-family:var(--fm);font-size:.62rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.55rem}
+.shd::after{content:'';flex:1;height:1px;background:var(--border)}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:.65rem;margin-bottom:1.9rem}
+.di{background:var(--surface);border:2px solid transparent;border-radius:10px;padding:.95rem .85rem;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.di-glow{position:absolute;inset:0;opacity:0;transition:opacity .2s;pointer-events:none}
+.di:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .di:hover .di-glow{opacity:1}
-.di-em{font-size:1.75rem;margin-bottom:.42rem;line-height:1;position:relative}
-.di-name{font-weight:600;font-size:.84rem;margin-bottom:.27rem;line-height:1.25;position:relative}
-.di-desc{font-size:.68rem;color:var(--muted);line-height:1.4;margin-bottom:.38rem;position:relative}
-.badge{display:inline-block;font-size:.56rem;padding:.13rem .38rem;border-radius:10px;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;position:relative}
-.b-hot{background:rgba(255,60,0,.15);color:var(--accent)}
-.b-new{background:rgba(0,212,255,.15);color:var(--accent2)}
-.b-pro{background:rgba(255,210,0,.12);color:var(--gold)}
-.no-res{text-align:center;padding:4rem 2rem;color:var(--muted)}
-.no-em{font-size:2.5rem;margin-bottom:.8rem}
-.no-t{font-family:var(--ff);font-size:1.4rem;margin-bottom:.4rem;color:var(--text)}
+.di-em{font-size:1.7rem;margin-bottom:.38rem;line-height:1;position:relative}
+.di-nm{font-weight:600;font-size:.82rem;margin-bottom:.25rem;line-height:1.25;position:relative}
+.di-ds{font-size:.67rem;color:var(--muted);line-height:1.4;margin-bottom:.35rem;position:relative}
+.badge{display:inline-block;font-size:.55rem;padding:.12rem .36rem;border-radius:10px;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;position:relative}
+.bh{background:rgba(255,60,0,.15);color:var(--accent)}
+.bn{background:rgba(0,212,255,.15);color:var(--a2)}
+.bp{background:rgba(255,210,0,.12);color:var(--gold)}
+.no-res{text-align:center;padding:3.5rem 2rem;color:var(--muted)}
+.no-res-em{font-size:2.2rem;margin-bottom:.7rem}
+.no-res-t{font-family:var(--ff);font-size:1.3rem;margin-bottom:.4rem;color:var(--text)}
 
-/* ═══════════════════════════════════════════════
-   DESIGN SHEET — slides up after picking item
-═══════════════════════════════════════════════ */
-#design-sheet{
-  position:fixed;inset:0;top:var(--nav);z-index:250;
-  background:var(--bg);
-  display:none;flex-direction:column;
-  animation:sheetUp .38s cubic-bezier(.16,1,.3,1);
+/* ════════════════════════════════
+   DESIGN SHEET — slides up
+════════════════════════════════ */
+#s-sheet{
+  overflow:hidden;
+  animation:sheetIn .38s cubic-bezier(.16,1,.3,1);
 }
-#design-sheet.open{display:flex}
-@keyframes sheetUp{
-  from{opacity:0;transform:translateY(40px) scale(.98)}
-  to  {opacity:1;transform:translateY(0)   scale(1)}
-}
+@keyframes sheetIn{from{opacity:0;transform:translateY(36px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-/* ── Sheet Header ── */
-.sh-header{
+/* Sheet Header */
+.sh-top{
   display:flex;align-items:center;justify-content:space-between;
-  padding:.75rem 1.5rem;
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;gap:1rem;flex-wrap:wrap;
+  padding:.65rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;gap:.8rem;flex-wrap:wrap;
 }
-.sh-left{display:flex;align-items:center;gap:.9rem}
-.sh-back{
-  background:none;border:1px solid var(--border);color:var(--muted);
-  padding:.35rem .8rem;border-radius:5px;cursor:pointer;
-  font-family:var(--fb);font-size:.8rem;transition:all .18s;flex-shrink:0;
+.sh-left{display:flex;align-items:center;gap:.85rem}
+.sh-bk{background:none;border:1px solid var(--border);color:var(--muted);padding:.32rem .75rem;border-radius:5px;cursor:pointer;font-family:var(--fb);font-size:.78rem;transition:all .17s;flex-shrink:0}
+.sh-bk:hover{color:var(--text);border-color:var(--accent)}
+.sh-subj{display:flex;align-items:center;gap:.55rem}
+.sh-em{font-size:1.55rem;line-height:1}
+.sh-nm{font-family:var(--ff);font-size:1.25rem;letter-spacing:1px;line-height:1}
+.sh-cat{font-family:var(--fm);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
+.sh-pill{
+  font-family:var(--fm);font-size:.6rem;letter-spacing:3px;color:var(--a2);
+  text-transform:uppercase;background:rgba(0,212,255,.08);
+  border:1px solid rgba(0,212,255,.2);padding:.2rem .55rem;border-radius:20px;
 }
-.sh-back:hover{color:var(--text);border-color:var(--accent)}
-.sh-subject{display:flex;align-items:center;gap:.6rem}
-.sh-em{font-size:1.6rem;line-height:1}
-.sh-info{}
-.sh-name{font-family:var(--ff);font-size:1.3rem;letter-spacing:1px;line-height:1}
-.sh-cat{font-family:var(--fm);font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
-.sh-step{
-  font-family:var(--fm);font-size:.62rem;letter-spacing:3px;
-  color:var(--accent2);text-transform:uppercase;
-  background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);
-  padding:.22rem .6rem;border-radius:20px;
-}
-.sh-right{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.sh-right{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
 
-/* ── Shape Toolbar ── */
-.sh-toolbar{
-  display:flex;align-items:center;gap:.4rem;
-  padding:.52rem 1.2rem;
-  background:rgba(18,18,26,.95);
-  border-bottom:1px solid var(--border);
-  overflow-x:auto;flex-shrink:0;
+/* Toolbar */
+.sh-bar{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.48rem 1.2rem;background:rgba(17,17,25,.97);
+  border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;
 }
-.sh-toolbar::-webkit-scrollbar{height:3px}
-.tsep{width:1px;height:22px;background:var(--border);margin:0 .1rem;flex-shrink:0}
-.tb{
-  padding:.33rem .68rem;background:var(--surface2);
-  border:1px solid var(--border);color:var(--text);
-  border-radius:4px;cursor:pointer;font-size:.77rem;
-  font-family:var(--fb);transition:all .15s;white-space:nowrap;flex-shrink:0;
-}
-.tb:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-.tb.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.tb-grp{display:flex;align-items:center;gap:.35rem;flex-shrink:0}
-.tb-grp-label{font-family:var(--fm);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;flex-shrink:0}
+.sh-bar::-webkit-scrollbar{height:3px}
+.tsep{width:1px;height:20px;background:var(--border);margin:0 .1rem;flex-shrink:0}
+.tg{display:flex;align-items:center;gap:.3rem;flex-shrink:0}
+.tg-lbl{font-family:var(--fm);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.tb{padding:.3rem .65rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:.76rem;font-family:var(--fb);transition:all .14s;white-space:nowrap;flex-shrink:0}
+.tb:hover,.tb.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.tb.c2{background:var(--a2);border-color:var(--a2);color:#000}
 
-/* ── Sheet Body: Canvas + Props ── */
-.sh-body{flex:1;display:flex;overflow:hidden;position:relative}
+/* Workspace */
+.sh-ws{flex:1;display:flex;overflow:hidden}
 
-/* ── Canvas Area ── */
-.canvas-area{
+/* Canvas */
+.cvwrap{
   flex:1;position:relative;
-  background:radial-gradient(ellipse at 50% 40%, #0d0d1a 0%, #07070e 100%);
-  cursor:crosshair;
+  background:radial-gradient(ellipse at 50% 35%,#0e0e1c 0%,#05050c 100%);
+  cursor:crosshair;overflow:hidden;
 }
 #cv{width:100%;height:100%;display:block}
-
-/* Canvas overlays */
-.cv-watermark{
-  position:absolute;top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  font-family:var(--ff);font-size:clamp(2rem,6vw,5rem);
-  letter-spacing:.2em;color:rgba(255,255,255,.03);
-  pointer-events:none;white-space:nowrap;text-transform:uppercase;
-  user-select:none;
+.cv-wm{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--ff);font-size:clamp(1.8rem,5vw,4.5rem);
+  letter-spacing:.18em;color:rgba(255,255,255,.025);
+  pointer-events:none;white-space:nowrap;text-transform:uppercase;user-select:none;
 }
 .cv-hint{
-  position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);
-  font-family:var(--fm);font-size:.62rem;color:rgba(255,255,255,.2);
-  pointer-events:none;white-space:nowrap;text-align:center;line-height:1.8;
+  position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);
+  font-family:var(--fm);font-size:.6rem;color:rgba(255,255,255,.18);
+  pointer-events:none;white-space:nowrap;text-align:center;line-height:1.9;
 }
-.cv-objcount{
-  position:absolute;top:1rem;left:1rem;
-  font-family:var(--fm);font-size:.65rem;color:var(--muted);
-  pointer-events:none;line-height:1.8;
+.cv-info{
+  position:absolute;top:.85rem;left:.85rem;
+  font-family:var(--fm);font-size:.62rem;color:var(--muted);
+  pointer-events:none;line-height:1.9;
 }
-.cv-objcount b{color:var(--accent2)}
-.cv-sel-badge{
-  position:absolute;top:1rem;right:1rem;
-  font-family:var(--fm);font-size:.65rem;
-  background:rgba(18,18,26,.9);border:1px solid var(--border);
-  padding:.3rem .7rem;border-radius:6px;color:var(--muted);
-  pointer-events:none;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+.cv-info b{color:var(--a2)}
+.cv-sel{
+  position:absolute;top:.85rem;right:.85rem;
+  font-family:var(--fm);font-size:.62rem;
+  background:rgba(17,17,25,.9);border:1px solid var(--border);
+  padding:.28rem .65rem;border-radius:6px;color:var(--muted);
+  pointer-events:none;transition:all .2s;
 }
-.cv-sel-badge.active{border-color:var(--accent2);color:var(--accent2)}
+.cv-sel.hi{border-color:var(--a2);color:var(--a2)}
 
-/* ── Properties Panel ── */
-.props-panel{
-  width:265px;background:var(--surface);
-  border-left:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;flex-shrink:0;
+/* Props Panel */
+.pp{
+  width:268px;background:var(--surface);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
 }
-.props-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
-.ptab{
-  flex:1;padding:.55rem .4rem;font-size:.72rem;font-family:var(--fm);
-  letter-spacing:1px;text-transform:uppercase;cursor:pointer;
-  color:var(--muted);border:none;background:none;
-  border-bottom:2px solid transparent;transition:all .15s;
-}
+.pp-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
+.ptab{flex:1;padding:.5rem .3rem;font-size:.68rem;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .14s}
 .ptab:hover{color:var(--text)}
-.ptab.on{color:var(--accent2);border-bottom-color:var(--accent2)}
-.props-body{flex:1;overflow-y:auto;padding:.85rem}
-.ph{
-  font-family:var(--fm);font-size:.62rem;letter-spacing:3px;
-  text-transform:uppercase;color:var(--muted);
-  margin:.9rem 0 .6rem;padding-bottom:.3rem;
-  border-bottom:1px solid var(--border);
-}
+.ptab.on{color:var(--a2);border-bottom-color:var(--a2)}
+.pp-body{flex:1;overflow-y:auto;padding:.8rem}
+.ph{font-family:var(--fm);font-size:.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:.85rem 0 .55rem;padding-bottom:.28rem;border-bottom:1px solid var(--border)}
 .ph:first-child{margin-top:0}
-.pr{display:flex;align-items:center;gap:.4rem;margin-bottom:.45rem}
-.pl{font-size:.73rem;color:var(--muted);width:52px;flex-shrink:0}
-.pi{
-  background:var(--surface2);border:1px solid var(--border);
-  color:var(--text);padding:.26rem .42rem;border-radius:3px;
-  font-size:.73rem;font-family:var(--fm);width:100%;
-  transition:border-color .2s;
-}
-.pi:focus{outline:none;border-color:var(--accent2)}
+.pr{display:flex;align-items:center;gap:.38rem;margin-bottom:.42rem}
+.pl{font-size:.72rem;color:var(--muted);width:50px;flex-shrink:0}
+.pi{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.25rem .4rem;border-radius:3px;font-size:.72rem;font-family:var(--fm);width:100%;transition:border-color .2s}
+.pi:focus{outline:none;border-color:var(--a2)}
 .cp{width:100%;height:30px;border-radius:3px;border:1px solid var(--border);cursor:pointer;background:none}
-.subj-card{
-  display:flex;align-items:center;gap:.6rem;
-  padding:.55rem .65rem;
-  background:linear-gradient(135deg,var(--surface2),rgba(0,212,255,.04));
-  border:1px solid rgba(0,212,255,.15);
-  border-radius:8px;margin-bottom:.6rem;
-}
-.subj-big-em{font-size:1.5rem;line-height:1}
-.subj-nm{font-weight:600;font-size:.84rem}
-.subj-ds{font-size:.67rem;color:var(--muted);margin-top:.1rem}
+.sc{display:flex;align-items:center;gap:.55rem;padding:.5rem .6rem;background:linear-gradient(135deg,var(--s2),rgba(0,212,255,.04));border:1px solid rgba(0,212,255,.15);border-radius:8px;margin-bottom:.55rem}
+.sc-em{font-size:1.4rem;line-height:1}
+.sc-nm{font-weight:600;font-size:.8rem}
+.sc-ds{font-size:.65rem;color:var(--muted);margin-top:.08rem}
 .ol{list-style:none}
-.oi{
-  display:flex;align-items:center;gap:.42rem;
-  padding:.32rem .5rem;border-radius:4px;
-  cursor:pointer;font-size:.78rem;
-  transition:background .15s;border:1px solid transparent;
-  margin-bottom:.25rem;
-}
-.oi:hover{background:var(--surface2)}
+.oi{display:flex;align-items:center;gap:.4rem;padding:.3rem .48rem;border-radius:4px;cursor:pointer;font-size:.76rem;transition:background .14s;border:1px solid transparent;margin-bottom:.22rem}
+.oi:hover{background:var(--s2)}
 .oi.sel{background:rgba(255,60,0,.1);border-color:var(--accent)}
-.od{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.on2{flex:1;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ox{color:var(--muted);cursor:pointer;font-size:.66rem;padding:.1rem .25rem;border-radius:3px;flex-shrink:0}
+.od{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.on2{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.76rem}
+.ox{color:var(--muted);cursor:pointer;font-size:.65rem;padding:.08rem .22rem;border-radius:3px;flex-shrink:0}
 .ox:hover{color:var(--accent);background:rgba(255,60,0,.1)}
-.empty-obj{
-  text-align:center;padding:1.5rem 1rem;color:var(--muted);
-  font-size:.78rem;line-height:1.6;
-}
-.empty-obj-em{font-size:1.8rem;margin-bottom:.5rem}
+.empty-ol{text-align:center;padding:1.4rem .8rem;color:var(--muted);font-size:.76rem;line-height:1.7}
+.empty-ol em{font-size:1.7rem;display:block;margin-bottom:.4rem;font-style:normal}
+.preset-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem}
+.preset-btn{padding:.38rem .4rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:.72rem;font-family:var(--fb);transition:all .14s;text-align:center}
+.preset-btn:hover{border-color:var(--a2);color:var(--a2)}
+.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+.slabel{font-size:.74rem;color:var(--muted)}
+.tog{width:36px;height:20px;background:var(--s2);border-radius:10px;cursor:pointer;position:relative;border:1px solid var(--border);transition:background .18s;flex-shrink:0}
+.tog.on{background:var(--accent);border-color:var(--accent)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .18s}
+.tog.on::after{transform:translateX(16px)}
 
-/* ── Scene Settings Panel ── */
-.scene-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}
-.scene-label{font-size:.76rem;color:var(--muted)}
-.stgl{
-  width:38px;height:20px;background:var(--surface2);border-radius:10px;
-  cursor:pointer;position:relative;border:1px solid var(--border);
-  transition:background .18s;flex-shrink:0;
-}
-.stgl.on{background:var(--accent);border-color:var(--accent)}
-.stgl::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .18s}
-.stgl.on::after{transform:translateX(18px)}
-
-/* ═══════ SAVE MODAL ═══════ */
-.overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.78);
-  backdrop-filter:blur(10px);z-index:400;
-  display:none;align-items:center;justify-content:center;
-}
-.overlay.open{display:flex}
-.modal{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:14px;padding:2rem;width:92%;max-width:460px;
-  animation:mIn .28s ease;
-}
-@keyframes mIn{from{opacity:0;transform:scale(.92) translateY(16px)}to{opacity:1;transform:scale(1) translateY(0)}}
-.modal-icon{font-size:2.5rem;text-align:center;margin-bottom:.6rem}
-.modal-t{font-family:var(--ff);font-size:2rem;margin-bottom:.3rem;letter-spacing:2px;text-align:center}
-.modal-sub{font-size:.82rem;color:var(--muted);text-align:center;margin-bottom:1.5rem}
-.fg{margin-bottom:.85rem}
-.fl{font-size:.72rem;color:var(--muted);margin-bottom:.32rem;display:block;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase}
-.fi,.fs,.ft{
-  width:100%;background:var(--surface2);border:1px solid var(--border);
-  color:var(--text);padding:.55rem .75rem;border-radius:5px;
-  font-family:var(--fb);font-size:.88rem;transition:border-color .2s;
-}
+/* ════════════════════════════════
+   SAVE MODAL
+════════════════════════════════ */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:950;display:none;align-items:center;justify-content:center}
+.ov.on{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.9rem;width:92%;max-width:450px;animation:mIn .26s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.91) translateY(14px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-em{font-size:2.5rem;text-align:center;margin-bottom:.5rem}
+.modal-t{font-family:var(--ff);font-size:1.9rem;letter-spacing:2px;text-align:center;margin-bottom:.25rem}
+.modal-sub{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:1.4rem}
+.fg{margin-bottom:.8rem}
+.fl{font-size:.7rem;color:var(--muted);margin-bottom:.3rem;display:block;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase}
+.fi,.fs,.ft{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.52rem .72rem;border-radius:5px;font-family:var(--fb);font-size:.86rem;transition:border-color .2s}
 .fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--accent)}
 .fs option{background:var(--surface)}
-.ft{resize:vertical;min-height:70px}
+.ft{resize:vertical;min-height:65px}
 .trow{display:flex;align-items:center;justify-content:space-between}
-.tgl{
-  width:44px;height:24px;background:var(--surface2);border-radius:12px;
-  cursor:pointer;position:relative;border:1px solid var(--border);
-  transition:background .2s;flex-shrink:0;
-}
-.tgl.on{background:var(--green);border-color:var(--green)}
-.tgl::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .2s}
-.tgl.on::after{transform:translateX(20px)}
-.ma{display:flex;gap:.7rem;margin-top:1.4rem;justify-content:flex-end}
+.stgl{width:42px;height:22px;background:var(--s2);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--border);transition:background .18s;flex-shrink:0}
+.stgl.on{background:var(--green);border-color:var(--green)}
+.stgl::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .18s}
+.stgl.on::after{transform:translateX(20px)}
+.ma{display:flex;gap:.65rem;margin-top:1.3rem;justify-content:flex-end}
 
-/* ═══════ SUCCESS OVERLAY ═══════ */
-#success-ov{
-  position:fixed;inset:0;background:rgba(0,0,0,.88);
-  backdrop-filter:blur(12px);z-index:500;
-  display:none;align-items:center;justify-content:center;
-}
-#success-ov.open{display:flex}
-.success-box{
-  background:var(--surface);border:1px solid var(--green);
-  border-radius:16px;padding:2.5rem 2rem;
-  width:92%;max-width:400px;text-align:center;
-  animation:mIn .3s ease;
-}
-.success-em{font-size:3.5rem;margin-bottom:.8rem}
-.success-t{font-family:var(--ff);font-size:2.2rem;letter-spacing:2px;color:var(--green);margin-bottom:.5rem}
-.success-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.5rem;line-height:1.6}
-.success-preview{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:8px;padding:.8rem 1rem;margin-bottom:1.5rem;
-  text-align:left;
-}
-.sp-row{display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:.3rem}
-.sp-label{color:var(--muted)}
-.sp-val{color:var(--text);font-weight:500}
-.success-actions{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+/* ════════════════════════════════
+   SUCCESS SCREEN
+════════════════════════════════ */
+#success-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);z-index:960;display:none;align-items:center;justify-content:center}
+#success-ov.on{display:flex}
+.suc-box{background:var(--surface);border:1px solid var(--green);border-radius:16px;padding:2.4rem 2rem;width:92%;max-width:400px;text-align:center;animation:mIn .3s ease}
+.suc-em{font-size:3.5rem;margin-bottom:.6rem}
+.suc-t{font-family:var(--ff);font-size:2.1rem;letter-spacing:2px;color:var(--green);margin-bottom:.45rem}
+.suc-sub{color:var(--muted);font-size:.85rem;margin-bottom:1.4rem;line-height:1.6}
+.suc-preview{background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;margin-bottom:1.4rem;text-align:left}
+.sp-row{display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.28rem}
+.sp-l{color:var(--muted)}
+.sp-v{color:var(--text);font-weight:600}
+.suc-acts{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap}
 
-/* ═══════ TOAST ═══════ */
-.toast{
-  position:fixed;bottom:1.5rem;right:1.5rem;z-index:600;
-  background:var(--surface);border:1px solid var(--border);
-  border-left:3px solid var(--accent);
-  padding:.68rem 1.1rem;border-radius:7px;font-size:.82rem;
-  transform:translateY(70px);opacity:0;
-  transition:all .28s;pointer-events:none;
-}
-.toast.show{transform:translateY(0);opacity:1}
+/* ════════════════════════════════
+   GALLERY
+════════════════════════════════ */
+#s-gallery{overflow-y:auto;padding:2rem}
+.s-tag{font-family:var(--fm);font-size:.64rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.38rem}
+.s-title{font-family:var(--ff);font-size:2.7rem;letter-spacing:2px;margin-bottom:1.8rem}
+.gg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem}
+.gc{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .2s;cursor:pointer}
+.gc:hover{transform:translateY(-3px);border-color:var(--a2)}
+.gc-thumb{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;overflow:hidden}
+.gc-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gc-info{padding:.85rem}
+.gc-nm{font-weight:600;font-size:.9rem;margin-bottom:.28rem}
+.gc-meta{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);font-family:var(--fm)}
+.gc-badge{display:inline-flex;align-items:center;gap:.28rem;font-size:.63rem;padding:.16rem .48rem;border-radius:20px;border:1px solid var(--border);margin-top:.45rem;font-family:var(--fm)}
+.gEmpty{grid-column:1/-1;text-align:center;padding:5rem 2rem;color:var(--muted)}
+.gEmpty em{font-size:3rem;display:block;margin-bottom:.8rem;font-style:normal}
+.gEmpty strong{font-family:var(--ff);font-size:1.7rem;display:block;margin-bottom:.4rem;color:var(--text)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:.65rem 1.05rem;border-radius:7px;font-size:.8rem;transform:translateY(65px);opacity:0;transition:all .26s;pointer-events:none}
+.toast.on{transform:translateY(0);opacity:1}
 .toast.ok{border-left-color:var(--green)}
-.toast.info{border-left-color:var(--accent2)}
+.toast.inf{border-left-color:var(--a2)}
 
-/* ═══════ GALLERY ═══════ */
-#v-gallery{padding:2rem}
-.s-tag{font-family:var(--fm);font-size:.65rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.4rem}
-.s-title{font-family:var(--ff);font-size:2.8rem;letter-spacing:2px;margin-bottom:2rem}
-.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.1rem}
-.g-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .22s;cursor:pointer}
-.g-card:hover{transform:translateY(-3px);border-color:var(--accent2)}
-.g-thumb{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}
-.g-thumb img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
-.g-info{padding:.9rem}
-.g-name{font-weight:600;font-size:.92rem;margin-bottom:.3rem}
-.g-meta{display:flex;justify-content:space-between;font-size:.74rem;color:var(--muted);font-family:var(--fm)}
-.g-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;padding:.18rem .5rem;border-radius:20px;border:1px solid var(--border);margin-top:.5rem;font-family:var(--fm)}
-.g-empty{text-align:center;padding:5rem 2rem;color:var(--muted);grid-column:1/-1}
-.g-empty-em{font-size:3rem;margin-bottom:1rem}
-.g-empty-t{font-family:var(--ff);font-size:1.8rem;color:var(--text);margin-bottom:.5rem}
-
-/* ═══════ RESPONSIVE ═══════ */
-@media(max-width:900px){.props-panel{width:230px}}
+@media(max-width:880px){.pp{display:none}}
 @media(max-width:768px){
-  .props-panel{display:none}
-  .hstats{gap:1.5rem}
-  .pk-body{padding:1rem 1rem 3rem}
-  .pk-hd{padding:1rem}
-  .igrid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
-  .sh-header{padding:.6rem 1rem}
-  .sh-toolbar{padding:.45rem .8rem}
+  .hstats{gap:1.6rem}
+  .pk-body,.pk-head{padding:1rem}
+  .igrid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr))}
+  .sh-top{padding:.55rem 1rem}
+  .sh-bar{padding:.42rem .7rem}
 }
 </style>
 </head>
 <body>
 
-<!-- ══════ NAV ══════ -->
-<nav>
-  <div class="logo" onclick="showView('hero')">DESIGN<span>FORGE</span></div>
-  <div class="nav-r">
-    <button class="btn btn-g" onclick="showView('gallery')">🌐 Gallery</button>
-    <button class="btn btn-g" onclick="showView('picker')">⊞ Browse</button>
-    <button class="btn btn-p" onclick="showView('picker')">+ New Design</button>
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="logo" onclick="goTo('hero')">DESIGN<b>FORGE</b></div>
+  <div class="topbar-r">
+    <button class="btn btn-o" onclick="goTo('gallery')">🌐 Gallery</button>
+    <button class="btn btn-o" onclick="goTo('picker')">⊞ Browse</button>
+    <button class="btn btn-r" onclick="goTo('picker')">＋ New Design</button>
   </div>
-</nav>
+</div>
 
-<div id="app">
-
-  <!-- ══════ HERO ══════ -->
-  <div id="v-hero" class="view active">
-    <div class="hgrid"></div>
-    <div class="hglow"></div>
+<!-- ════ HERO ════ -->
+<div id="s-hero" class="screen on">
+  <div class="hgrid"></div>
+  <div class="hglow"></div>
+  <div class="hero-inner">
     <div class="htag">// Professional 3D Design Platform</div>
-    <h1 class="htitle">DESIGN<br><span class="acc">FORGE</span></h1>
-    <p class="hsub">Pick what you want to build — a full 3D workspace opens instantly. Design, customize, and save your creation.</p>
-    <div class="hctas">
-      <button class="btn btn-p btn-lg" onclick="showView('picker')">🚀 Start Designing</button>
-      <button class="btn btn-g btn-lg" onclick="showView('gallery')">View Gallery →</button>
+    <h1 class="htitle">DESIGN<br><em>FORGE</em></h1>
+    <p class="hsub">Choose what you want to build from 70+ design types — a full 3D workspace opens instantly. Design, customize, and save.</p>
+    <div class="hbtns">
+      <button class="btn btn-r btn-lg" onclick="goTo('picker')">🚀 Start Designing</button>
+      <button class="btn btn-o btn-lg" onclick="goTo('gallery')">View Gallery →</button>
     </div>
     <div class="hstats">
-      <div><div class="stn" id="stat-n">0</div><div class="stl">Designs Saved</div></div>
-      <div><div class="stn">10</div><div class="stl">Categories</div></div>
-      <div><div class="stn">70+</div><div class="stl">Design Types</div></div>
+      <div class="stat"><div class="n" id="stat-n">0</div><div class="l">Saved</div></div>
+      <div class="stat"><div class="n">10</div><div class="l">Categories</div></div>
+      <div class="stat"><div class="n">70+</div><div class="l">Design Types</div></div>
     </div>
   </div>
+</div>
 
-  <!-- ══════ PICKER ══════ -->
-  <div id="v-picker" class="view">
-    <div class="pk-hd">
-      <div class="pk-top">
-        <div>
-          <div class="pk-lbl">// Step 1 — Choose your design type</div>
-          <div class="pk-title">WHAT ARE YOU <span>DESIGNING?</span></div>
-        </div>
-        <button class="pk-back" onclick="showView('hero')">← Back</button>
+<!-- ════ PICKER ════ -->
+<div id="s-picker" class="screen">
+  <div class="pk-head">
+    <div class="pk-row1">
+      <div>
+        <div class="pk-tag">// Step 1 — Pick what you want to design</div>
+        <div class="pk-title">WHAT ARE YOU <span>DESIGNING?</span></div>
       </div>
-      <div class="srch-wrap">
-        <span class="srch-icon">🔍</span>
-        <input id="srch" placeholder="Search — car, robot, sneaker, rocket, bridge…" oninput="renderPicker()" autocomplete="off"/>
-      </div>
-      <div class="ftabs" id="ftabs"></div>
+      <button class="pk-back" onclick="goTo('hero')">← Home</button>
     </div>
-    <div class="pk-body" id="pk-body"></div>
-  </div>
-
-  <!-- ══════ GALLERY ══════ -->
-  <div id="v-gallery" class="view">
-    <div class="s-tag">// Community</div>
-    <div class="s-title">SAVED DESIGNS</div>
-    <div class="g-grid" id="g-grid">
-      <div class="g-empty">
-        <div class="g-empty-em">🎨</div>
-        <div class="g-empty-t">NO DESIGNS YET</div>
-        <div>Create and save your first design to see it here.</div>
-      </div>
+    <div class="srch">
+      <span>🔍</span>
+      <input id="srch-input" placeholder="Search — car, robot, sneaker, rocket, bridge…" oninput="renderPicker()" autocomplete="off"/>
     </div>
+    <div class="ftabs" id="ftabs"></div>
   </div>
+  <div class="pk-body" id="pk-body"></div>
+</div>
 
-</div><!-- /#app -->
-
-<!-- ══════════════════════════════════════════
-     DESIGN SHEET (full-screen workspace)
-     Opens after clicking a design item
-══════════════════════════════════════════ -->
-<div id="design-sheet">
-
-  <!-- Sheet Header -->
-  <div class="sh-header">
+<!-- ════ DESIGN SHEET ════ -->
+<div id="s-sheet" class="screen">
+  <!-- Header -->
+  <div class="sh-top">
     <div class="sh-left">
-      <button class="sh-back" onclick="closeSheet()">← Pick Another</button>
-      <div class="sh-subject">
+      <button class="sh-bk" onclick="goTo('picker')">← Pick Another</button>
+      <div class="sh-subj">
         <div class="sh-em" id="sh-em">🎨</div>
-        <div class="sh-info">
-          <div class="sh-name" id="sh-name">Design</div>
+        <div>
+          <div class="sh-nm" id="sh-nm">Design</div>
           <div class="sh-cat" id="sh-cat">Category</div>
         </div>
       </div>
-      <div class="sh-step">Step 2 — Design Your Product</div>
+      <div class="sh-pill">Step 2 — Design Your Product</div>
     </div>
     <div class="sh-right">
-      <button class="btn btn-g" onclick="resetCam()" title="Reset camera view">⊙ Reset View</button>
-      <button class="btn btn-g" id="wire-btn" onclick="toggleWire()">⬡ Wireframe</button>
-      <button class="btn btn-g" style="color:#ff7070" onclick="delSel()">✕ Delete</button>
-      <button class="btn btn-green btn-lg" onclick="openSave()">💾 Save Design</button>
+      <button class="btn btn-o" onclick="resetCam()">⊙ Reset View</button>
+      <button class="btn btn-o" id="wire-btn" onclick="toggleWire()">⬡ Wireframe</button>
+      <button class="btn btn-o" style="color:#ff8080" onclick="delSel()">✕ Delete</button>
+      <button class="btn btn-g btn-lg" onclick="openSave()">💾 Save Design</button>
     </div>
   </div>
 
   <!-- Shape Toolbar -->
-  <div class="sh-toolbar">
-    <div class="tb-grp-label">ADD SHAPE</div>
-    <div class="tb-grp">
-      <button class="tb" onclick="addShape('box')"      title="Add Box">□ Box</button>
-      <button class="tb" onclick="addShape('sphere')"   title="Add Sphere">○ Sphere</button>
-      <button class="tb" onclick="addShape('cylinder')" title="Add Cylinder">⬤ Cylinder</button>
-      <button class="tb" onclick="addShape('cone')"     title="Add Cone">△ Cone</button>
-      <button class="tb" onclick="addShape('torus')"    title="Add Torus">◎ Torus</button>
-      <button class="tb" onclick="addShape('ring')"     title="Add Ring">⊚ Ring</button>
-      <button class="tb" onclick="addShape('tube')"     title="Add Tube">⌀ Tube</button>
-      <button class="tb" onclick="addShape('octahedron')" title="Add Octahedron">◈ Octa</button>
+  <div class="sh-bar">
+    <div class="tg-lbl">ADD</div>
+    <div class="tg">
+      <button class="tb" onclick="add('box')">□ Box</button>
+      <button class="tb" onclick="add('sphere')">○ Sphere</button>
+      <button class="tb" onclick="add('cylinder')">⬤ Cylinder</button>
+      <button class="tb" onclick="add('cone')">△ Cone</button>
+      <button class="tb" onclick="add('torus')">◎ Torus</button>
+      <button class="tb" onclick="add('ring')">⊚ Ring</button>
+      <button class="tb" onclick="add('tube')">⌀ Tube</button>
+      <button class="tb" onclick="add('octa')">◈ Octa</button>
+      <button class="tb" onclick="add('wedge')">▷ Wedge</button>
     </div>
     <div class="tsep"></div>
-    <div class="tb-grp-label">TRANSFORM</div>
-    <div class="tb-grp">
-      <button class="tb" id="mode-btn" onclick="cycleMode()">↕ Move</button>
-    </div>
-    <div class="tsep"></div>
-    <div class="tb-grp-label">ARRANGE</div>
-    <div class="tb-grp">
+    <div class="tg-lbl">EDIT</div>
+    <div class="tg">
       <button class="tb" onclick="dupeSel()">⧉ Duplicate</button>
-      <button class="tb" onclick="groupAll()">⊞ Group</button>
-      <button class="tb" onclick="clearAll()" style="color:#ff9090">✕✕ Clear All</button>
+      <button class="tb" onclick="clearAll()" style="color:#ff9090">✕ Clear</button>
     </div>
     <div class="tsep"></div>
-    <div class="tb-grp-label">CAMERA</div>
-    <div class="tb-grp">
-      <button class="tb" onclick="setCamPreset('front')">Front</button>
-      <button class="tb" onclick="setCamPreset('top')">Top</button>
-      <button class="tb" onclick="setCamPreset('side')">Side</button>
-      <button class="tb" onclick="setCamPreset('iso')">Iso</button>
+    <div class="tg-lbl">VIEW</div>
+    <div class="tg">
+      <button class="tb" onclick="camPreset('front')">Front</button>
+      <button class="tb" onclick="camPreset('top')">Top</button>
+      <button class="tb" onclick="camPreset('side')">Side</button>
+      <button class="tb" onclick="camPreset('iso')">Iso</button>
     </div>
   </div>
 
-  <!-- Workspace: Canvas + Props -->
-  <div class="sh-body">
-
-    <!-- 3D Canvas -->
-    <div class="canvas-area" id="cwrap">
+  <!-- Workspace -->
+  <div class="sh-ws">
+    <!-- Canvas -->
+    <div class="cvwrap" id="cvwrap">
       <canvas id="cv"></canvas>
-      <div class="cv-watermark" id="cv-watermark"></div>
+      <div class="cv-wm" id="cv-wm"></div>
       <div class="cv-hint">
-        Left-drag: Orbit &nbsp;·&nbsp; Right-drag: Pan &nbsp;·&nbsp; Scroll: Zoom &nbsp;·&nbsp; Click object: Select
+        Left-drag: Orbit &nbsp;·&nbsp; Right-drag: Pan &nbsp;·&nbsp; Scroll: Zoom &nbsp;·&nbsp; Click: Select
       </div>
-      <div class="cv-objcount">
-        Objects: <b id="ocount">0</b>
-      </div>
-      <div class="cv-sel-badge" id="sel-badge">Nothing selected</div>
+      <div class="cv-info">Objects: <b id="ocount">0</b></div>
+      <div class="cv-sel" id="cv-sel">Nothing selected</div>
     </div>
 
     <!-- Properties Panel -->
-    <div class="props-panel">
-      <div class="props-tabs">
-        <button class="ptab on" onclick="switchTab(this,'tab-obj')" id="ptab-obj">Objects</button>
-        <button class="ptab"    onclick="switchTab(this,'tab-mat')" id="ptab-mat">Material</button>
-        <button class="ptab"    onclick="switchTab(this,'tab-scene')" id="ptab-scene">Scene</button>
+    <div class="pp">
+      <div class="pp-tabs">
+        <button class="ptab on" onclick="ptab(this,'pt-obj')">Objects</button>
+        <button class="ptab"    onclick="ptab(this,'pt-mat')">Material</button>
+        <button class="ptab"    onclick="ptab(this,'pt-scene')">Scene</button>
       </div>
 
       <!-- Objects Tab -->
-      <div class="props-body" id="tab-obj">
-        <!-- Subject card -->
-        <div class="subj-card" id="subj-card">
-          <div class="subj-big-em" id="sc-em">🎨</div>
+      <div class="pp-body" id="pt-obj">
+        <div class="sc" id="sc-card">
+          <div class="sc-em" id="sc-em">🎨</div>
           <div>
-            <div class="subj-nm" id="sc-nm">Design</div>
-            <div class="subj-ds" id="sc-ds">Start adding shapes below</div>
+            <div class="sc-nm" id="sc-nm">Design</div>
+            <div class="sc-ds" id="sc-ds">Add shapes to start building</div>
           </div>
         </div>
-
-        <!-- Transform -->
         <div class="ph">// Position</div>
         <div class="pr"><span class="pl">X</span><input class="pi" id="px" type="number" step=".1" value="0" oninput="applyTr()"></div>
         <div class="pr"><span class="pl">Y</span><input class="pi" id="py" type="number" step=".1" value="0" oninput="applyTr()"></div>
@@ -594,112 +445,105 @@ nav{
         <div class="pr"><span class="pl">X</span><input class="pi" id="sx" type="number" step=".05" value="1" oninput="applyTr()"></div>
         <div class="pr"><span class="pl">Y</span><input class="pi" id="sy" type="number" step=".05" value="1" oninput="applyTr()"></div>
         <div class="pr"><span class="pl">Z</span><input class="pi" id="sz" type="number" step=".05" value="1" oninput="applyTr()"></div>
-        <div class="ph">// Rotation (deg)</div>
+        <div class="ph">// Rotation (°)</div>
         <div class="pr"><span class="pl">X</span><input class="pi" id="rx" type="number" step="5" value="0" oninput="applyTr()"></div>
         <div class="pr"><span class="pl">Y</span><input class="pi" id="ry" type="number" step="5" value="0" oninput="applyTr()"></div>
         <div class="pr"><span class="pl">Z</span><input class="pi" id="rz" type="number" step="5" value="0" oninput="applyTr()"></div>
-
-        <!-- Object list -->
         <div class="ph">// Objects in Scene</div>
         <ul class="ol" id="olist">
-          <li class="empty-obj">
-            <div class="empty-obj-em">✦</div>
-            Add a shape from the toolbar<br>to start building
-          </li>
+          <li class="empty-ol"><em>✦</em>Add shapes from the toolbar<br>to start building your design</li>
         </ul>
       </div>
 
       <!-- Material Tab -->
-      <div class="props-body" id="tab-mat" style="display:none">
-        <div class="ph">// Color & Finish</div>
+      <div class="pp-body" id="pt-mat" style="display:none">
+        <div class="ph">// Color & Surface</div>
         <div class="pr"><span class="pl">Color</span><input class="cp" type="color" id="mc" value="#4d9fff" oninput="applyMat()"></div>
-        <div class="pr"><span class="pl">Metal</span><input class="pi" id="mm" type="number" step=".05" min="0" max="1" value=".3" oninput="applyMat()"></div>
-        <div class="pr"><span class="pl">Rough</span><input class="pi" id="mr" type="number" step=".05" min="0" max="1" value=".4" oninput="applyMat()"></div>
+        <div class="pr"><span class="pl">Metalness</span><input class="pi" id="mm" type="number" step=".05" min="0" max="1" value=".3" oninput="applyMat()"></div>
+        <div class="pr"><span class="pl">Roughness</span><input class="pi" id="mr" type="number" step=".05" min="0" max="1" value=".4" oninput="applyMat()"></div>
         <div class="pr"><span class="pl">Opacity</span><input class="pi" id="mop" type="number" step=".05" min="0" max="1" value="1" oninput="applyMat()"></div>
-        <div class="ph">// Quick Presets</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
-          <button class="tb" onclick="applyPreset('chrome')"  style="padding:.4rem .5rem">Chrome</button>
-          <button class="tb" onclick="applyPreset('gold')"    style="padding:.4rem .5rem">Gold</button>
-          <button class="tb" onclick="applyPreset('plastic')" style="padding:.4rem .5rem">Plastic</button>
-          <button class="tb" onclick="applyPreset('glass')"   style="padding:.4rem .5rem">Glass</button>
-          <button class="tb" onclick="applyPreset('rubber')"  style="padding:.4rem .5rem">Rubber</button>
-          <button class="tb" onclick="applyPreset('wood')"    style="padding:.4rem .5rem">Wood</button>
-          <button class="tb" onclick="applyPreset('carbon')"  style="padding:.4rem .5rem">Carbon</button>
-          <button class="tb" onclick="applyPreset('neon')"    style="padding:.4rem .5rem">Neon</button>
+        <div class="ph">// Material Presets</div>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="preset('chrome')">🔩 Chrome</button>
+          <button class="preset-btn" onclick="preset('gold')">✨ Gold</button>
+          <button class="preset-btn" onclick="preset('plastic')">🔴 Plastic</button>
+          <button class="preset-btn" onclick="preset('glass')">🔵 Glass</button>
+          <button class="preset-btn" onclick="preset('rubber')">⚫ Rubber</button>
+          <button class="preset-btn" onclick="preset('wood')">🪵 Wood</button>
+          <button class="preset-btn" onclick="preset('carbon')">◼ Carbon</button>
+          <button class="preset-btn" onclick="preset('neon')">💚 Neon</button>
+          <button class="preset-btn" onclick="preset('copper')">🟤 Copper</button>
+          <button class="preset-btn" onclick="preset('ice')">🩵 Ice</button>
         </div>
-        <div class="ph">// Apply To</div>
-        <button class="tb" style="width:100%;padding:.5rem;margin-bottom:.4rem" onclick="applyMatToAll()">Apply to ALL objects</button>
+        <div class="ph" style="margin-top:1rem">// Apply To</div>
+        <button class="tb c2" style="width:100%;padding:.45rem;margin-bottom:.35rem" onclick="applyAll()">Apply to ALL objects</button>
       </div>
 
       <!-- Scene Tab -->
-      <div class="props-body" id="tab-scene" style="display:none">
-        <div class="ph">// Environment</div>
-        <div class="scene-row">
-          <span class="scene-label">Show Grid</span>
-          <div class="stgl on" id="tog-grid" onclick="toggleGrid()"></div>
-        </div>
-        <div class="scene-row">
-          <span class="scene-label">Shadows</span>
-          <div class="stgl on" id="tog-shadow" onclick="toggleShadow()"></div>
-        </div>
-        <div class="scene-row">
-          <span class="scene-label">Fog</span>
-          <div class="stgl on" id="tog-fog" onclick="toggleFog()"></div>
-        </div>
-        <div class="scene-row">
-          <span class="scene-label">Wireframe</span>
-          <div class="stgl" id="tog-wire" onclick="toggleWire()"></div>
-        </div>
+      <div class="pp-body" id="pt-scene" style="display:none">
+        <div class="ph">// Display</div>
+        <div class="srow"><span class="slabel">Grid</span><div class="tog on" id="tog-grid" onclick="toggleGrid()"></div></div>
+        <div class="srow"><span class="slabel">Shadows</span><div class="tog on" id="tog-shad" onclick="toggleShad()"></div></div>
+        <div class="srow"><span class="slabel">Fog</span><div class="tog on" id="tog-fog" onclick="toggleFog()"></div></div>
+        <div class="srow"><span class="slabel">Wireframe</span><div class="tog" id="tog-wire" onclick="toggleWire()"></div></div>
         <div class="ph">// Lighting</div>
-        <div class="pr"><span class="pl" style="width:70px">Ambient</span><input class="pi" id="amb-int" type="number" step=".05" min="0" max="2" value=".4" oninput="applyLighting()"></div>
-        <div class="pr"><span class="pl" style="width:70px">Directional</span><input class="pi" id="dir-int" type="number" step=".05" min="0" max="3" value="1.2" oninput="applyLighting()"></div>
+        <div class="pr"><span class="pl" style="width:62px">Ambient</span><input class="pi" id="amb" type="number" step=".05" min="0" max="2" value=".4" oninput="applyLight()"></div>
+        <div class="pr"><span class="pl" style="width:62px">Sun</span><input class="pi" id="sun" type="number" step=".05" min="0" max="3" value="1.2" oninput="applyLight()"></div>
         <div class="ph">// Background</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
-          <button class="tb" onclick="setBg('dark')"   style="padding:.4rem .5rem">Dark</button>
-          <button class="tb" onclick="setBg('midnight')" style="padding:.4rem .5rem">Midnight</button>
-          <button class="tb" onclick="setBg('studio')" style="padding:.4rem .5rem">Studio</button>
-          <button class="tb" onclick="setBg('space')"  style="padding:.4rem .5rem">Space</button>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="setBg(0x07070e)">🌑 Dark</button>
+          <button class="preset-btn" onclick="setBg(0x000814)">🌃 Midnight</button>
+          <button class="preset-btn" onclick="setBg(0x1a1a2e)">🌆 Studio</button>
+          <button class="preset-btn" onclick="setBg(0x020209)">🌌 Space</button>
         </div>
       </div>
-    </div><!-- /.props-panel -->
-
-  </div><!-- /.sh-body -->
-</div><!-- /#design-sheet -->
-
-<!-- ══════ SAVE MODAL ══════ -->
-<div class="overlay" id="save-ov">
-  <div class="modal">
-    <div class="modal-icon">💾</div>
-    <div class="modal-t">SAVE YOUR DESIGN</div>
-    <div class="modal-sub">Give your creation a name and save it to the gallery</div>
-    <div class="fg"><label class="fl">Design Name</label><input class="fi" id="s-name" placeholder="e.g. My Sports Car v1"></div>
-    <div class="fg"><label class="fl">Category</label><select class="fs" id="s-cat"></select></div>
-    <div class="fg"><label class="fl">Description</label><textarea class="ft" id="s-desc" placeholder="What did you design? What makes it special?"></textarea></div>
-    <div class="fg"><label class="fl">Your Name / Company</label><input class="fi" id="s-author" placeholder="e.g. John Doe / Acme Corp"></div>
-    <div class="fg">
-      <div class="trow">
-        <label class="fl" style="margin:0">Share in Public Gallery</label>
-        <div class="tgl" id="pub-tgl" onclick="this.classList.toggle('on')"></div>
-      </div>
-    </div>
-    <div class="ma">
-      <button class="btn btn-g" onclick="closeSave()">Cancel</button>
-      <button class="btn btn-green" onclick="doSave()">✅ Save Design</button>
     </div>
   </div>
 </div>
 
-<!-- ══════ SUCCESS OVERLAY ══════ -->
+<!-- ════ GALLERY ════ -->
+<div id="s-gallery" class="screen">
+  <div class="s-tag">// Community</div>
+  <div class="s-title">SAVED DESIGNS</div>
+  <div class="gg" id="gg">
+    <div class="gEmpty"><em>🎨</em><strong>NO DESIGNS YET</strong>Create and save your first design to see it here.</div>
+  </div>
+</div>
+
+<!-- ════ SAVE MODAL ════ -->
+<div class="ov" id="save-ov">
+  <div class="modal">
+    <div class="modal-em">💾</div>
+    <div class="modal-t">SAVE YOUR DESIGN</div>
+    <div class="modal-sub">Name your creation and save it to your gallery</div>
+    <div class="fg"><label class="fl">Design Name</label><input class="fi" id="s-name" placeholder="e.g. Sports Car Model v1"></div>
+    <div class="fg"><label class="fl">Category</label><select class="fs" id="s-cat"></select></div>
+    <div class="fg"><label class="fl">Description</label><textarea class="ft" id="s-desc" placeholder="What did you design? What makes it unique?"></textarea></div>
+    <div class="fg"><label class="fl">Your Name / Company</label><input class="fi" id="s-author" placeholder="e.g. John Doe"></div>
+    <div class="fg">
+      <div class="trow">
+        <label class="fl" style="margin:0">Share in Public Gallery</label>
+        <div class="stgl" id="pub-tgl" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+    <div class="ma">
+      <button class="btn btn-o" onclick="closeSave()">Cancel</button>
+      <button class="btn btn-g" onclick="doSave()">✅ Save Design</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SUCCESS ════ -->
 <div id="success-ov">
-  <div class="success-box">
-    <div class="success-em">🎉</div>
-    <div class="success-t">DESIGN SAVED!</div>
-    <div class="success-sub">Your design has been saved successfully.<br>You can find it in the gallery.</div>
-    <div class="success-preview" id="success-preview"></div>
-    <div class="success-actions">
-      <button class="btn btn-g" onclick="closeSuccess();closeSheet()">← Back to Picker</button>
-      <button class="btn btn-p" onclick="closeSuccess()">Continue Editing</button>
-      <button class="btn btn-b" onclick="closeSuccess();showView('gallery')">View Gallery →</button>
+  <div class="suc-box">
+    <div class="suc-em">🎉</div>
+    <div class="suc-t">DESIGN SAVED!</div>
+    <div class="suc-sub">Your design has been saved to the gallery successfully.</div>
+    <div class="suc-preview" id="suc-preview"></div>
+    <div class="suc-acts">
+      <button class="btn btn-o" onclick="closeSuc();goTo('picker')">← New Design</button>
+      <button class="btn btn-r" onclick="closeSuc()">Continue Editing</button>
+      <button class="btn btn-c" onclick="closeSuc();goTo('gallery')">View Gallery →</button>
     </div>
   </div>
 </div>
@@ -711,768 +555,538 @@ nav{
 <script>
 'use strict';
 
-/* ═══════════════════════════════════════════
-   CATALOG DATA
-═══════════════════════════════════════════ */
-const CATALOG = [
-  { id:'vehicles',     label:'Vehicles',                 icon:'🚗', color:'#FF4D4D', items:[
-    {id:'car',        name:'Car / Sedan',       em:'🚗', desc:'Body, chassis, interior',       badge:'hot'},
-    {id:'supercar',   name:'Supercar',          em:'🏎️', desc:'Aerodynamic performance build', badge:'hot'},
-    {id:'suv',        name:'SUV / Truck',       em:'🛻', desc:'Large body, off-road builds',   badge:''},
-    {id:'motorcycle', name:'Motorcycle',        em:'🏍️', desc:'Frame, engine, fairings',       badge:''},
-    {id:'bicycle',    name:'Bicycle',           em:'🚲', desc:'Frame geometry & components',   badge:''},
-    {id:'boat',       name:'Boat / Yacht',      em:'⛵', desc:'Hull, deck, cabin layout',      badge:''},
-    {id:'aircraft',   name:'Aircraft',          em:'✈️', desc:'Fuselage, wings, tail',          badge:'pro'},
-    {id:'spaceship',  name:'Spacecraft',        em:'🚀', desc:'Capsule, propulsion, payload',  badge:'pro'},
+/* ══════════════ DATA ══════════════ */
+const CATALOG=[
+  {id:'vehicles',label:'Vehicles',icon:'🚗',color:'#FF4D4D',items:[
+    {id:'car',name:'Car / Sedan',em:'🚗',desc:'Body, chassis, interior',badge:'hot'},
+    {id:'supercar',name:'Supercar',em:'🏎️',desc:'Aerodynamic performance build',badge:'hot'},
+    {id:'suv',name:'SUV / Truck',em:'🛻',desc:'Large body, off-road builds',badge:''},
+    {id:'motorcycle',name:'Motorcycle',em:'🏍️',desc:'Frame, engine, fairings',badge:''},
+    {id:'bicycle',name:'Bicycle',em:'🚲',desc:'Frame geometry & components',badge:''},
+    {id:'boat',name:'Boat / Yacht',em:'⛵',desc:'Hull, deck, cabin layout',badge:''},
+    {id:'aircraft',name:'Aircraft',em:'✈️',desc:'Fuselage, wings, tail',badge:'pro'},
+    {id:'spaceship',name:'Spacecraft',em:'🚀',desc:'Capsule, propulsion, payload',badge:'pro'},
   ]},
-  { id:'electronics',  label:'Electronics',              icon:'⚡', color:'#FFD700', items:[
-    {id:'smartphone', name:'Smartphone',        em:'📱', desc:'Body, screen, port layout',     badge:'hot'},
-    {id:'laptop',     name:'Laptop',            em:'💻', desc:'Chassis, keyboard, hinge',       badge:'hot'},
-    {id:'drone',      name:'Drone',             em:'🚁', desc:'Frame, motors, payload bay',     badge:'new'},
-    {id:'robot',      name:'Robot / Bot',       em:'🤖', desc:'Joints, chassis, actuators',     badge:'new'},
-    {id:'pcb',        name:'PCB Board',         em:'🔌', desc:'Circuit layout, components',     badge:'pro'},
-    {id:'smartwatch', name:'Smartwatch',        em:'⌚', desc:'Case, band, display face',       badge:''},
-    {id:'speaker',    name:'Speaker / Audio',   em:'🔊', desc:'Enclosure, driver, port',        badge:''},
-    {id:'camera',     name:'Camera Body',       em:'📷', desc:'Body, lens mount, ergonomics',   badge:''},
+  {id:'electronics',label:'Electronics',icon:'⚡',color:'#FFD700',items:[
+    {id:'smartphone',name:'Smartphone',em:'📱',desc:'Body, screen, port layout',badge:'hot'},
+    {id:'laptop',name:'Laptop',em:'💻',desc:'Chassis, keyboard, hinge',badge:'hot'},
+    {id:'drone',name:'Drone',em:'🚁',desc:'Frame, motors, payload bay',badge:'new'},
+    {id:'robot',name:'Robot / Bot',em:'🤖',desc:'Joints, chassis, actuators',badge:'new'},
+    {id:'pcb',name:'PCB Board',em:'🔌',desc:'Circuit layout, components',badge:'pro'},
+    {id:'smartwatch',name:'Smartwatch',em:'⌚',desc:'Case, band, display face',badge:''},
+    {id:'speaker',name:'Speaker / Audio',em:'🔊',desc:'Enclosure, driver, port',badge:''},
+    {id:'camera',name:'Camera Body',em:'📷',desc:'Body, lens mount, ergonomics',badge:''},
   ]},
-  { id:'architecture', label:'Architecture',             icon:'🏛️', color:'#50C878', items:[
-    {id:'house',      name:'House / Villa',     em:'🏠', desc:'Floor plan, facade, roof',       badge:'hot'},
-    {id:'interior',   name:'Interior Space',    em:'🪴', desc:'Room layout, furniture, light',  badge:'hot'},
-    {id:'skyscraper', name:'Skyscraper',        em:'🏙️', desc:'Tower structure & facade',       badge:'pro'},
-    {id:'bridge',     name:'Bridge',            em:'🌉', desc:'Span, supports, road deck',      badge:''},
-    {id:'stadium',    name:'Stadium / Arena',   em:'🏟️', desc:'Seating, roof, field layout',    badge:'pro'},
-    {id:'temple',     name:'Temple / Monument', em:'🕌', desc:'Columns, dome, ornaments',       badge:''},
+  {id:'architecture',label:'Architecture',icon:'🏛️',color:'#50C878',items:[
+    {id:'house',name:'House / Villa',em:'🏠',desc:'Floor plan, facade, roof',badge:'hot'},
+    {id:'interior',name:'Interior Space',em:'🪴',desc:'Room layout, furniture, light',badge:'hot'},
+    {id:'skyscraper',name:'Skyscraper',em:'🏙️',desc:'Tower structure & facade',badge:'pro'},
+    {id:'bridge',name:'Bridge',em:'🌉',desc:'Span, supports, road deck',badge:''},
+    {id:'stadium',name:'Stadium / Arena',em:'🏟️',desc:'Seating, roof, field layout',badge:'pro'},
+    {id:'temple',name:'Temple / Monument',em:'🕌',desc:'Columns, dome, ornaments',badge:''},
   ]},
-  { id:'3dprint',      label:'3D Printing',              icon:'🖨️', color:'#4D9FFF', items:[
-    {id:'figurine',   name:'Figurine / Statue', em:'🗿', desc:'Sculpted character & base',      badge:'hot'},
-    {id:'miniature',  name:'Miniature Model',   em:'🏰', desc:'Scale replica for display',      badge:'hot'},
-    {id:'enclosure',  name:'Device Enclosure',  em:'📦', desc:'Snap-fit box, lid, cutouts',     badge:''},
-    {id:'prosthetic', name:'Prosthetic Part',   em:'🦾', desc:'Medical-grade limb component',   badge:'new'},
-    {id:'art3d',      name:'Abstract Art Piece',em:'🎨', desc:'Freeform sculptural object',     badge:'new'},
-    {id:'tooling',    name:'Jig / Fixture',     em:'🔧', desc:'Alignment & assembly tool',      badge:''},
+  {id:'3dprint',label:'3D Printing',icon:'🖨️',color:'#4D9FFF',items:[
+    {id:'figurine',name:'Figurine / Statue',em:'🗿',desc:'Sculpted character & base',badge:'hot'},
+    {id:'miniature',name:'Miniature Model',em:'🏰',desc:'Scale replica for display',badge:'hot'},
+    {id:'enclosure',name:'Device Enclosure',em:'📦',desc:'Snap-fit box, lid, cutouts',badge:''},
+    {id:'prosthetic',name:'Prosthetic Part',em:'🦾',desc:'Medical-grade limb component',badge:'new'},
+    {id:'art3d',name:'Abstract Art Piece',em:'🎨',desc:'Freeform sculptural object',badge:'new'},
+    {id:'tooling',name:'Jig / Fixture',em:'🔧',desc:'Alignment & assembly tool',badge:''},
   ]},
-  { id:'furniture',    label:'Furniture',                icon:'🪑', color:'#FF8C42', items:[
-    {id:'chair',      name:'Chair / Seat',      em:'🪑', desc:'Frame, cushion, ergonomics',     badge:''},
-    {id:'table',      name:'Table / Desk',      em:'🗄️', desc:'Top, legs, joinery details',     badge:''},
-    {id:'shelf',      name:'Shelf / Storage',   em:'📚', desc:'Modular shelving system',         badge:'hot'},
-    {id:'sofa',       name:'Sofa / Couch',      em:'🛋️', desc:'Frame, foam, upholstery form',   badge:''},
-    {id:'lamp',       name:'Lamp / Lighting',   em:'💡', desc:'Base, shade, mounting',           badge:'new'},
-    {id:'kitchen',    name:'Kitchen Unit',      em:'🍳', desc:'Cabinets, countertop, layout',   badge:''},
+  {id:'furniture',label:'Furniture',icon:'🪑',color:'#FF8C42',items:[
+    {id:'chair',name:'Chair / Seat',em:'🪑',desc:'Frame, cushion, ergonomics',badge:''},
+    {id:'table',name:'Table / Desk',em:'🗄️',desc:'Top, legs, joinery details',badge:''},
+    {id:'shelf',name:'Shelf / Storage',em:'📚',desc:'Modular shelving system',badge:'hot'},
+    {id:'sofa',name:'Sofa / Couch',em:'🛋️',desc:'Frame, foam, upholstery form',badge:''},
+    {id:'lamp',name:'Lamp / Lighting',em:'💡',desc:'Base, shade, mounting',badge:'new'},
+    {id:'kitchen',name:'Kitchen Unit',em:'🍳',desc:'Cabinets, countertop, layout',badge:''},
   ]},
-  { id:'industrial',   label:'Industrial',               icon:'⚙️', color:'#A0A0B8', items:[
-    {id:'engine',     name:'Engine / Motor',    em:'🔩', desc:'Block, pistons, crankshaft',     badge:'pro'},
-    {id:'gear',       name:'Gear / Mechanism',  em:'⚙️', desc:'Spur, helical, planetary gears', badge:''},
-    {id:'turbine',    name:'Turbine Blade',     em:'🌀', desc:'Aerofoil profile, root, tip',    badge:'pro'},
-    {id:'mold',       name:'Injection Mold',    em:'🏭', desc:'Core, cavity, runner system',    badge:'pro'},
-    {id:'bracket',    name:'Bracket / Mount',   em:'📐', desc:'Structural support component',   badge:''},
-    {id:'tank',       name:'Storage Tank',      em:'🛢️', desc:'Shell, nozzle, support legs',    badge:''},
+  {id:'industrial',label:'Industrial',icon:'⚙️',color:'#A0A0B8',items:[
+    {id:'engine',name:'Engine / Motor',em:'🔩',desc:'Block, pistons, crankshaft',badge:'pro'},
+    {id:'gear',name:'Gear / Mechanism',em:'⚙️',desc:'Spur, helical, planetary gears',badge:''},
+    {id:'turbine',name:'Turbine Blade',em:'🌀',desc:'Aerofoil profile, root, tip',badge:'pro'},
+    {id:'mold',name:'Injection Mold',em:'🏭',desc:'Core, cavity, runner system',badge:'pro'},
+    {id:'bracket',name:'Bracket / Mount',em:'📐',desc:'Structural support component',badge:''},
+    {id:'tank',name:'Storage Tank',em:'🛢️',desc:'Shell, nozzle, support legs',badge:''},
   ]},
-  { id:'fashion',      label:'Fashion & Wearables',      icon:'👟', color:'#FF69B4', items:[
-    {id:'shoe',       name:'Shoe / Sneaker',    em:'👟', desc:'Last, sole, upper structure',    badge:'hot'},
-    {id:'helmet',     name:'Helmet',            em:'⛑️', desc:'Shell, liner, visor mount',      badge:''},
-    {id:'glasses',    name:'Eyewear Frame',     em:'👓', desc:'Front, temples, bridge',          badge:'new'},
-    {id:'bag',        name:'Bag / Backpack',    em:'🎒', desc:'Shell, compartments, straps',    badge:''},
-    {id:'watchcase',  name:'Watch Case',        em:'🕰️', desc:'Case, bezel, lugs, crown',       badge:''},
+  {id:'fashion',label:'Fashion & Wearables',icon:'👟',color:'#FF69B4',items:[
+    {id:'shoe',name:'Shoe / Sneaker',em:'👟',desc:'Last, sole, upper structure',badge:'hot'},
+    {id:'helmet',name:'Helmet',em:'⛑️',desc:'Shell, liner, visor mount',badge:''},
+    {id:'glasses',name:'Eyewear Frame',em:'👓',desc:'Front, temples, bridge',badge:'new'},
+    {id:'bag',name:'Bag / Backpack',em:'🎒',desc:'Shell, compartments, straps',badge:''},
+    {id:'watchcase',name:'Watch Case',em:'🕰️',desc:'Case, bezel, lugs, crown',badge:''},
   ]},
-  { id:'aerospace',    label:'Aerospace & Space',        icon:'🛸', color:'#BF5FFF', items:[
-    {id:'rocket2',    name:'Rocket / Launch',   em:'🚀', desc:'Stage, nozzle, fairing',          badge:'pro'},
-    {id:'satellite',  name:'Satellite',         em:'🛰️', desc:'Bus, solar panels, antenna',     badge:'pro'},
-    {id:'uav',        name:'UAV / Fixed Wing',  em:'✈️', desc:'Wing, fuselage, payload pod',    badge:'new'},
-    {id:'spacesuit',  name:'Space Suit',        em:'👨‍🚀', desc:'Suit layers, helmet, PLSS',      badge:'pro'},
+  {id:'aerospace',label:'Aerospace & Space',icon:'🛸',color:'#BF5FFF',items:[
+    {id:'rocket2',name:'Rocket / Launch',em:'🚀',desc:'Stage, nozzle, fairing',badge:'pro'},
+    {id:'satellite',name:'Satellite',em:'🛰️',desc:'Bus, solar panels, antenna',badge:'pro'},
+    {id:'uav',name:'UAV / Fixed Wing',em:'✈️',desc:'Wing, fuselage, payload pod',badge:'new'},
+    {id:'spacesuit',name:'Space Suit',em:'👨‍🚀',desc:'Suit layers, helmet, PLSS',badge:'pro'},
   ]},
-  { id:'medical',      label:'Medical & Bio',            icon:'🏥', color:'#00CED1', items:[
-    {id:'implant',    name:'Implant / Device',  em:'🦴', desc:'Bone scaffold, lattice struct',   badge:'pro'},
-    {id:'organ',      name:'Organ Model',       em:'🫀', desc:'Anatomical replica, education',  badge:'new'},
-    {id:'brace',      name:'Orthopaedic Brace', em:'🦿', desc:'Custom-fit support shell',       badge:'new'},
-    {id:'surgical',   name:'Surgical Tool',     em:'🔬', desc:'Handle, tip, grip geometry',     badge:'pro'},
+  {id:'medical',label:'Medical & Bio',icon:'🏥',color:'#00CED1',items:[
+    {id:'implant',name:'Implant / Device',em:'🦴',desc:'Bone scaffold, lattice struct',badge:'pro'},
+    {id:'organ',name:'Organ Model',em:'🫀',desc:'Anatomical replica, education',badge:'new'},
+    {id:'brace',name:'Orthopaedic Brace',em:'🦿',desc:'Custom-fit support shell',badge:'new'},
+    {id:'surgical',name:'Surgical Tool',em:'🔬',desc:'Handle, tip, grip geometry',badge:'pro'},
   ]},
-  { id:'art',          label:'Art & Sculpture',          icon:'🎨', color:'#FF8C42', items:[
-    {id:'sculpture',  name:'Sculpture',         em:'🗽', desc:'Abstract or figurative form',    badge:''},
-    {id:'trophy',     name:'Trophy / Award',    em:'🏆', desc:'Base, stem, topper form',        badge:'hot'},
-    {id:'coin',       name:'Coin / Medal',      em:'🥇', desc:'Relief artwork, edge detail',    badge:''},
-    {id:'install',    name:'Art Installation',  em:'🖼️', desc:'Large-scale interactive piece',  badge:'new'},
+  {id:'art',label:'Art & Sculpture',icon:'🎨',color:'#FF8C42',items:[
+    {id:'sculpture',name:'Sculpture',em:'🗽',desc:'Abstract or figurative form',badge:''},
+    {id:'trophy',name:'Trophy / Award',em:'🏆',desc:'Base, stem, topper form',badge:'hot'},
+    {id:'coin',name:'Coin / Medal',em:'🥇',desc:'Relief artwork, edge detail',badge:''},
+    {id:'install',name:'Art Installation',em:'🖼️',desc:'Large-scale interactive piece',badge:'new'},
   ]},
 ];
 
-const POPULAR = [
-  {em:'🏎️',name:'Supercar',   catId:'vehicles',    id:'supercar'},
-  {em:'📱',name:'Smartphone', catId:'electronics', id:'smartphone'},
-  {em:'🏠',name:'House',      catId:'architecture',id:'house'},
-  {em:'🤖',name:'Robot',      catId:'electronics', id:'robot'},
-  {em:'👟',name:'Sneaker',    catId:'fashion',     id:'shoe'},
-  {em:'🚀',name:'Rocket',     catId:'aerospace',   id:'rocket2'},
-  {em:'🏆',name:'Trophy',     catId:'art',         id:'trophy'},
-  {em:'⚙️',name:'Gear',       catId:'industrial',  id:'gear'},
-  {em:'🦾',name:'Prosthetic', catId:'3dprint',     id:'prosthetic'},
-  {em:'🛰️',name:'Satellite',  catId:'aerospace',   id:'satellite'},
+const POPULAR=[
+  {em:'🏎️',name:'Supercar',catId:'vehicles',id:'supercar'},
+  {em:'📱',name:'Smartphone',catId:'electronics',id:'smartphone'},
+  {em:'🏠',name:'House',catId:'architecture',id:'house'},
+  {em:'🤖',name:'Robot',catId:'electronics',id:'robot'},
+  {em:'👟',name:'Sneaker',catId:'fashion',id:'shoe'},
+  {em:'🚀',name:'Rocket',catId:'aerospace',id:'rocket2'},
+  {em:'🏆',name:'Trophy',catId:'art',id:'trophy'},
+  {em:'⚙️',name:'Gear',catId:'industrial',id:'gear'},
+  {em:'🦾',name:'Prosthetic',catId:'3dprint',id:'prosthetic'},
+  {em:'🛰️',name:'Satellite',catId:'aerospace',id:'satellite'},
 ];
 
-const FILTERS = ['All','Vehicles','Electronics','Architecture','3D Printing','Furniture','Industrial','Fashion','Aerospace','Medical','Art'];
-const FILTER_MAP = {'All':'','Vehicles':'vehicles','Electronics':'electronics','Architecture':'architecture','3D Printing':'3dprint','Furniture':'furniture','Industrial':'industrial','Fashion':'fashion','Aerospace':'aerospace','Medical':'medical','Art':'art'};
+const FILTERS=['All','Vehicles','Electronics','Architecture','3D Printing','Furniture','Industrial','Fashion','Aerospace','Medical','Art'];
+const FMAP={All:'',Vehicles:'vehicles',Electronics:'electronics',Architecture:'architecture','3D Printing':'3dprint',Furniture:'furniture',Industrial:'industrial',Fashion:'fashion',Aerospace:'aerospace',Medical:'medical',Art:'art'};
 
-const MAT_PRESETS = {
-  chrome:  {color:'#c8d0d8', metalness:1.0, roughness:.05, opacity:1},
-  gold:    {color:'#ffd700', metalness:1.0, roughness:.15, opacity:1},
-  plastic: {color:'#ff4d4d', metalness:.0,  roughness:.6,  opacity:1},
-  glass:   {color:'#aaddff', metalness:.0,  roughness:.0,  opacity:.3},
-  rubber:  {color:'#222233', metalness:.0,  roughness:.95, opacity:1},
-  wood:    {color:'#8B5E3C', metalness:.0,  roughness:.85, opacity:1},
-  carbon:  {color:'#1a1a22', metalness:.4,  roughness:.3,  opacity:1},
-  neon:    {color:'#00ffcc', metalness:.0,  roughness:.4,  opacity:1},
+const PRESETS={
+  chrome: {color:'#c8d0d8',metalness:1,roughness:.05,opacity:1},
+  gold:   {color:'#ffd700',metalness:1,roughness:.15,opacity:1},
+  plastic:{color:'#ee4444',metalness:0,roughness:.6,opacity:1},
+  glass:  {color:'#aaddff',metalness:0,roughness:0,opacity:.28},
+  rubber: {color:'#222233',metalness:0,roughness:.95,opacity:1},
+  wood:   {color:'#8B5E3C',metalness:0,roughness:.85,opacity:1},
+  carbon: {color:'#1a1a22',metalness:.4,roughness:.3,opacity:1},
+  neon:   {color:'#00ffcc',metalness:0,roughness:.4,opacity:1},
+  copper: {color:'#b87333',metalness:.9,roughness:.25,opacity:1},
+  ice:    {color:'#cce8ff',metalness:0,roughness:.08,opacity:.6},
 };
 
-/* ═══════════════════════════════════════════
-   APP STATE
-═══════════════════════════════════════════ */
-let activeFilter   = 'All';
-let currentSubject = null;
-let designCount    = 0;
-let savedDesigns   = [];
+/* ══════════════ STATE ══════════════ */
+let curFilter='All', curSubject=null, saves=[], saveCount=0;
+let threeOk=false;
+let scene,camera,renderer,grid,floor,ambL,sunL;
+let objs=[],selObj=null,wireMode=false,colorIdx=0;
+let fogOn=true, shadowOn=true, gridOn=true;
+const CAM={theta:.72,phi:.62,r:11,tx:0,ty:0,tz:0};
+const MO={down:false,pan:false,x:0,y:0};
+let tDist=0;
+const COLORS=['#4d9fff','#ff4d4d','#50c878','#ffd700','#ff8c42','#bf5fff','#00ced1','#ff3c00','#ffffff','#f0a500'];
 
-/* ═══════════════════════════════════════════
-   VIEW MANAGEMENT
-═══════════════════════════════════════════ */
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  const el = document.getElementById('v-' + name);
-  if (el) el.classList.add('active');
-  if (name === 'gallery') renderGallery();
+/* ══════════════ NAVIGATION ══════════════ */
+function goTo(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+name).classList.add('on');
+  if(name==='sheet') initThree();
+  if(name==='gallery') renderGallery();
 }
 
-/* ═══════════════════════════════════════════
-   PICKER
-═══════════════════════════════════════════ */
-function buildPicker() {
+/* ══════════════ PICKER ══════════════ */
+function buildPicker(){
   // filter tabs
-  const tabsEl = document.getElementById('ftabs');
-  tabsEl.innerHTML = FILTERS.map(f =>
-    `<button class="ftab${f === activeFilter ? ' on' : ''}" onclick="setFilter(this,'${f}')">${f}</button>`
+  document.getElementById('ftabs').innerHTML=FILTERS.map(f=>
+    `<button class="ftab${f===curFilter?' on':''}" onclick="setFilter(this,'${f}')">${f}</button>`
   ).join('');
-
-  // save modal category list
-  document.getElementById('s-cat').innerHTML =
-    CATALOG.map(c => `<option value="${c.id}">${c.icon} ${c.label}</option>`).join('');
-
+  // modal category select
+  document.getElementById('s-cat').innerHTML=CATALOG.map(c=>
+    `<option value="${c.id}">${c.icon} ${c.label}</option>`
+  ).join('');
   renderPicker();
 }
 
-function setFilter(btn, f) {
-  activeFilter = f;
-  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('on'));
+function setFilter(btn,f){
+  curFilter=f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('on'));
   btn.classList.add('on');
   renderPicker();
 }
 
-function renderPicker() {
-  const q    = (document.getElementById('srch').value || '').toLowerCase().trim();
-  const body = document.getElementById('pk-body');
-  const targetId = FILTER_MAP[activeFilter] || '';
-  let html = '', total = 0;
+function renderPicker(){
+  const q=(document.getElementById('srch-input').value||'').toLowerCase().trim();
+  const tid=FMAP[curFilter]||'';
+  let html='',total=0;
 
-  if (!q && activeFilter === 'All') {
-    html += `<div style="font-family:var(--fm);font-size:.62rem;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:.65rem">⚡ Popular picks</div>`;
-    html += `<div class="pop-row">` +
-      POPULAR.map(p => `<div class="pop-chip" data-catid="${p.catId}" data-id="${p.id}">${p.em} ${p.name}</div>`).join('') +
-    `</div>`;
+  if(!q&&curFilter==='All'){
+    html+=`<div style="font-family:var(--fm);font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">⚡ Popular picks</div>
+    <div class="pop-row">${POPULAR.map(p=>`<div class="pop-chip" data-c="${p.catId}" data-i="${p.id}">${p.em} ${p.name}</div>`).join('')}</div>`;
   }
 
-  CATALOG.forEach(sec => {
-    if (targetId && sec.id !== targetId) return;
-    const items = sec.items.filter(it =>
-      !q || (it.name + ' ' + it.desc + ' ' + sec.label).toLowerCase().includes(q)
-    );
-    if (!items.length) return;
-    total += items.length;
-    html += `<div class="sec-hd" style="color:${sec.color}">${sec.icon} ${sec.label.toUpperCase()}</div>`;
-    html += `<div class="igrid">`;
-    items.forEach(it => {
-      const badge = it.badge === 'hot' ? `<span class="badge b-hot">🔥 Popular</span>`
-        : it.badge === 'new' ? `<span class="badge b-new">✨ New</span>`
-        : it.badge === 'pro' ? `<span class="badge b-pro">⭐ Pro</span>` : '';
-      html += `<div class="di" data-catid="${sec.id}" data-id="${it.id}"
+  CATALOG.forEach(sec=>{
+    if(tid&&sec.id!==tid) return;
+    const items=sec.items.filter(it=>!q||(it.name+' '+it.desc+' '+sec.label).toLowerCase().includes(q));
+    if(!items.length) return;
+    total+=items.length;
+    html+=`<div class="shd" style="color:${sec.color}">${sec.icon} ${sec.label.toUpperCase()}</div><div class="igrid">`;
+    items.forEach(it=>{
+      const b=it.badge==='hot'?`<span class="badge bh">🔥 Popular</span>`:it.badge==='new'?`<span class="badge bn">✨ New</span>`:it.badge==='pro'?`<span class="badge bp">⭐ Pro</span>`:'';
+      html+=`<div class="di" data-c="${sec.id}" data-i="${it.id}"
         onmouseenter="this.style.borderColor='${sec.color}'"
         onmouseleave="this.style.borderColor='transparent'">
-        <div class="di-glow" style="background:${sec.color}15"></div>
+        <div class="di-glow" style="background:${sec.color}14"></div>
         <div class="di-em">${it.em}</div>
-        <div class="di-name">${it.name}</div>
-        <div class="di-desc">${it.desc}</div>
-        ${badge}
-      </div>`;
+        <div class="di-nm">${it.name}</div>
+        <div class="di-ds">${it.desc}</div>${b}</div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
 
-  if (!total) {
-    html += `<div class="no-res"><div class="no-em">🤔</div><div class="no-t">NOTHING FOUND</div><div>Try a different keyword.</div></div>`;
-  }
+  if(!total) html=`<div class="no-res"><div class="no-res-em">🤔</div><div class="no-res-t">NOTHING FOUND</div><div>Try a different keyword.</div></div>`;
 
-  body.innerHTML = html;
-
-  body.querySelectorAll('.di, .pop-chip').forEach(el => {
-    el.addEventListener('click', () => selectItem(el.dataset.catid, el.dataset.id));
+  const body=document.getElementById('pk-body');
+  body.innerHTML=html;
+  body.querySelectorAll('.di,.pop-chip').forEach(el=>{
+    el.addEventListener('click',()=>selectItem(el.dataset.c,el.dataset.i));
   });
 }
 
-function selectItem(catId, itemId) {
-  const cat  = CATALOG.find(c => c.id === catId);
-  if (!cat) return;
-  const item = cat.items.find(i => i.id === itemId);
-  if (!item) return;
+function selectItem(catId,itemId){
+  const cat=CATALOG.find(c=>c.id===catId);
+  if(!cat) return;
+  const item=cat.items.find(i=>i.id===itemId);
+  if(!item) return;
 
-  currentSubject = { ...item, catId, catColor: cat.color, catLabel: cat.label };
+  curSubject={...item,catId,catColor:cat.color,catLabel:cat.label};
 
   // populate sheet header
-  document.getElementById('sh-em').textContent   = item.em;
-  document.getElementById('sh-name').textContent  = item.name;
-  document.getElementById('sh-cat').textContent   = cat.label.toUpperCase();
-  document.getElementById('cv-watermark').textContent = item.name;
-  document.getElementById('s-name').value         = item.name + ' Design';
-  document.getElementById('s-cat').value          = catId;
+  g('sh-em').textContent  = item.em;
+  g('sh-nm').textContent  = item.name;
+  g('sh-cat').textContent = cat.label.toUpperCase();
+  g('cv-wm').textContent  = item.name;
+  g('s-name').value       = item.name+' Design';
+  g('s-cat').value        = catId;
+  g('sc-em').textContent  = item.em;
+  g('sc-nm').textContent  = item.name;
+  g('sc-ds').textContent  = item.desc;
 
-  // subject card in props
-  document.getElementById('sc-em').textContent  = item.em;
-  document.getElementById('sc-nm').textContent  = item.name;
-  document.getElementById('sc-ds').textContent  = item.desc;
-
-  openSheet();
+  goTo('sheet');
+  toast('Workspace opened for '+item.name,'inf');
 }
 
-/* ═══════════════════════════════════════════
-   DESIGN SHEET
-═══════════════════════════════════════════ */
-function openSheet() {
-  document.getElementById('design-sheet').classList.add('open');
-  initThree();
-}
-function closeSheet() {
-  document.getElementById('design-sheet').classList.remove('open');
-  showView('picker');
-}
+/* ══════════════ THREE.JS ══════════════ */
+function initThree(){
+  if(threeOk){updateCam();return;}
+  threeOk=true;
 
-/* ═══════════════════════════════════════════
-   PROPS TABS
-═══════════════════════════════════════════ */
-function switchTab(btn, id) {
-  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('on'));
-  btn.classList.add('on');
-  ['tab-obj','tab-mat','tab-scene'].forEach(t => {
-    document.getElementById(t).style.display = t === id ? 'block' : 'none';
-  });
-}
+  const wrap=document.getElementById('cvwrap');
+  const cv=document.getElementById('cv');
 
-/* ═══════════════════════════════════════════
-   THREE.JS ENGINE
-═══════════════════════════════════════════ */
-let scene, camera, renderer, gridHelper, floorMesh;
-let ambLight, dirLight;
-let objs     = [];
-let selObj   = null;
-let wireMode = false;
-let colorIdx = 0;
-let threeReady = false;
-let showGrid   = true;
-let showShadow = true;
-let showFog    = true;
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x07070e);
+  scene.fog=new THREE.FogExp2(0x07070e,.016);
 
-const COLORS = ['#4d9fff','#ff4d4d','#50c878','#ffd700','#ff8c42','#bf5fff','#00ced1','#ff3c00','#ffffff','#ffaaaa'];
-const CAM = { theta:.7, phi:.65, radius:10, tx:0, ty:0, tz:0 };
-const MO  = { down:false, pan:false, x:0, y:0 };
-let   touchDist = 0;
+  camera=new THREE.PerspectiveCamera(45,wrap.clientWidth/wrap.clientHeight,.1,200);
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  renderer.setSize(wrap.clientWidth,wrap.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+  renderer.shadowMap.enabled=true;
+  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=1.2;
 
-function initThree() {
-  if (threeReady) { updateCam(); return; }
-  threeReady = true;
+  // Lights
+  ambL=new THREE.AmbientLight(0xffffff,.4); scene.add(ambL);
+  sunL=new THREE.DirectionalLight(0xffffff,1.2);
+  sunL.position.set(8,14,6);sunL.castShadow=true;
+  sunL.shadow.mapSize.set(2048,2048);
+  sunL.shadow.camera.near=.1;sunL.shadow.camera.far=60;
+  sunL.shadow.camera.left=sunL.shadow.camera.bottom=-15;
+  sunL.shadow.camera.right=sunL.shadow.camera.top=15;
+  scene.add(sunL);
+  const fl2=new THREE.DirectionalLight(0x00d4ff,.26);fl2.position.set(-6,-2,-5);scene.add(fl2);
+  const rl=new THREE.DirectionalLight(0xff3c00,.16);rl.position.set(0,-6,5);scene.add(rl);
 
-  const wrap = document.getElementById('cwrap');
-  const cv   = document.getElementById('cv');
-
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x07070e);
-  scene.fog        = new THREE.FogExp2(0x07070e, .018);
-
-  camera   = new THREE.PerspectiveCamera(45, wrap.clientWidth / wrap.clientHeight, .1, 200);
-  renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, preserveDrawingBuffer: true });
-  renderer.setSize(wrap.clientWidth, wrap.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type    = THREE.PCFSoftShadowMap;
-  renderer.toneMapping       = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.2;
-
-  // lights
-  ambLight = new THREE.AmbientLight(0xffffff, .4);
-  scene.add(ambLight);
-
-  dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  dirLight.position.set(8, 14, 6);
-  dirLight.castShadow = true;
-  dirLight.shadow.mapSize.width  = 2048;
-  dirLight.shadow.mapSize.height = 2048;
-  dirLight.shadow.camera.near = .1;
-  dirLight.shadow.camera.far  = 60;
-  dirLight.shadow.camera.left = dirLight.shadow.camera.bottom = -15;
-  dirLight.shadow.camera.right = dirLight.shadow.camera.top  =  15;
-  scene.add(dirLight);
-
-  const fillL = new THREE.DirectionalLight(0x00d4ff, .28);
-  fillL.position.set(-6, -2, -5); scene.add(fillL);
-  const rimL = new THREE.DirectionalLight(0xff3c00, .18);
-  rimL.position.set(0, -6, 5); scene.add(rimL);
-
-  // grid
-  gridHelper = new THREE.GridHelper(24, 24, 0x2a2a3a, 0x1a1a2a);
-  scene.add(gridHelper);
-
-  // floor
-  floorMesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(24, 24),
-    new THREE.MeshStandardMaterial({ color: 0x0c0c14, roughness: .9, metalness: .1 })
+  // Grid + Floor
+  grid=new THREE.GridHelper(24,24,0x252535,0x191926);scene.add(grid);
+  floor=new THREE.Mesh(
+    new THREE.PlaneGeometry(24,24),
+    new THREE.MeshStandardMaterial({color:0x0b0b13,roughness:.9,metalness:.1})
   );
-  floorMesh.rotation.x = -Math.PI / 2;
-  floorMesh.receiveShadow = true;
-  scene.add(floorMesh);
+  floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;scene.add(floor);
 
   updateCam();
 
-  // events
-  cv.addEventListener('mousedown',   onMD);
-  cv.addEventListener('mousemove',   onMM);
-  cv.addEventListener('mouseup',     () => MO.down = false);
-  cv.addEventListener('wheel',       onWH, { passive: false });
-  cv.addEventListener('contextmenu', e => e.preventDefault());
-  cv.addEventListener('touchstart',  onTS, { passive: false });
-  cv.addEventListener('touchmove',   onTM, { passive: false });
-  cv.addEventListener('touchend',    () => MO.down = false);
+  // Mouse
+  cv.addEventListener('mousedown',onMD);
+  cv.addEventListener('mousemove',onMM);
+  cv.addEventListener('mouseup',()=>MO.down=false);
+  cv.addEventListener('wheel',onWH,{passive:false});
+  cv.addEventListener('contextmenu',e=>e.preventDefault());
+  // Touch
+  cv.addEventListener('touchstart',onTS,{passive:false});
+  cv.addEventListener('touchmove',onTM,{passive:false});
+  cv.addEventListener('touchend',()=>MO.down=false);
 
-  window.addEventListener('resize', () => {
-    camera.aspect = wrap.clientWidth / wrap.clientHeight;
+  window.addEventListener('resize',()=>{
+    camera.aspect=wrap.clientWidth/wrap.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(wrap.clientWidth, wrap.clientHeight);
+    renderer.setSize(wrap.clientWidth,wrap.clientHeight);
   });
 
-  (function loop() { requestAnimationFrame(loop); renderer.render(scene, camera); })();
+  (function loop(){requestAnimationFrame(loop);renderer.render(scene,camera);})();
 }
 
-function updateCam() {
-  const x = CAM.radius * Math.sin(CAM.phi) * Math.sin(CAM.theta);
-  const y = CAM.radius * Math.cos(CAM.phi);
-  const z = CAM.radius * Math.sin(CAM.phi) * Math.cos(CAM.theta);
-  camera.position.set(CAM.tx + x, CAM.ty + y, CAM.tz + z);
-  camera.lookAt(CAM.tx, CAM.ty, CAM.tz);
+function updateCam(){
+  const x=CAM.r*Math.sin(CAM.phi)*Math.sin(CAM.theta);
+  const y=CAM.r*Math.cos(CAM.phi);
+  const z=CAM.r*Math.sin(CAM.phi)*Math.cos(CAM.theta);
+  camera.position.set(CAM.tx+x,CAM.ty+y,CAM.tz+z);
+  camera.lookAt(CAM.tx,CAM.ty,CAM.tz);
 }
 
-function onMD(e) {
-  MO.down = true; MO.pan = e.button === 2; MO.x = e.clientX; MO.y = e.clientY;
-  if (e.button === 0) pick(e);
-}
-function onMM(e) {
-  if (!MO.down) return;
-  const dx = e.clientX - MO.x, dy = e.clientY - MO.y;
-  if (MO.pan) {
-    const sp = .005 * CAM.radius;
-    const r  = new THREE.Vector3();
-    r.crossVectors(camera.getWorldDirection(new THREE.Vector3()), camera.up).normalize();
-    CAM.tx -= r.x * dx * sp; CAM.tz -= r.z * dx * sp;
-    CAM.ty += dy * sp;
-  } else {
-    CAM.theta -= dx * .007;
-    CAM.phi = Math.max(.05, Math.min(Math.PI - .05, CAM.phi - dy * .007));
+function onMD(e){MO.down=true;MO.pan=e.button===2;MO.x=e.clientX;MO.y=e.clientY;if(e.button===0)pick(e);}
+function onMM(e){
+  if(!MO.down) return;
+  const dx=e.clientX-MO.x,dy=e.clientY-MO.y;
+  if(MO.pan){
+    const sp=.005*CAM.r,r=new THREE.Vector3();
+    r.crossVectors(camera.getWorldDirection(new THREE.Vector3()),camera.up).normalize();
+    CAM.tx-=r.x*dx*sp;CAM.tz-=r.z*dx*sp;CAM.ty+=dy*sp;
+  }else{
+    CAM.theta-=dx*.007;
+    CAM.phi=Math.max(.05,Math.min(Math.PI-.05,CAM.phi-dy*.007));
   }
-  updateCam(); MO.x = e.clientX; MO.y = e.clientY;
+  updateCam();MO.x=e.clientX;MO.y=e.clientY;
 }
-function onWH(e) {
+function onWH(e){e.preventDefault();CAM.r=Math.max(1.5,Math.min(40,CAM.r+e.deltaY*.012));updateCam();}
+function onTS(e){
   e.preventDefault();
-  CAM.radius = Math.max(1.5, Math.min(40, CAM.radius + e.deltaY * .012));
-  updateCam();
+  if(e.touches.length===1){MO.down=true;MO.pan=false;MO.x=e.touches[0].clientX;MO.y=e.touches[0].clientY;}
+  else if(e.touches.length===2) tDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
 }
-function onTS(e) {
+function onTM(e){
   e.preventDefault();
-  if (e.touches.length === 1) {
-    MO.down = true; MO.pan = false;
-    MO.x = e.touches[0].clientX; MO.y = e.touches[0].clientY;
-  } else if (e.touches.length === 2) {
-    touchDist = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-  }
-}
-function onTM(e) {
-  e.preventDefault();
-  if (e.touches.length === 1 && MO.down) {
-    const dx = e.touches[0].clientX - MO.x, dy = e.touches[0].clientY - MO.y;
-    CAM.theta -= dx * .007;
-    CAM.phi = Math.max(.05, Math.min(Math.PI - .05, CAM.phi - dy * .007));
-    updateCam(); MO.x = e.touches[0].clientX; MO.y = e.touches[0].clientY;
-  } else if (e.touches.length === 2) {
-    const d = Math.hypot(
-      e.touches[0].clientX - e.touches[1].clientX,
-      e.touches[0].clientY - e.touches[1].clientY
-    );
-    CAM.radius = Math.max(1.5, Math.min(40, CAM.radius * (touchDist / d)));
-    touchDist = d; updateCam();
+  if(e.touches.length===1&&MO.down){
+    const dx=e.touches[0].clientX-MO.x,dy=e.touches[0].clientY-MO.y;
+    CAM.theta-=dx*.007;CAM.phi=Math.max(.05,Math.min(Math.PI-.05,CAM.phi-dy*.007));
+    updateCam();MO.x=e.touches[0].clientX;MO.y=e.touches[0].clientY;
+  }else if(e.touches.length===2){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    CAM.r=Math.max(1.5,Math.min(40,CAM.r*(tDist/d)));tDist=d;updateCam();
   }
 }
 
-function pick(e) {
-  const cv   = document.getElementById('cv');
-  const rect = cv.getBoundingClientRect();
-  const m    = new THREE.Vector2(
-    ((e.clientX - rect.left) / rect.width)  * 2 - 1,
-    -((e.clientY - rect.top) / rect.height) * 2 + 1
-  );
-  const ray = new THREE.Raycaster();
-  ray.setFromCamera(m, camera);
-  const hits = ray.intersectObjects(objs);
-  hits.length ? doSel(hits[0].object) : doDesel();
+function pick(e){
+  const cv=document.getElementById('cv'),rect=cv.getBoundingClientRect();
+  const m=new THREE.Vector2(((e.clientX-rect.left)/rect.width)*2-1,-((e.clientY-rect.top)/rect.height)*2+1);
+  const ray=new THREE.Raycaster();ray.setFromCamera(m,camera);
+  const hits=ray.intersectObjects(objs);
+  hits.length?doSel(hits[0].object):doDesel();
 }
 
-/* ── Select / Deselect ── */
-function doSel(o) {
-  doDesel();
-  selObj = o;
-  // cyan outline
-  const out = new THREE.Mesh(
-    o.geometry.clone(),
-    new THREE.MeshBasicMaterial({ color: 0x00d4ff, side: THREE.BackSide })
-  );
-  out.scale.multiplyScalar(1.07);
-  out.userData.isOut = true;
-  o.add(out);
-  // update inputs
-  document.getElementById('px').value  = o.position.x.toFixed(2);
-  document.getElementById('py').value  = o.position.y.toFixed(2);
-  document.getElementById('pz').value  = o.position.z.toFixed(2);
-  document.getElementById('sx').value  = o.scale.x.toFixed(2);
-  document.getElementById('sy').value  = o.scale.y.toFixed(2);
-  document.getElementById('sz').value  = o.scale.z.toFixed(2);
-  document.getElementById('rx').value  = Math.round(THREE.MathUtils.radToDeg(o.rotation.x));
-  document.getElementById('ry').value  = Math.round(THREE.MathUtils.radToDeg(o.rotation.y));
-  document.getElementById('rz').value  = Math.round(THREE.MathUtils.radToDeg(o.rotation.z));
-  document.getElementById('mc').value  = '#' + o.material.color.getHexString();
-  document.getElementById('mm').value  = o.material.metalness.toFixed(2);
-  document.getElementById('mr').value  = o.material.roughness.toFixed(2);
-  document.getElementById('mop').value = o.material.opacity.toFixed(2);
-
-  const badge = document.getElementById('sel-badge');
-  badge.textContent = '✦ ' + o.userData.name;
-  badge.classList.add('active');
+function doSel(o){
+  doDesel();selObj=o;
+  const out=new THREE.Mesh(o.geometry.clone(),new THREE.MeshBasicMaterial({color:0x00d4ff,side:THREE.BackSide}));
+  out.scale.multiplyScalar(1.07);out.userData.isOut=true;o.add(out);
+  g('px').value=o.position.x.toFixed(2);
+  g('py').value=o.position.y.toFixed(2);
+  g('pz').value=o.position.z.toFixed(2);
+  g('sx').value=o.scale.x.toFixed(2);
+  g('sy').value=o.scale.y.toFixed(2);
+  g('sz').value=o.scale.z.toFixed(2);
+  g('rx').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.x));
+  g('ry').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.y));
+  g('rz').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.z));
+  g('mc').value='#'+o.material.color.getHexString();
+  g('mm').value=o.material.metalness.toFixed(2);
+  g('mr').value=o.material.roughness.toFixed(2);
+  g('mop').value=o.material.opacity.toFixed(2);
+  const sel=document.getElementById('cv-sel');
+  sel.textContent='✦ '+o.userData.name;sel.classList.add('hi');
   refreshList();
 }
-function doDesel() {
-  if (selObj) selObj.children.filter(c => c.userData.isOut).forEach(c => selObj.remove(c));
-  selObj = null;
-  const badge = document.getElementById('sel-badge');
-  badge.textContent = 'Nothing selected';
-  badge.classList.remove('active');
+function doDesel(){
+  if(selObj) selObj.children.filter(c=>c.userData.isOut).forEach(c=>selObj.remove(c));
+  selObj=null;
+  const sel=document.getElementById('cv-sel');
+  sel.textContent='Nothing selected';sel.classList.remove('hi');
   refreshList();
 }
 
-/* ── Add Shapes ── */
-const GEO_FN = {
-  box:         () => new THREE.BoxGeometry(1, 1, 1),
-  sphere:      () => new THREE.SphereGeometry(.6, 32, 32),
-  cylinder:    () => new THREE.CylinderGeometry(.5, .5, 1.2, 32),
-  cone:        () => new THREE.ConeGeometry(.55, 1.2, 32),
-  torus:       () => new THREE.TorusGeometry(.5, .18, 16, 64),
-  ring:        () => new THREE.TorusGeometry(.55, .06, 8, 48),
-  tube:        () => new THREE.CylinderGeometry(.3, .3, 1.5, 20, 1, true),
-  octahedron:  () => new THREE.OctahedronGeometry(.7),
+const GEOS={
+  box:()=>new THREE.BoxGeometry(1,1,1),
+  sphere:()=>new THREE.SphereGeometry(.6,32,32),
+  cylinder:()=>new THREE.CylinderGeometry(.5,.5,1.2,32),
+  cone:()=>new THREE.ConeGeometry(.55,1.2,32),
+  torus:()=>new THREE.TorusGeometry(.5,.18,16,64),
+  ring:()=>new THREE.TorusGeometry(.55,.06,8,48),
+  tube:()=>new THREE.CylinderGeometry(.28,.28,1.5,20,1,true),
+  octa:()=>new THREE.OctahedronGeometry(.7),
+  wedge:()=>{const g=new THREE.BufferGeometry();const v=new Float32Array([-1,0,-1,1,0,-1,1,0,1,-1,0,1,-1,1,-1,1,1,-1]);g.setAttribute('position',new THREE.BufferAttribute(v,3));g.setIndex([0,1,2,0,2,3,0,1,5,0,5,4,1,2,6,1,6,5,2,3,7,2,7,6,3,0,4,3,4,7,4,5,6,4,6,7]);g.computeVertexNormals();return g;},
 };
 
-function addShape(type) {
-  const geo = (GEO_FN[type] || GEO_FN.box)();
-  const col = COLORS[colorIdx++ % COLORS.length];
-  const mat = new THREE.MeshStandardMaterial({
-    color: col, metalness: .3, roughness: .4,
-    transparent: false, opacity: 1,
+function add(type){
+  const geo=(GEOS[type]||GEOS.box)();
+  const mat=new THREE.MeshStandardMaterial({
+    color:COLORS[colorIdx++%COLORS.length],metalness:.3,roughness:.4,transparent:false,opacity:1
   });
-  const mesh = new THREE.Mesh(geo, mat);
-  const spread = Math.min(objs.length * .4, 3);
-  mesh.position.set(
-    (Math.random() - .5) * (2 + spread),
-    .5 + Math.random() * .3,
-    (Math.random() - .5) * (2 + spread)
-  );
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  mesh.userData.name = type[0].toUpperCase() + type.slice(1) + '_' + (objs.length + 1);
-  scene.add(mesh);
-  objs.push(mesh);
-  updateObjCount();
-  doSel(mesh);
-  showToast(`Added ${mesh.userData.name}`, 'info');
+  const m=new THREE.Mesh(geo,mat);
+  m.position.set((Math.random()-.5)*4,.5+Math.random()*.2,(Math.random()-.5)*4);
+  m.castShadow=true;m.receiveShadow=true;
+  m.userData.name=type[0].toUpperCase()+type.slice(1)+'_'+(objs.length+1);
+  scene.add(m);objs.push(m);
+  g('ocount').textContent=objs.length;
+  doSel(m);
+  toast('Added '+m.userData.name,'inf');
 }
 
-/* ── Delete / Clear / Duplicate ── */
-function delSel() {
-  if (!selObj) { showToast('Select an object first', ''); return; }
-  scene.remove(selObj);
-  objs = objs.filter(o => o !== selObj);
-  selObj = null;
-  document.getElementById('sel-badge').textContent = 'Nothing selected';
-  document.getElementById('sel-badge').classList.remove('active');
-  updateObjCount(); refreshList();
-}
-function clearAll() {
-  if (!objs.length) return;
-  if (!confirm('Remove all objects from the scene?')) return;
-  objs.forEach(o => scene.remove(o));
-  objs = []; selObj = null;
-  document.getElementById('sel-badge').textContent = 'Nothing selected';
-  document.getElementById('sel-badge').classList.remove('active');
-  updateObjCount(); refreshList();
-}
-function dupeSel() {
-  if (!selObj) { showToast('Select an object to duplicate', ''); return; }
-  const geo = selObj.geometry.clone();
-  const mat = selObj.material.clone();
-  const clone = new THREE.Mesh(geo, mat);
-  clone.position.copy(selObj.position).add(new THREE.Vector3(.5, 0, .5));
-  clone.scale.copy(selObj.scale);
-  clone.rotation.copy(selObj.rotation);
-  clone.castShadow = true; clone.receiveShadow = true;
-  clone.userData.name = selObj.userData.name + '_copy';
-  scene.add(clone); objs.push(clone);
-  updateObjCount(); doSel(clone);
-  showToast('Duplicated!', 'info');
-}
-function groupAll() {
-  showToast('Group: ' + objs.length + ' objects selected', 'info');
+function delSel(){if(!selObj){toast('Select an object first','');return;}scene.remove(selObj);objs=objs.filter(o=>o!==selObj);selObj=null;g('cv-sel').textContent='Nothing selected';document.getElementById('cv-sel').classList.remove('hi');g('ocount').textContent=objs.length;refreshList();}
+function clearAll(){if(!objs.length)return;if(!confirm('Remove all objects?'))return;objs.forEach(o=>scene.remove(o));objs=[];selObj=null;g('cv-sel').textContent='Nothing selected';document.getElementById('cv-sel').classList.remove('hi');g('ocount').textContent=0;refreshList();}
+function dupeSel(){
+  if(!selObj){toast('Select an object to duplicate','');return;}
+  const geo=selObj.geometry.clone(),mat=selObj.material.clone();
+  const cl=new THREE.Mesh(geo,mat);
+  cl.position.copy(selObj.position).add(new THREE.Vector3(.6,0,.6));
+  cl.scale.copy(selObj.scale);cl.rotation.copy(selObj.rotation);
+  cl.castShadow=true;cl.receiveShadow=true;
+  cl.userData.name=selObj.userData.name+'_copy';
+  scene.add(cl);objs.push(cl);g('ocount').textContent=objs.length;doSel(cl);
+  toast('Duplicated!','inf');
 }
 
-/* ── Transform & Material ── */
-function applyTr() {
-  if (!selObj) return;
-  selObj.position.set(+g('px'), +g('py'), +g('pz'));
-  selObj.scale.set(   +g('sx'), +g('sy'), +g('sz'));
+function applyTr(){
+  if(!selObj)return;
+  selObj.position.set(+g('px').value,+g('py').value,+g('pz').value);
+  selObj.scale.set(+g('sx').value,+g('sy').value,+g('sz').value);
   selObj.rotation.set(
-    THREE.MathUtils.degToRad(+g('rx')),
-    THREE.MathUtils.degToRad(+g('ry')),
-    THREE.MathUtils.degToRad(+g('rz'))
+    THREE.MathUtils.degToRad(+g('rx').value),
+    THREE.MathUtils.degToRad(+g('ry').value),
+    THREE.MathUtils.degToRad(+g('rz').value)
   );
 }
-function applyMat() {
-  if (!selObj) return;
-  selObj.material.color.set(g('mc'));
-  selObj.material.metalness = +g('mm');
-  selObj.material.roughness = +g('mr');
-  const op = +g('mop');
-  selObj.material.opacity = op;
-  selObj.material.transparent = op < 1;
+function applyMat(){
+  if(!selObj)return;
+  selObj.material.color.set(g('mc').value);
+  selObj.material.metalness=+g('mm').value;
+  selObj.material.roughness=+g('mr').value;
+  const op=+g('mop').value;
+  selObj.material.opacity=op;selObj.material.transparent=op<1;
 }
-function applyMatToAll() {
-  const col = g('mc'), met = +g('mm'), rou = +g('mr'), op = +g('mop');
-  objs.forEach(o => {
-    o.material.color.set(col);
-    o.material.metalness = met;
-    o.material.roughness = rou;
-    o.material.opacity   = op;
-    o.material.transparent = op < 1;
+function applyAll(){
+  objs.forEach(o=>{
+    o.material.color.set(g('mc').value);
+    o.material.metalness=+g('mm').value;
+    o.material.roughness=+g('mr').value;
+    const op=+g('mop').value;o.material.opacity=op;o.material.transparent=op<1;
   });
-  showToast('Applied material to all objects', 'info');
+  toast('Applied to all objects','inf');
 }
-function applyPreset(name) {
-  const p = MAT_PRESETS[name]; if (!p) return;
-  document.getElementById('mc').value  = p.color;
-  document.getElementById('mm').value  = p.metalness;
-  document.getElementById('mr').value  = p.roughness;
-  document.getElementById('mop').value = p.opacity;
-  applyMat();
-  showToast('Preset: ' + name, 'info');
+function preset(name){
+  const p=PRESETS[name];if(!p)return;
+  g('mc').value=p.color;g('mm').value=p.metalness;g('mr').value=p.roughness;g('mop').value=p.opacity;
+  applyMat();toast('Preset: '+name,'inf');
 }
 
-/* ── Scene Controls ── */
-function toggleGrid() {
-  showGrid = !showGrid;
-  if (gridHelper) gridHelper.visible = showGrid;
-  document.getElementById('tog-grid').classList.toggle('on', showGrid);
+function toggleGrid(){gridOn=!gridOn;if(grid)grid.visible=gridOn;document.getElementById('tog-grid').classList.toggle('on',gridOn);}
+function toggleShad(){shadowOn=!shadowOn;renderer.shadowMap.enabled=shadowOn;document.getElementById('tog-shad').classList.toggle('on',shadowOn);}
+function toggleFog(){fogOn=!fogOn;scene.fog=fogOn?new THREE.FogExp2(0x07070e,.016):null;document.getElementById('tog-fog').classList.toggle('on',fogOn);}
+function toggleWire(){
+  wireMode=!wireMode;
+  objs.forEach(o=>o.material.wireframe=wireMode);
+  document.getElementById('wire-btn').textContent=wireMode?'⬡ Solid':'⬡ Wireframe';
+  document.getElementById('tog-wire').classList.toggle('on',wireMode);
 }
-function toggleShadow() {
-  showShadow = !showShadow;
-  renderer.shadowMap.enabled = showShadow;
-  document.getElementById('tog-shadow').classList.toggle('on', showShadow);
-}
-function toggleFog() {
-  showFog = !showFog;
-  scene.fog = showFog ? new THREE.FogExp2(0x07070e, .018) : null;
-  document.getElementById('tog-fog').classList.toggle('on', showFog);
-}
-function toggleWire() {
-  wireMode = !wireMode;
-  objs.forEach(o => { o.material.wireframe = wireMode; });
-  document.getElementById('wire-btn').textContent = wireMode ? '⬡ Solid' : '⬡ Wireframe';
-  document.getElementById('tog-wire').classList.toggle('on', wireMode);
-}
-function applyLighting() {
-  if (ambLight) ambLight.intensity = +document.getElementById('amb-int').value;
-  if (dirLight) dirLight.intensity = +document.getElementById('dir-int').value;
-}
-function setBg(preset) {
-  const bgs = {
-    dark:     0x07070e,
-    midnight: 0x000814,
-    studio:   0x1a1a2e,
-    space:    0x020209,
-  };
-  if (scene) scene.background = new THREE.Color(bgs[preset] || 0x07070e);
-}
+function applyLight(){if(ambL)ambL.intensity=+g('amb').value;if(sunL)sunL.intensity=+g('sun').value;}
+function setBg(hex){if(scene)scene.background=new THREE.Color(hex);}
 
-/* ── Camera Presets ── */
-function setCamPreset(name) {
-  const r = CAM.radius;
-  const P = {
-    front: { theta: 0,           phi: Math.PI/2 },
-    top:   { theta: 0,           phi: 0.01 },
-    side:  { theta: Math.PI/2,   phi: Math.PI/2 },
-    iso:   { theta: Math.PI/4,   phi: Math.PI/4 },
-  };
-  const p = P[name] || P.iso;
-  CAM.theta = p.theta; CAM.phi = p.phi; CAM.radius = r;
-  updateCam();
+function camPreset(n){
+  const P={front:{theta:0,phi:Math.PI/2},top:{theta:0,phi:.01},side:{theta:Math.PI/2,phi:Math.PI/2},iso:{theta:Math.PI/4,phi:Math.PI/4}};
+  const p=P[n]||P.iso;CAM.theta=p.theta;CAM.phi=p.phi;updateCam();
 }
-function resetCam() {
-  CAM.theta = .7; CAM.phi = .65; CAM.radius = 10;
-  CAM.tx = 0; CAM.ty = 0; CAM.tz = 0;
-  updateCam();
-}
-function cycleMode() {
-  const modes = ['↕ Move', '↔ Rotate', '⇔ Scale'];
-  const btn = document.getElementById('mode-btn');
-  const idx = modes.indexOf(btn.textContent);
-  btn.textContent = modes[(idx + 1) % modes.length];
-}
+function resetCam(){CAM.theta=.72;CAM.phi=.62;CAM.r=11;CAM.tx=0;CAM.ty=0;CAM.tz=0;updateCam();}
 
-/* ── Helpers ── */
-function g(id) { return document.getElementById(id).value; }
-function updateObjCount() {
-  document.getElementById('ocount').textContent = objs.length;
-}
-function refreshList() {
-  const ul = document.getElementById('olist');
-  if (!objs.length) {
-    ul.innerHTML = `<li class="empty-obj"><div class="empty-obj-em">✦</div>Add a shape from the toolbar<br>to start building</li>`;
-    return;
-  }
-  ul.innerHTML = '';
-  objs.forEach((o, i) => {
-    const li = document.createElement('li');
-    li.className = 'oi' + (o === selObj ? ' sel' : '');
-    li.innerHTML =
-      `<div class="od" style="background:#${o.material.color.getHexString()}"></div>` +
-      `<span class="on2">${o.userData.name}</span>` +
-      `<span class="ox" title="Delete">✕</span>`;
-    li.addEventListener('click', () => doSel(o));
-    li.querySelector('.ox').addEventListener('click', e => {
-      e.stopPropagation();
-      scene.remove(o);
-      objs.splice(i, 1);
-      if (selObj === o) {
-        selObj = null;
-        document.getElementById('sel-badge').textContent = 'Nothing selected';
-        document.getElementById('sel-badge').classList.remove('active');
-      }
-      updateObjCount(); refreshList();
+function refreshList(){
+  const ul=document.getElementById('olist');
+  if(!objs.length){ul.innerHTML='<li class="empty-ol"><em>✦</em>Add shapes from the toolbar<br>to start building your design</li>';return;}
+  ul.innerHTML='';
+  objs.forEach((o,i)=>{
+    const li=document.createElement('li');
+    li.className='oi'+(o===selObj?' sel':'');
+    li.innerHTML=`<div class="od" style="background:#${o.material.color.getHexString()}"></div><span class="on2">${o.userData.name}</span><span class="ox">✕</span>`;
+    li.addEventListener('click',()=>doSel(o));
+    li.querySelector('.ox').addEventListener('click',e=>{
+      e.stopPropagation();scene.remove(o);objs.splice(i,1);
+      if(selObj===o){selObj=null;document.getElementById('cv-sel').textContent='Nothing selected';document.getElementById('cv-sel').classList.remove('hi');}
+      g('ocount').textContent=objs.length;refreshList();
     });
     ul.appendChild(li);
   });
 }
 
-/* ═══════════════════════════════════════════
-   SAVE FLOW
-═══════════════════════════════════════════ */
-function openSave() {
-  if (!objs.length) { showToast('Add at least one shape before saving!', ''); return; }
-  document.getElementById('save-ov').classList.add('open');
+/* ══════════════ PROPS TABS ══════════════ */
+function ptab(btn,id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['pt-obj','pt-mat','pt-scene'].forEach(t=>document.getElementById(t).style.display=t===id?'block':'none');
 }
-function closeSave() { document.getElementById('save-ov').classList.remove('open'); }
 
-function doSave() {
-  const name    = document.getElementById('s-name').value.trim() || 'Untitled Design';
-  const catId   = document.getElementById('s-cat').value;
-  const desc    = document.getElementById('s-desc').value.trim();
-  const author  = document.getElementById('s-author').value.trim() || 'Anonymous';
-  const isPublic = document.getElementById('pub-tgl').classList.contains('on');
+/* ══════════════ SAVE ══════════════ */
+function openSave(){
+  if(!objs.length){toast('Add at least one shape before saving!','');return;}
+  document.getElementById('save-ov').classList.add('on');
+}
+function closeSave(){document.getElementById('save-ov').classList.remove('on');}
 
-  // capture thumbnail from canvas
-  let thumb = '';
-  try { thumb = renderer.domElement.toDataURL('image/jpeg', .7); } catch(e) {}
-
-  const design = {
-    id:        Date.now(),
-    name, catId, desc, author, isPublic,
-    thumb,
-    objCount:  objs.length,
-    subject:   currentSubject,
-    savedAt:   new Date().toLocaleString(),
-  };
-
-  savedDesigns.unshift(design);
-  designCount++;
-  document.getElementById('stat-n').textContent = designCount;
+function doSave(){
+  const name=g('s-name').value.trim()||'Untitled Design';
+  const catId=g('s-cat').value;
+  const desc=g('s-desc').value.trim();
+  const author=g('s-author').value.trim()||'Anonymous';
+  const pub=document.getElementById('pub-tgl').classList.contains('on');
+  let thumb='';
+  try{thumb=renderer.domElement.toDataURL('image/jpeg',.75);}catch(e){}
+  const design={id:Date.now(),name,catId,desc,author,pub,thumb,objCount:objs.length,subject:curSubject,date:new Date().toLocaleString()};
+  saves.unshift(design);saveCount++;
+  document.getElementById('stat-n').textContent=saveCount;
   closeSave();
-
-  // show success overlay
-  document.getElementById('success-preview').innerHTML = `
-    <div class="sp-row"><span class="sp-label">Design</span><span class="sp-val">${name}</span></div>
-    <div class="sp-row"><span class="sp-label">Objects</span><span class="sp-val">${objs.length} shape${objs.length!==1?'s':''}</span></div>
-    <div class="sp-row"><span class="sp-label">Author</span><span class="sp-val">${author}</span></div>
-    <div class="sp-row"><span class="sp-label">Saved</span><span class="sp-val">${design.savedAt}</span></div>
-    <div class="sp-row"><span class="sp-label">Visibility</span><span class="sp-val" style="color:var(--${isPublic?'green':'muted'})">${isPublic?'🌐 Public':'🔒 Private'}</span></div>
+  // success screen
+  const cat=CATALOG.find(c=>c.id===catId)||{icon:'⊞',label:'Design'};
+  document.getElementById('suc-preview').innerHTML=`
+    <div class="sp-row"><span class="sp-l">Design</span><span class="sp-v">${name}</span></div>
+    <div class="sp-row"><span class="sp-l">Category</span><span class="sp-v">${cat.icon} ${cat.label}</span></div>
+    <div class="sp-row"><span class="sp-l">Objects</span><span class="sp-v">${objs.length} shape${objs.length!==1?'s':''}</span></div>
+    <div class="sp-row"><span class="sp-l">Author</span><span class="sp-v">${author}</span></div>
+    <div class="sp-row"><span class="sp-l">Saved</span><span class="sp-v">${design.date}</span></div>
+    <div class="sp-row"><span class="sp-l">Visibility</span><span class="sp-v" style="color:var(--${pub?'green':'muted'})">${pub?'🌐 Public':'🔒 Private'}</span></div>
   `;
-  document.getElementById('success-ov').classList.add('open');
+  document.getElementById('success-ov').classList.add('on');
 }
+function closeSuc(){document.getElementById('success-ov').classList.remove('on');}
 
-function closeSuccess() { document.getElementById('success-ov').classList.remove('open'); }
-
-/* ═══════════════════════════════════════════
-   GALLERY
-═══════════════════════════════════════════ */
-function renderGallery() {
-  const grid = document.getElementById('g-grid');
-  if (!savedDesigns.length) {
-    grid.innerHTML = `<div class="g-empty"><div class="g-empty-em">🎨</div><div class="g-empty-t">NO DESIGNS YET</div><div>Create and save your first design to see it here.</div></div>`;
-    return;
-  }
-  grid.innerHTML = savedDesigns.map(d => {
-    const cat = CATALOG.find(c => c.id === d.catId) || { color:'#fff', icon:'⊞', label:'Design' };
-    return `<div class="g-card">
-      <div class="g-thumb" style="background:linear-gradient(135deg,var(--surface2),${cat.color}22)">
-        ${d.thumb ? `<img src="${d.thumb}" alt="${d.name}"/>` : `<span style="font-size:3rem">${d.subject?.em||cat.icon}</span>`}
+/* ══════════════ GALLERY ══════════════ */
+function renderGallery(){
+  const gg=document.getElementById('gg');
+  if(!saves.length){gg.innerHTML='<div class="gEmpty"><em>🎨</em><strong>NO DESIGNS YET</strong>Create and save your first design to see it here.</div>';return;}
+  gg.innerHTML=saves.map(d=>{
+    const cat=CATALOG.find(c=>c.id===d.catId)||{color:'#888',icon:'⊞',label:'Design'};
+    return `<div class="gc">
+      <div class="gc-thumb" style="background:linear-gradient(135deg,var(--s2),${cat.color}20)">
+        ${d.thumb?`<img src="${d.thumb}" alt="${d.name}"/>`:`<span>${d.subject?.em||cat.icon}</span>`}
       </div>
-      <div class="g-info">
-        <div class="g-name">${d.name}</div>
-        <div class="g-meta">
-          <span>by ${d.author}</span>
-          <span>${d.objCount} object${d.objCount!==1?'s':''}</span>
-        </div>
-        <div class="g-badge" style="border-color:${cat.color};color:${cat.color}">
-          ${cat.icon} ${cat.label}
-          ${d.isPublic ? ' · 🌐 Public' : ''}
-        </div>
-        <div style="font-size:.66rem;color:var(--muted);margin-top:.4rem;font-family:var(--fm)">${d.savedAt}</div>
+      <div class="gc-info">
+        <div class="gc-nm">${d.name}</div>
+        <div class="gc-meta"><span>by ${d.author}</span><span>${d.objCount} shape${d.objCount!==1?'s':''}</span></div>
+        <div class="gc-badge" style="border-color:${cat.color};color:${cat.color}">${cat.icon} ${cat.label}${d.pub?' · 🌐':''}</div>
+        <div style="font-size:.62rem;color:var(--muted);margin-top:.38rem;font-family:var(--fm)">${d.date}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-/* ═══════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════ */
-function showToast(msg, type) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className   = 'toast show' + (type ? ' ' + type : '');
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.classList.remove('show'), 3000);
+/* ══════════════ TOAST ══════════════ */
+function toast(msg,type){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className='toast on'+(type?' '+type:'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2900);
 }
 
-/* ═══════════════════════════════════════════
-   BOOT
-═══════════════════════════════════════════ */
+/* ══════════════ HELPERS ══════════════ */
+function g(id){return document.getElementById(id);}
+
+/* ══════════════ BOOT ══════════════ */
 buildPicker();
 </script>
 </body>
 </html>
-HTMLEOF
-echo "Done — $(wc -l < /mnt/user-data/outputs/DesignForge/index.html) lines"
