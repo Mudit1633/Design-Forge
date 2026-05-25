@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/DesignForge/index.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -168,4 +167,1265 @@ input:focus,select:focus,textarea:focus{outline:none}
 .pchip{flex-shrink:0;display:flex;align-items:center;gap:.38rem;padding:.45rem .85rem;border-radius:7px;cursor:pointer;background:var(--sur);border:1px solid var(--brd);font-size:.77rem;transition:all .17s;white-space:nowrap}
 .pchip:hover{border-color:var(--acc);color:var(--acc)}
 .shd{font-family:var(--fm);font-size:.6rem;letter-spacing:4px;text-transform:uppercase;margin-bottom:.78rem;display:flex;align-items:center;gap:.52rem}
-.shd::after{con
+.shd::after{content:'';flex:1;height:1px;background:var(--brd)}
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(142px,1fr));gap:.62rem;margin-bottom:1.9rem}
+.di{background:var(--sur);border:2px solid transparent;border-radius:10px;padding:.92rem .82rem;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s;position:relative;overflow:hidden}
+.di-gl{position:absolute;inset:0;opacity:0;transition:opacity .2s;pointer-events:none}
+.di:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.5)}
+.di:hover .di-gl{opacity:1}
+.di-em{font-size:1.7rem;margin-bottom:.38rem;line-height:1;position:relative}
+.di-nm{font-weight:600;font-size:.81rem;margin-bottom:.24rem;line-height:1.25;position:relative}
+.di-ds{font-size:.66rem;color:var(--mut);line-height:1.4;margin-bottom:.34rem;position:relative}
+.badge{display:inline-block;font-size:.54rem;padding:.11rem .35rem;border-radius:10px;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;position:relative}
+.bh{background:rgba(255,60,0,.15);color:var(--acc)}
+.bn{background:rgba(0,212,255,.15);color:var(--a2)}
+.bp{background:rgba(255,210,0,.12);color:var(--gold)}
+.nores{text-align:center;padding:3.5rem 2rem;color:var(--mut)}
+.nores-em{font-size:2.2rem;margin-bottom:.7rem}
+.nores-t{font-family:var(--fh);font-size:1.3rem;margin-bottom:.4rem;color:var(--txt)}
+
+/* ════════════════════════════════════
+   DESIGN SHEET
+════════════════════════════════════ */
+#s-sheet{overflow:hidden;animation:shIn .36s cubic-bezier(.16,1,.3,1)}
+@keyframes shIn{from{opacity:0;transform:translateY(34px) scale(.985)}to{opacity:1;transform:none}}
+
+/* sheet header */
+.shtop{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.62rem 1.35rem;background:var(--sur);border-bottom:1px solid var(--brd);
+  flex-shrink:0;gap:.7rem;flex-wrap:wrap;
+}
+.shleft{display:flex;align-items:center;gap:.8rem}
+.shbk{background:none;border:1px solid var(--brd);color:var(--mut);padding:.3rem .72rem;border-radius:5px;cursor:pointer;font-size:.77rem;transition:all .17s;flex-shrink:0}
+.shbk:hover{color:var(--txt);border-color:var(--acc)}
+.shs{display:flex;align-items:center;gap:.5rem}
+.shem{font-size:1.5rem;line-height:1}
+.shnm{font-family:var(--fh);font-size:1.2rem;letter-spacing:1px;line-height:1}
+.shcat{font-family:var(--fm);font-size:.58rem;color:var(--mut);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
+.shpill{font-family:var(--fm);font-size:.58rem;letter-spacing:3px;color:var(--a2);text-transform:uppercase;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);padding:.18rem .52rem;border-radius:20px}
+.shright{display:flex;gap:.45rem;align-items:center;flex-wrap:wrap}
+
+/* toolbar */
+.shbar{
+  display:flex;align-items:center;gap:.32rem;
+  padding:.46rem 1.1rem;background:rgba(17,17,25,.98);
+  border-bottom:1px solid var(--brd);overflow-x:auto;flex-shrink:0;
+}
+.shbar::-webkit-scrollbar{height:3px}
+.tsep{width:1px;height:20px;background:var(--brd);margin:0 .1rem;flex-shrink:0}
+.tglbl{font-family:var(--fm);font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--mut);flex-shrink:0}
+.tg{display:flex;align-items:center;gap:.28rem;flex-shrink:0}
+.tb{padding:.28rem .62rem;background:var(--s2);border:1px solid var(--brd);color:var(--txt);border-radius:4px;cursor:pointer;font-size:.75rem;transition:all .14s;white-space:nowrap;flex-shrink:0}
+.tb:hover{background:var(--acc);border-color:var(--acc);color:#fff}
+.tb.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.tb.cg{background:var(--grn);border-color:var(--grn);color:#000;font-weight:700}
+.tb.ca{background:var(--a2);border-color:var(--a2);color:#000;font-weight:700}
+
+/* workspace */
+.shws{flex:1;display:flex;overflow:hidden}
+.cvwrap{flex:1;position:relative;background:radial-gradient(ellipse at 50% 35%,#0e0e1c,#05050c);cursor:crosshair;overflow:hidden}
+#cv{width:100%;height:100%;display:block}
+.cvwm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--fh);font-size:clamp(1.8rem,5vw,4.5rem);letter-spacing:.18em;color:rgba(255,255,255,.025);pointer-events:none;white-space:nowrap;text-transform:uppercase;user-select:none}
+.cvhint{position:absolute;bottom:.82rem;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:.58rem;color:rgba(255,255,255,.18);pointer-events:none;white-space:nowrap;text-align:center;line-height:1.9}
+.cvinfo{position:absolute;top:.82rem;left:.82rem;font-family:var(--fm);font-size:.6rem;color:var(--mut);pointer-events:none;line-height:1.9}
+.cvinfo b{color:var(--a2)}
+.cvsel{position:absolute;top:.82rem;right:.82rem;font-family:var(--fm);font-size:.6rem;background:rgba(17,17,25,.9);border:1px solid var(--brd);padding:.26rem .62rem;border-radius:6px;color:var(--mut);pointer-events:none;transition:all .2s}
+.cvsel.hi{border-color:var(--a2);color:var(--a2)}
+
+/* 2-D handle overlay */
+#hov{position:absolute;inset:0;pointer-events:none;z-index:10}
+.hmove{position:absolute;pointer-events:all;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:rgba(0,212,255,.12);border:2px solid var(--a2);cursor:grab;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:background .15s;user-select:none}
+.hmove:hover{background:rgba(0,212,255,.32)}
+.hmove:active{cursor:grabbing}
+.hscale{position:absolute;pointer-events:all;width:13px;height:13px;background:var(--a2);border:2px solid #fff;border-radius:3px;transform:translate(-50%,-50%);user-select:none}
+.hscale.tl,.hscale.br{cursor:nwse-resize}
+.hscale.tr,.hscale.bl{cursor:nesw-resize}
+.hscale.tm,.hscale.bm{cursor:ns-resize;width:18px;height:9px}
+.hscale.lm,.hscale.rm{cursor:ew-resize;width:9px;height:18px}
+.hscale:hover{background:#fff}
+
+/* props panel */
+.pp{width:265px;background:var(--sur);border-left:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.pptabs{display:flex;border-bottom:1px solid var(--brd);flex-shrink:0}
+.ptab{flex:1;padding:.48rem .28rem;font-size:.66rem;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--mut);border:none;background:none;border-bottom:2px solid transparent;transition:all .14s}
+.ptab:hover{color:var(--txt)}
+.ptab.on{color:var(--a2);border-bottom-color:var(--a2)}
+.ppbody{flex:1;overflow-y:auto;padding:.78rem}
+.ph{font-family:var(--fm);font-size:.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--mut);margin:.82rem 0 .52rem;padding-bottom:.26rem;border-bottom:1px solid var(--brd)}
+.ph:first-child{margin-top:0}
+.pr{display:flex;align-items:center;gap:.36rem;margin-bottom:.4rem}
+.pl{font-size:.7rem;color:var(--mut);width:48px;flex-shrink:0}
+.pi{background:var(--s2);border:1px solid var(--brd);color:var(--txt);padding:.24rem .38rem;border-radius:3px;font-size:.7rem;font-family:var(--fm);width:100%;transition:border-color .2s}
+.pi:focus{border-color:var(--a2)}
+.cp{width:100%;height:30px;border-radius:3px;border:1px solid var(--brd);cursor:pointer;background:none}
+/* quick-size */
+.szrow{display:flex;gap:.3rem;margin-bottom:.42rem}
+.szb{flex:1;padding:.34rem .3rem;background:var(--s2);border:1px solid var(--brd);color:var(--txt);border-radius:4px;cursor:pointer;font-size:.72rem;font-weight:600;text-align:center;transition:all .14s}
+.szb.bg{border-color:var(--grn);color:var(--grn)}
+.szb.bg:hover{background:var(--grn);color:#000}
+.szb.sm{border-color:var(--acc);color:var(--acc)}
+.szb.sm:hover{background:var(--acc);color:#fff}
+.szb.x2{border-color:var(--a2);color:var(--a2)}
+.szb.x2:hover{background:var(--a2);color:#000}
+.szb.rs:hover{background:var(--s2);border-color:var(--mut)}
+.slabel{font-size:.7rem;color:var(--mut);display:flex;justify-content:space-between;margin-bottom:.3rem}
+.slabel b{color:var(--a2)}
+input[type=range].slider{width:100%;height:4px;appearance:none;background:var(--brd);border-radius:2px;cursor:pointer;outline:none}
+input[type=range].slider::-webkit-slider-thumb{appearance:none;width:15px;height:15px;border-radius:50%;background:var(--a2);border:2px solid #fff;cursor:pointer}
+/* subject card */
+.scard{display:flex;align-items:center;gap:.55rem;padding:.48rem .58rem;background:linear-gradient(135deg,var(--s2),rgba(0,212,255,.04));border:1px solid rgba(0,212,255,.15);border-radius:8px;margin-bottom:.55rem}
+.scem{font-size:1.4rem;line-height:1}
+.scnm{font-weight:600;font-size:.8rem}
+.scds{font-size:.64rem;color:var(--mut);margin-top:.07rem}
+/* object list */
+.ol{list-style:none}
+.oi{display:flex;align-items:center;gap:.38rem;padding:.28rem .46rem;border-radius:4px;cursor:pointer;font-size:.75rem;transition:background .14s;border:1px solid transparent;margin-bottom:.2rem}
+.oi:hover{background:var(--s2)}
+.oi.on{background:rgba(255,60,0,.1);border-color:var(--acc)}
+.od{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.on2{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.75rem}
+.ox{color:var(--mut);cursor:pointer;font-size:.64rem;padding:.08rem .2rem;border-radius:3px;flex-shrink:0}
+.ox:hover{color:var(--acc);background:rgba(255,60,0,.1)}
+.eol{text-align:center;padding:1.3rem .8rem;color:var(--mut);font-size:.74rem;line-height:1.7}
+.eol em{font-size:1.7rem;display:block;margin-bottom:.4rem;font-style:normal}
+/* presets */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:.3rem}
+.pb{padding:.36rem .4rem;background:var(--s2);border:1px solid var(--brd);color:var(--txt);border-radius:4px;cursor:pointer;font-size:.7rem;transition:all .14s;text-align:center}
+.pb:hover{border-color:var(--a2);color:var(--a2)}
+/* scene toggles */
+.srow{display:flex;align-items:center;justify-content:space-between;margin-bottom:.58rem}
+.slb{font-size:.72rem;color:var(--mut)}
+.tog{width:34px;height:19px;background:var(--s2);border-radius:10px;cursor:pointer;position:relative;border:1px solid var(--brd);transition:background .18s;flex-shrink:0}
+.tog.on{background:var(--acc);border-color:var(--acc)}
+.tog::after{content:'';position:absolute;top:2px;left:2px;width:13px;height:13px;background:#fff;border-radius:50%;transition:transform .18s}
+.tog.on::after{transform:translateX(15px)}
+
+/* ════════════════════════════════════
+   GALLERY
+════════════════════════════════════ */
+#s-gal{overflow-y:auto;padding:2rem}
+.stag{font-family:var(--fm);font-size:.62rem;color:var(--acc);letter-spacing:4px;text-transform:uppercase;margin-bottom:.38rem}
+.stitl{font-family:var(--fh);font-size:2.6rem;letter-spacing:2px;margin-bottom:1.8rem}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(245px,1fr));gap:.95rem}
+.gc{background:var(--sur);border:1px solid var(--brd);border-radius:10px;overflow:hidden;transition:all .2s;cursor:pointer}
+.gc:hover{transform:translateY(-3px);border-color:var(--a2)}
+.gcth{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:2.8rem;position:relative;overflow:hidden}
+.gcth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.gcin{padding:.82rem}
+.gcnm{font-weight:600;font-size:.88rem;margin-bottom:.26rem}
+.gcmt{display:flex;justify-content:space-between;font-size:.7rem;color:var(--mut);font-family:var(--fm)}
+.gcbg{display:inline-flex;align-items:center;gap:.26rem;font-size:.62rem;padding:.15rem .46rem;border-radius:20px;border:1px solid var(--brd);margin-top:.42rem;font-family:var(--fm)}
+.gemp{grid-column:1/-1;text-align:center;padding:4.5rem 2rem;color:var(--mut)}
+.gemp em{font-size:2.8rem;display:block;margin-bottom:.8rem;font-style:normal}
+.gemp strong{font-family:var(--fh);font-size:1.7rem;display:block;margin-bottom:.4rem;color:var(--txt)}
+
+/* ════════════════════════════════════
+   MODALS & OVERLAYS
+════════════════════════════════════ */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);z-index:700;display:none;align-items:center;justify-content:center;padding:1rem}
+.ov.on{display:flex}
+.modal{background:var(--sur);border:1px solid var(--brd);border-radius:14px;padding:1.9rem;width:100%;max-width:440px;animation:mIn .26s ease}
+@keyframes mIn{from{opacity:0;transform:scale(.91) translateY(14px)}to{opacity:1;transform:none}}
+.modal-em{font-size:2.5rem;text-align:center;margin-bottom:.5rem}
+.modalt{font-family:var(--fh);font-size:1.9rem;letter-spacing:2px;text-align:center;margin-bottom:.24rem}
+.modalsub{font-size:.78rem;color:var(--mut);text-align:center;margin-bottom:1.4rem}
+.ft{width:100%;background:var(--s2);border:1px solid var(--brd);color:var(--txt);padding:.54rem .76rem;border-radius:5px;font-size:.86rem;transition:border-color .2s;resize:vertical;min-height:62px}
+.ft:focus{border-color:var(--acc)}
+.stgl{width:40px;height:22px;background:var(--s2);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--brd);transition:background .18s;flex-shrink:0}
+.stgl.on{background:var(--grn);border-color:var(--grn)}
+.stgl::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .18s}
+.stgl.on::after{transform:translateX(18px)}
+.trow{display:flex;align-items:center;justify-content:space-between}
+.ma{display:flex;gap:.62rem;margin-top:1.3rem;justify-content:flex-end}
+/* success */
+#sucov{position:fixed;inset:0;background:rgba(0,0,0,.9);backdrop-filter:blur(14px);z-index:750;display:none;align-items:center;justify-content:center;padding:1rem}
+#sucov.on{display:flex}
+.sucbox{background:var(--sur);border:1px solid var(--grn);border-radius:16px;padding:2.3rem 2rem;width:100%;max-width:390px;text-align:center;animation:mIn .3s ease}
+.sucem{font-size:3.5rem;margin-bottom:.6rem}
+.suct{font-family:var(--fh);font-size:2rem;letter-spacing:2px;color:var(--grn);margin-bottom:.44rem}
+.sucsub{color:var(--mut);font-size:.82rem;margin-bottom:1.3rem;line-height:1.6}
+.sucprev{background:var(--s2);border:1px solid var(--brd);border-radius:8px;padding:.72rem .9rem;margin-bottom:1.3rem;text-align:left}
+.spr{display:flex;justify-content:space-between;font-size:.74rem;margin-bottom:.26rem}
+.spl{color:var(--mut)} .spv{color:var(--txt);font-weight:600}
+.sucacts{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap}
+/* toast */
+.toast{position:fixed;bottom:1.3rem;right:1.3rem;z-index:1000;background:var(--sur);border:1px solid var(--brd);border-left:3px solid var(--acc);padding:.62rem 1rem;border-radius:7px;font-size:.78rem;transform:translateY(62px);opacity:0;transition:all .25s;pointer-events:none;max-width:280px}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.ok{border-left-color:var(--grn)}
+.toast.inf{border-left-color:var(--a2)}
+
+@media(max-width:880px){.pp{display:none}}
+@media(max-width:768px){
+  .hstats{gap:1.5rem}
+  .pkbody,.pkh{padding:1rem}
+  .igrid{grid-template-columns:repeat(auto-fill,minmax(122px,1fr))}
+  .shtop{padding:.55rem 1rem}
+  .shbar{padding:.4rem .7rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════ -->
+<div id="auth">
+  <div class="auth-bg"></div>
+  <div class="auth-card">
+    <div class="auth-logo">DESIGN<b>FORGE</b></div>
+    <div class="auth-tag">// 3D Product Design Platform</div>
+
+    <div class="atabs">
+      <button class="atab on" onclick="aTab('su')">Create Account</button>
+      <button class="atab"    onclick="aTab('li')">Sign In</button>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="apanel on" id="ap-su">
+      <div class="fg">
+        <div class="fl">Pick your avatar</div>
+        <div class="av-row" id="avrow">
+          <div class="av on"  data-av="🧑‍💻" onclick="pickAv(this)">🧑‍💻</div>
+          <div class="av" data-av="👩‍🎨" onclick="pickAv(this)">👩‍🎨</div>
+          <div class="av" data-av="👨‍🔧" onclick="pickAv(this)">👨‍🔧</div>
+          <div class="av" data-av="👩‍🚀" onclick="pickAv(this)">👩‍🚀</div>
+          <div class="av" data-av="🧑‍🏭" onclick="pickAv(this)">🧑‍🏭</div>
+          <div class="av" data-av="👨‍🎓" onclick="pickAv(this)">👨‍🎓</div>
+          <div class="av" data-av="🦸"  onclick="pickAv(this)">🦸</div>
+          <div class="av" data-av="🤖" onclick="pickAv(this)">🤖</div>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">Full Name</label>
+        <input class="fi" id="su-n" placeholder="e.g. John Doe" oninput="clrErr()"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Email Address</label>
+        <input class="fi" id="su-e" type="email" placeholder="you@example.com" oninput="clrErr()"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" id="su-p" type="password" placeholder="Minimum 6 characters" oninput="pwStr()"/>
+        <div class="pw-bar-wrap"><div class="pw-bar" id="pwbar"></div></div>
+        <div class="pw-hint" id="pwlbl">Enter a password</div>
+      </div>
+      <div class="fg">
+        <label class="fl">Confirm Password</label>
+        <input class="fi" id="su-p2" type="password" placeholder="Repeat password" oninput="clrErr()"/>
+      </div>
+      <div class="aerr" id="su-err"></div>
+      <button class="asub" onclick="doSignUp()">CREATE ACCOUNT →</button>
+      <div class="ahint">Already have an account? <b onclick="aTab('li')">Sign In</b></div>
+    </div>
+
+    <!-- SIGN IN -->
+    <div class="apanel" id="ap-li">
+      <div class="fg">
+        <label class="fl">Email Address</label>
+        <input class="fi" id="li-e" type="email" placeholder="you@example.com" oninput="clrErr()"/>
+      </div>
+      <div class="fg">
+        <label class="fl">Password</label>
+        <input class="fi" id="li-p" type="password" placeholder="Your password" oninput="clrErr()"/>
+      </div>
+      <div class="aerr" id="li-err"></div>
+      <button class="asub" onclick="doLogin()">SIGN IN →</button>
+      <div class="adiv">or</div>
+      <button class="asub demo" onclick="demoLogin()">🚀 Try Demo — No Account Needed</button>
+      <div class="ahint">No account? <b onclick="aTab('su')">Create one free</b></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     TOPBAR
+════════════════════════════════════ -->
+<div id="bar">
+  <div class="logo" onclick="go('hero')">DESIGN<b>FORGE</b></div>
+  <div class="bar-r">
+    <button class="btn btn-o" onclick="go('gal')">🌐 Gallery</button>
+    <button class="btn btn-o" onclick="go('pick')">⊞ Browse</button>
+    <button class="btn btn-r" onclick="go('pick')">＋ New Design</button>
+    <div class="ubadge" onclick="signOut()">
+      <span class="uav" id="uav">🧑‍💻</span>
+      <span id="unm">User</span>
+      <span style="color:var(--mut);font-size:.68rem">· out</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
+<div id="s-hero" class="scr on">
+  <div class="hgrid"></div>
+  <div class="hglow"></div>
+  <div class="hi">
+    <div class="htag">// Professional 3D Design Platform</div>
+    <h1 class="htitle">DESIGN<br><em>FORGE</em></h1>
+    <p class="hsub">Sign in, pick what to build, drag shapes onto the sheet, resize them freely — then save your creation.</p>
+    <div class="hbtns">
+      <button class="btn btn-r btn-lg" onclick="go('pick')">🚀 Start Designing</button>
+      <button class="btn btn-o btn-lg" onclick="go('gal')">View Gallery →</button>
+    </div>
+    <div class="hstats">
+      <div><div class="stn" id="stat-n">0</div><div class="stl">Saved</div></div>
+      <div><div class="stn">10</div><div class="stl">Categories</div></div>
+      <div><div class="stn">70+</div><div class="stl">Design Types</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PICKER
+════════════════════════════════════ -->
+<div id="s-pick" class="scr">
+  <div class="pkh">
+    <div class="pkr">
+      <div>
+        <div class="pktag">// Step 1 — Choose your design type</div>
+        <div class="pktitle">WHAT ARE YOU <span>DESIGNING?</span></div>
+      </div>
+      <button class="pkback" onclick="go('hero')">← Home</button>
+    </div>
+    <div class="srchw">
+      <span>🔍</span>
+      <input id="srch" placeholder="Search — car, robot, sneaker, rocket, house…" oninput="rPick()" autocomplete="off"/>
+    </div>
+    <div class="ftabs" id="ftabs"></div>
+  </div>
+  <div class="pkbody" id="pkbody"></div>
+</div>
+
+<!-- ════════════════════════════════════
+     DESIGN SHEET
+════════════════════════════════════ -->
+<div id="s-sheet" class="scr">
+  <!-- header -->
+  <div class="shtop">
+    <div class="shleft">
+      <button class="shbk" onclick="go('pick')">← Pick Another</button>
+      <div class="shs">
+        <div class="shem" id="sh-em">🎨</div>
+        <div>
+          <div class="shnm" id="sh-nm">Design</div>
+          <div class="shcat" id="sh-cat">Category</div>
+        </div>
+      </div>
+      <div class="shpill">Step 2 — Design Your Product</div>
+    </div>
+    <div class="shright">
+      <button class="btn btn-o" onclick="resetCam()">⊙ Reset View</button>
+      <button class="btn btn-o" id="wirebtn" onclick="toggleWire()">⬡ Wireframe</button>
+      <button class="btn btn-o" id="movebtn" onclick="toggleMove()">✥ Move: OFF</button>
+      <button class="btn btn-o" style="color:#ff8080" onclick="delSel()">✕ Delete</button>
+      <button class="btn btn-g btn-lg" onclick="openSave()">💾 Save Design</button>
+    </div>
+  </div>
+
+  <!-- shape toolbar -->
+  <div class="shbar">
+    <div class="tglbl">ADD SHAPE</div>
+    <div class="tg">
+      <button class="tb" onclick="add('box')">□ Box</button>
+      <button class="tb" onclick="add('sphere')">○ Sphere</button>
+      <button class="tb" onclick="add('cylinder')">⬤ Cylinder</button>
+      <button class="tb" onclick="add('cone')">△ Cone</button>
+      <button class="tb" onclick="add('torus')">◎ Torus</button>
+      <button class="tb" onclick="add('ring')">⊚ Ring</button>
+      <button class="tb" onclick="add('tube')">⌀ Tube</button>
+      <button class="tb" onclick="add('octa')">◈ Octa</button>
+      <button class="tb" onclick="add('wedge')">▷ Wedge</button>
+    </div>
+    <div class="tsep"></div>
+    <div class="tglbl">SIZE</div>
+    <div class="tg">
+      <button class="tb cg" onclick="scaleBy(1.25)">＋ Bigger</button>
+      <button class="tb" style="border-color:#ff8080;color:#ff8080" onclick="scaleBy(.8)">－ Smaller</button>
+      <button class="tb ca" onclick="scaleBy(2)">×2</button>
+      <button class="tb" onclick="scaleBy(.5)">÷2</button>
+    </div>
+    <div class="tsep"></div>
+    <div class="tglbl">POSITION</div>
+    <div class="tg">
+      <button class="tb" onclick="mv(-1,0,0)">◁X</button>
+      <button class="tb" onclick="mv(1,0,0)">▷X</button>
+      <button class="tb" onclick="mv(0,.5,0)">△Y</button>
+      <button class="tb" onclick="mv(0,-.5,0)">▽Y</button>
+      <button class="tb" onclick="mv(0,0,-1)">△Z</button>
+      <button class="tb" onclick="mv(0,0,1)">▽Z</button>
+    </div>
+    <div class="tsep"></div>
+    <div class="tglbl">EDIT</div>
+    <div class="tg">
+      <button class="tb" onclick="dupe()">⧉ Dupe</button>
+      <button class="tb" onclick="clearAll()" style="color:#ff9090">✕ Clear</button>
+    </div>
+    <div class="tsep"></div>
+    <div class="tglbl">VIEW</div>
+    <div class="tg">
+      <button class="tb" onclick="camP('front')">Front</button>
+      <button class="tb" onclick="camP('top')">Top</button>
+      <button class="tb" onclick="camP('side')">Side</button>
+      <button class="tb" onclick="camP('iso')">Iso</button>
+    </div>
+  </div>
+
+  <!-- workspace -->
+  <div class="shws">
+    <!-- canvas -->
+    <div class="cvwrap" id="cvwrap">
+      <canvas id="cv"></canvas>
+      <div class="cvwm" id="cvwm"></div>
+      <div class="cvhint" id="cvhint">Left-drag: Orbit &nbsp;·&nbsp; Right-drag: Pan &nbsp;·&nbsp; Scroll: Zoom &nbsp;·&nbsp; Click: Select</div>
+      <div class="cvinfo">Objects: <b id="ocnt">0</b> &nbsp;·&nbsp; Mode: <b id="modelbl">Orbit</b></div>
+      <div class="cvsel" id="cvsel">Nothing selected</div>
+      <div id="hov"></div>
+    </div>
+
+    <!-- props panel -->
+    <div class="pp">
+      <div class="pptabs">
+        <button class="ptab on" onclick="ptab(this,'pt-o')">Objects</button>
+        <button class="ptab"    onclick="ptab(this,'pt-m')">Material</button>
+        <button class="ptab"    onclick="ptab(this,'pt-s')">Scene</button>
+      </div>
+
+      <!-- Objects tab -->
+      <div class="ppbody" id="pt-o">
+        <div class="scard" id="scard">
+          <div class="scem" id="sc-em">🎨</div>
+          <div><div class="scnm" id="sc-nm">Design</div><div class="scds" id="sc-ds">Add shapes to start</div></div>
+        </div>
+        <!-- Quick size -->
+        <div class="ph">// Quick Size</div>
+        <div class="szrow">
+          <button class="szb bg" onclick="scaleBy(1.25)">＋ Bigger</button>
+          <button class="szb sm" onclick="scaleBy(.8)">－ Smaller</button>
+        </div>
+        <div class="szrow">
+          <button class="szb x2" onclick="scaleBy(2)">× 2</button>
+          <button class="szb" style="border-color:var(--mut)" onclick="scaleBy(.5)">÷ 2</button>
+          <button class="szb rs" onclick="resetScale()">Reset</button>
+        </div>
+        <div class="slabel">Uniform Scale <b id="svlbl">1.00</b></div>
+        <input type="range" class="slider" id="sslider" min=".1" max="5" step=".05" value="1" oninput="applySlider()"/>
+        <!-- Position -->
+        <div class="ph">// Position</div>
+        <div class="pr"><span class="pl">X</span><input class="pi" id="px" type="number" step=".1" value="0" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Y</span><input class="pi" id="py" type="number" step=".1" value="0" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Z</span><input class="pi" id="pz" type="number" step=".1" value="0" oninput="applyTr()"></div>
+        <!-- Scale -->
+        <div class="ph">// Scale</div>
+        <div class="pr"><span class="pl">X</span><input class="pi" id="sx" type="number" step=".05" value="1" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Y</span><input class="pi" id="sy" type="number" step=".05" value="1" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Z</span><input class="pi" id="sz" type="number" step=".05" value="1" oninput="applyTr()"></div>
+        <!-- Rotation -->
+        <div class="ph">// Rotation (°)</div>
+        <div class="pr"><span class="pl">X</span><input class="pi" id="rx" type="number" step="5" value="0" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Y</span><input class="pi" id="ry" type="number" step="5" value="0" oninput="applyTr()"></div>
+        <div class="pr"><span class="pl">Z</span><input class="pi" id="rz" type="number" step="5" value="0" oninput="applyTr()"></div>
+        <!-- Object list -->
+        <div class="ph">// Objects (<span id="ocnt2">0</span>)</div>
+        <ul class="ol" id="olist"><li class="eol"><em>✦</em>Add shapes from the toolbar<br>to start building</li></ul>
+      </div>
+
+      <!-- Material tab -->
+      <div class="ppbody" id="pt-m" style="display:none">
+        <div class="ph">// Color & Finish</div>
+        <div class="pr"><span class="pl">Color</span><input class="cp" type="color" id="mc" value="#4d9fff" oninput="applyMat()"></div>
+        <div class="pr"><span class="pl">Metalness</span><input class="pi" id="mm" type="number" step=".05" min="0" max="1" value=".3" oninput="applyMat()"></div>
+        <div class="pr"><span class="pl">Roughness</span><input class="pi" id="mr" type="number" step=".05" min="0" max="1" value=".4" oninput="applyMat()"></div>
+        <div class="pr"><span class="pl">Opacity</span><input class="pi" id="mop" type="number" step=".05" min="0" max="1" value="1" oninput="applyMat()"></div>
+        <div class="ph">// Presets</div>
+        <div class="pgrid">
+          <button class="pb" onclick="pset('chrome')">🔩 Chrome</button>
+          <button class="pb" onclick="pset('gold')">✨ Gold</button>
+          <button class="pb" onclick="pset('plastic')">🔴 Plastic</button>
+          <button class="pb" onclick="pset('glass')">🔵 Glass</button>
+          <button class="pb" onclick="pset('rubber')">⚫ Rubber</button>
+          <button class="pb" onclick="pset('wood')">🪵 Wood</button>
+          <button class="pb" onclick="pset('carbon')">◼ Carbon</button>
+          <button class="pb" onclick="pset('neon')">💚 Neon</button>
+          <button class="pb" onclick="pset('copper')">🟤 Copper</button>
+          <button class="pb" onclick="pset('ice')">🩵 Ice</button>
+        </div>
+        <div class="ph" style="margin-top:.8rem">// Bulk</div>
+        <button class="tb ca" style="width:100%;padding:.44rem" onclick="applyAll()">Apply to ALL objects</button>
+      </div>
+
+      <!-- Scene tab -->
+      <div class="ppbody" id="pt-s" style="display:none">
+        <div class="ph">// Display</div>
+        <div class="srow"><span class="slb">Grid</span><div class="tog on" id="tog-grid" onclick="tGrid()"></div></div>
+        <div class="srow"><span class="slb">Shadows</span><div class="tog on" id="tog-shad" onclick="tShad()"></div></div>
+        <div class="srow"><span class="slb">Fog</span><div class="tog on" id="tog-fog"  onclick="tFog()"></div></div>
+        <div class="srow"><span class="slb">Wireframe</span><div class="tog" id="tog-wire" onclick="toggleWire()"></div></div>
+        <div class="ph">// Lighting</div>
+        <div class="pr"><span class="pl" style="width:60px">Ambient</span><input class="pi" id="amb" type="number" step=".05" min="0" max="2" value=".4" oninput="applyLgt()"></div>
+        <div class="pr"><span class="pl" style="width:60px">Sun</span><input class="pi" id="sun" type="number" step=".05" min="0" max="3" value="1.2" oninput="applyLgt()"></div>
+        <div class="ph">// Background</div>
+        <div class="pgrid">
+          <button class="pb" onclick="setBg(0x07070e)">🌑 Dark</button>
+          <button class="pb" onclick="setBg(0x000814)">🌃 Midnight</button>
+          <button class="pb" onclick="setBg(0x1a1a2e)">🌆 Studio</button>
+          <button class="pb" onclick="setBg(0x020209)">🌌 Space</button>
+        </div>
+      </div>
+    </div><!-- /.pp -->
+  </div><!-- /.shws -->
+</div><!-- /#s-sheet -->
+
+<!-- ════════════════════════════════════
+     GALLERY
+════════════════════════════════════ -->
+<div id="s-gal" class="scr">
+  <div class="stag">// My Designs</div>
+  <div class="stitl">SAVED DESIGNS</div>
+  <div class="ggrid" id="ggrid">
+    <div class="gemp"><em>🎨</em><strong>NO DESIGNS YET</strong>Create and save your first design.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SAVE MODAL
+════════════════════════════════════ -->
+<div class="ov" id="saveov">
+  <div class="modal">
+    <div class="modal-em">💾</div>
+    <div class="modalt">SAVE YOUR DESIGN</div>
+    <div class="modalsub">Name your creation and save it to your gallery</div>
+    <div class="fg"><label class="fl">Design Name</label><input class="fi" id="s-nm" placeholder="e.g. Sports Car v1"></div>
+    <div class="fg"><label class="fl">Category</label><select class="fi" id="s-cat"></select></div>
+    <div class="fg"><label class="fl">Description</label><textarea class="ft" id="s-ds" placeholder="What did you design?"></textarea></div>
+    <div class="fg">
+      <div class="trow">
+        <label class="fl" style="margin:0">Share Publicly</label>
+        <div class="stgl" id="pubtgl" onclick="this.classList.toggle('on')"></div>
+      </div>
+    </div>
+    <div class="ma">
+      <button class="btn btn-o" onclick="closeSave()">Cancel</button>
+      <button class="btn btn-g" onclick="doSave()">✅ Save Design</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SUCCESS
+════════════════════════════════════ -->
+<div id="sucov">
+  <div class="sucbox">
+    <div class="sucem">🎉</div>
+    <div class="suct">SAVED!</div>
+    <div class="sucsub">Your design has been saved to the gallery.</div>
+    <div class="sucprev" id="sucprev"></div>
+    <div class="sucacts">
+      <button class="btn btn-o" onclick="closeSuc();go('pick')">← New Design</button>
+      <button class="btn btn-r" onclick="closeSuc()">Continue Editing</button>
+      <button class="btn btn-c" onclick="closeSuc();go('gal')">View Gallery →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+'use strict';
+
+/* ════════════ AUTH ════════════ */
+const USERS=[];
+let ME=null, SEL_AV='🧑‍💻';
+
+function aTab(t){
+  const su=t==='su';
+  document.querySelectorAll('.atab').forEach((b,i)=>b.classList.toggle('on',su?i===0:i===1));
+  G('ap-su').classList.toggle('on',su);
+  G('ap-li').classList.toggle('on',!su);
+  clrErr();
+}
+function pickAv(el){
+  document.querySelectorAll('.av').forEach(a=>a.classList.remove('on'));
+  el.classList.add('on'); SEL_AV=el.dataset.av;
+}
+function clrErr(){G('su-err').textContent='';G('li-err').textContent='';}
+function pwStr(){
+  const pw=G('su-p').value;
+  let s=0;
+  if(pw.length>=6)s++;if(pw.length>=10)s++;
+  if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^A-Za-z0-9]/.test(pw))s++;
+  const cols=['#ff3c00','#ff8c00','#ffd200','#a0e040','#00e676'];
+  const labs=['Too short','Weak','Fair','Good','Strong'];
+  const pct=Math.min(s/5*100,100);
+  G('pwbar').style.width=pct+'%';
+  G('pwbar').style.background=cols[Math.min(s-1,4)]||'#ff3c00';
+  G('pwlbl').textContent=pw.length===0?'Enter a password':(labs[Math.min(s-1,4)]||labs[0]);
+  G('pwlbl').style.color=pw.length?cols[Math.min(s-1,4)]:'';
+}
+function doSignUp(){
+  const n=G('su-n').value.trim(),e=G('su-e').value.trim().toLowerCase();
+  const p=G('su-p').value,p2=G('su-p2').value;
+  const err=G('su-err');
+  if(!n){err.textContent='Please enter your name.';return;}
+  if(!e||!e.includes('@')){err.textContent='Please enter a valid email.';return;}
+  if(p.length<6){err.textContent='Password must be at least 6 characters.';return;}
+  if(p!==p2){err.textContent='Passwords do not match.';return;}
+  if(USERS.find(u=>u.e===e)){err.textContent='An account with this email already exists.';return;}
+  const u={n,e,p,av:SEL_AV};USERS.push(u);loginAs(u);
+}
+function doLogin(){
+  const e=G('li-e').value.trim().toLowerCase(),p=G('li-p').value;
+  const err=G('li-err');
+  if(!e){err.textContent='Please enter your email.';return;}
+  if(!p){err.textContent='Please enter your password.';return;}
+  const u=USERS.find(u=>u.e===e&&u.p===p);
+  if(!u){err.textContent='Incorrect email or password.';return;}
+  loginAs(u);
+}
+function demoLogin(){
+  let u=USERS.find(u=>u.e==='demo@df.app');
+  if(!u){u={n:'Demo User',e:'demo@df.app',p:'demo',av:'🚀'};USERS.push(u);}
+  loginAs(u);
+}
+function loginAs(u){
+  ME=u;
+  G('auth').classList.add('gone');
+  G('uav').textContent=u.av;
+  G('unm').textContent=u.n.split(' ')[0];
+  toast('Welcome, '+u.n.split(' ')[0]+'! 🎉','ok');
+}
+function signOut(){
+  if(!confirm('Sign out?'))return;
+  ME=null;G('auth').classList.remove('gone');go('hero');
+}
+
+/* ════════════ CATALOG ════════════ */
+const CAT=[
+  {id:'vehicles',lb:'Vehicles',ic:'🚗',cl:'#FF4D4D',items:[
+    {id:'car',nm:'Car / Sedan',em:'🚗',ds:'Body, chassis, interior',bg:'hot'},
+    {id:'supercar',nm:'Supercar',em:'🏎️',ds:'Aerodynamic performance build',bg:'hot'},
+    {id:'suv',nm:'SUV / Truck',em:'🛻',ds:'Large body, off-road builds',bg:''},
+    {id:'motorcycle',nm:'Motorcycle',em:'🏍️',ds:'Frame, engine, fairings',bg:''},
+    {id:'bicycle',nm:'Bicycle',em:'🚲',ds:'Frame geometry & components',bg:''},
+    {id:'boat',nm:'Boat / Yacht',em:'⛵',ds:'Hull, deck, cabin layout',bg:''},
+    {id:'aircraft',nm:'Aircraft',em:'✈️',ds:'Fuselage, wings, tail',bg:'pro'},
+    {id:'spaceship',nm:'Spacecraft',em:'🚀',ds:'Capsule, propulsion, payload',bg:'pro'},
+  ]},
+  {id:'electronics',lb:'Electronics',ic:'⚡',cl:'#FFD700',items:[
+    {id:'phone',nm:'Smartphone',em:'📱',ds:'Body, screen, ports',bg:'hot'},
+    {id:'laptop',nm:'Laptop',em:'💻',ds:'Chassis, keyboard, hinge',bg:'hot'},
+    {id:'drone',nm:'Drone',em:'🚁',ds:'Frame, motors, payload bay',bg:'new'},
+    {id:'robot',nm:'Robot / Bot',em:'🤖',ds:'Joints, chassis, actuators',bg:'new'},
+    {id:'pcb',nm:'PCB Board',em:'🔌',ds:'Circuit layout, components',bg:'pro'},
+    {id:'watch',nm:'Smartwatch',em:'⌚',ds:'Case, band, display face',bg:''},
+    {id:'speaker',nm:'Speaker',em:'🔊',ds:'Enclosure, driver, port',bg:''},
+    {id:'camera',nm:'Camera',em:'📷',ds:'Body, lens mount, ergonomics',bg:''},
+  ]},
+  {id:'architecture',lb:'Architecture',ic:'🏛️',cl:'#50C878',items:[
+    {id:'house',nm:'House / Villa',em:'🏠',ds:'Floor plan, facade, roof',bg:'hot'},
+    {id:'interior',nm:'Interior Space',em:'🪴',ds:'Room layout, furniture',bg:'hot'},
+    {id:'tower',nm:'Skyscraper',em:'🏙️',ds:'Tower structure & facade',bg:'pro'},
+    {id:'bridge',nm:'Bridge',em:'🌉',ds:'Span, supports, road deck',bg:''},
+    {id:'stadium',nm:'Stadium / Arena',em:'🏟️',ds:'Seating, roof, field',bg:'pro'},
+    {id:'temple',nm:'Temple / Monument',em:'🕌',ds:'Columns, dome, ornaments',bg:''},
+  ]},
+  {id:'3dprint',lb:'3D Printing',ic:'🖨️',cl:'#4D9FFF',items:[
+    {id:'figurine',nm:'Figurine / Statue',em:'🗿',ds:'Sculpted character & base',bg:'hot'},
+    {id:'miniature',nm:'Miniature Model',em:'🏰',ds:'Scale replica for display',bg:'hot'},
+    {id:'enclosure',nm:'Device Enclosure',em:'📦',ds:'Snap-fit box, lid, cutouts',bg:''},
+    {id:'prosthetic',nm:'Prosthetic Part',em:'🦾',ds:'Medical-grade limb',bg:'new'},
+    {id:'art3d',nm:'Abstract Art',em:'🎨',ds:'Freeform sculptural object',bg:'new'},
+    {id:'jig',nm:'Jig / Fixture',em:'🔧',ds:'Alignment & assembly tool',bg:''},
+  ]},
+  {id:'furniture',lb:'Furniture',ic:'🪑',cl:'#FF8C42',items:[
+    {id:'chair',nm:'Chair / Seat',em:'🪑',ds:'Frame, cushion, ergonomics',bg:''},
+    {id:'table',nm:'Table / Desk',em:'🗄️',ds:'Top, legs, joinery',bg:''},
+    {id:'shelf',nm:'Shelf / Storage',em:'📚',ds:'Modular shelving system',bg:'hot'},
+    {id:'sofa',nm:'Sofa / Couch',em:'🛋️',ds:'Frame, foam, upholstery',bg:''},
+    {id:'lamp',nm:'Lamp / Lighting',em:'💡',ds:'Base, shade, mounting',bg:'new'},
+    {id:'kitchen',nm:'Kitchen Unit',em:'🍳',ds:'Cabinets, countertop',bg:''},
+  ]},
+  {id:'industrial',lb:'Industrial',ic:'⚙️',cl:'#A0A0B8',items:[
+    {id:'engine',nm:'Engine / Motor',em:'🔩',ds:'Block, pistons, crankshaft',bg:'pro'},
+    {id:'gear',nm:'Gear / Mechanism',em:'⚙️',ds:'Spur, helical, planetary',bg:''},
+    {id:'turbine',nm:'Turbine Blade',em:'🌀',ds:'Aerofoil profile, root, tip',bg:'pro'},
+    {id:'mold',nm:'Injection Mold',em:'🏭',ds:'Core, cavity, runner',bg:'pro'},
+    {id:'bracket',nm:'Bracket / Mount',em:'📐',ds:'Structural support',bg:''},
+    {id:'tank',nm:'Storage Tank',em:'🛢️',ds:'Shell, nozzle, legs',bg:''},
+  ]},
+  {id:'fashion',lb:'Fashion',ic:'👟',cl:'#FF69B4',items:[
+    {id:'shoe',nm:'Shoe / Sneaker',em:'👟',ds:'Last, sole, upper',bg:'hot'},
+    {id:'helmet',nm:'Helmet',em:'⛑️',ds:'Shell, liner, visor',bg:''},
+    {id:'glasses',nm:'Eyewear Frame',em:'👓',ds:'Front, temples, bridge',bg:'new'},
+    {id:'bag',nm:'Bag / Backpack',em:'🎒',ds:'Shell, compartments, straps',bg:''},
+    {id:'watchcase',nm:'Watch Case',em:'🕰️',ds:'Case, bezel, lugs, crown',bg:''},
+  ]},
+  {id:'aerospace',lb:'Aerospace',ic:'🛸',cl:'#BF5FFF',items:[
+    {id:'rocket',nm:'Rocket / Launch',em:'🚀',ds:'Stage, nozzle, fairing',bg:'pro'},
+    {id:'satellite',nm:'Satellite',em:'🛰️',ds:'Bus, panels, antenna',bg:'pro'},
+    {id:'uav',nm:'UAV / Fixed Wing',em:'✈️',ds:'Wing, fuselage, pod',bg:'new'},
+    {id:'suit',nm:'Space Suit',em:'👨‍🚀',ds:'Suit layers, helmet, PLSS',bg:'pro'},
+  ]},
+  {id:'medical',lb:'Medical',ic:'🏥',cl:'#00CED1',items:[
+    {id:'implant',nm:'Implant / Device',em:'🦴',ds:'Bone scaffold, lattice',bg:'pro'},
+    {id:'organ',nm:'Organ Model',em:'🫀',ds:'Anatomical replica',bg:'new'},
+    {id:'brace',nm:'Orthopaedic Brace',em:'🦿',ds:'Custom-fit support',bg:'new'},
+    {id:'surgical',nm:'Surgical Tool',em:'🔬',ds:'Handle, tip, grip',bg:'pro'},
+  ]},
+  {id:'art',lb:'Art & Sculpture',ic:'🎨',cl:'#FF8C42',items:[
+    {id:'sculpture',nm:'Sculpture',em:'🗽',ds:'Abstract or figurative',bg:''},
+    {id:'trophy',nm:'Trophy / Award',em:'🏆',ds:'Base, stem, topper',bg:'hot'},
+    {id:'coin',nm:'Coin / Medal',em:'🥇',ds:'Relief artwork, edge detail',bg:''},
+    {id:'install',nm:'Art Installation',em:'🖼️',ds:'Large-scale interactive',bg:'new'},
+  ]},
+];
+
+const POPULAR=[
+  {em:'🏎️',nm:'Supercar',c:'vehicles',i:'supercar'},
+  {em:'📱',nm:'Smartphone',c:'electronics',i:'phone'},
+  {em:'🏠',nm:'House',c:'architecture',i:'house'},
+  {em:'🤖',nm:'Robot',c:'electronics',i:'robot'},
+  {em:'👟',nm:'Sneaker',c:'fashion',i:'shoe'},
+  {em:'🚀',nm:'Rocket',c:'aerospace',i:'rocket'},
+  {em:'🏆',nm:'Trophy',c:'art',i:'trophy'},
+  {em:'⚙️',nm:'Gear',c:'industrial',i:'gear'},
+  {em:'🦾',nm:'Prosthetic',c:'3dprint',i:'prosthetic'},
+  {em:'🛰️',nm:'Satellite',c:'aerospace',i:'satellite'},
+];
+
+const FILTERS=['All','Vehicles','Electronics','Architecture','3D Printing','Furniture','Industrial','Fashion','Aerospace','Medical','Art'];
+const FMAP={All:'',Vehicles:'vehicles',Electronics:'electronics',Architecture:'architecture','3D Printing':'3dprint',Furniture:'furniture',Industrial:'industrial',Fashion:'fashion',Aerospace:'aerospace',Medical:'medical',Art:'art'};
+const MPRESETS={
+  chrome:{color:'#c8d0d8',metalness:1,roughness:.05,opacity:1},
+  gold:{color:'#ffd700',metalness:1,roughness:.15,opacity:1},
+  plastic:{color:'#ee4444',metalness:0,roughness:.6,opacity:1},
+  glass:{color:'#aaddff',metalness:0,roughness:0,opacity:.28},
+  rubber:{color:'#222233',metalness:0,roughness:.95,opacity:1},
+  wood:{color:'#8B5E3C',metalness:0,roughness:.85,opacity:1},
+  carbon:{color:'#1a1a22',metalness:.4,roughness:.3,opacity:1},
+  neon:{color:'#00ffcc',metalness:0,roughness:.4,opacity:1},
+  copper:{color:'#b87333',metalness:.9,roughness:.25,opacity:1},
+  ice:{color:'#cce8ff',metalness:0,roughness:.08,opacity:.6},
+};
+
+/* ════════════ STATE ════════════ */
+let CUR_FILTER='All',CUR_SUB=null,SAVES=[],SAVE_CNT=0;
+let threeOK=false;
+let scene,camera,renderer,gridMesh,floorMesh,ambL,sunL;
+let OBJS=[],SEL=null,WIRE=false,CI=0;
+let fogOn=true,shadOn=true,gridOn=true,moveMode=false;
+
+const C={t:.72,p:.62,r:11,tx:0,ty:0,tz:0};
+const MO={dn:false,pan:false,x:0,y:0};
+let tDist=0;
+
+const COLS=['#4d9fff','#ff4d4d','#50c878','#ffd700','#ff8c42','#bf5fff','#00ced1','#ff3c00','#ffffff','#f0a500'];
+const ray=new THREE.Raycaster();
+
+/* ════════════ NAV ════════════ */
+function go(nm){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  G('s-'+nm).classList.add('on');
+  if(nm==='sheet') initThree();
+  if(nm==='gal') renderGal();
+}
+
+/* ════════════ PICKER ════════════ */
+function buildPicker(){
+  G('ftabs').innerHTML=FILTERS.map(f=>`<button class="ftab${f===CUR_FILTER?' on':''}" onclick="setF(this,'${f}')">${f}</button>`).join('');
+  G('s-cat').innerHTML=CAT.map(c=>`<option value="${c.id}">${c.ic} ${c.lb}</option>`).join('');
+  rPick();
+}
+function setF(btn,f){
+  CUR_FILTER=f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');rPick();
+}
+function rPick(){
+  const q=(G('srch').value||'').toLowerCase().trim();
+  const tid=FMAP[CUR_FILTER]||'';
+  let html='',tot=0;
+  if(!q&&CUR_FILTER==='All'){
+    html+=`<div style="font-family:var(--fm);font-size:.58rem;letter-spacing:4px;text-transform:uppercase;color:var(--mut);margin-bottom:.58rem">⚡ Popular picks</div>
+    <div class="poprow">${POPULAR.map(p=>`<div class="pchip" data-c="${p.c}" data-i="${p.i}">${p.em} ${p.nm}</div>`).join('')}</div>`;
+  }
+  CAT.forEach(sec=>{
+    if(tid&&sec.id!==tid)return;
+    const items=sec.items.filter(it=>!q||(it.nm+' '+it.ds+' '+sec.lb).toLowerCase().includes(q));
+    if(!items.length)return;
+    tot+=items.length;
+    html+=`<div class="shd" style="color:${sec.cl}">${sec.ic} ${sec.lb.toUpperCase()}</div><div class="igrid">`;
+    items.forEach(it=>{
+      const b=it.bg==='hot'?`<span class="badge bh">🔥 Popular</span>`:it.bg==='new'?`<span class="badge bn">✨ New</span>`:it.bg==='pro'?`<span class="badge bp">⭐ Pro</span>`:'';
+      html+=`<div class="di" data-c="${sec.id}" data-i="${it.id}"
+        onmouseenter="this.style.borderColor='${sec.cl}'"
+        onmouseleave="this.style.borderColor='transparent'">
+        <div class="di-gl" style="background:${sec.cl}13"></div>
+        <div class="di-em">${it.em}</div><div class="di-nm">${it.nm}</div>
+        <div class="di-ds">${it.ds}</div>${b}</div>`;
+    });
+    html+=`</div>`;
+  });
+  if(!tot)html=`<div class="nores"><div class="nores-em">🤔</div><div class="nores-t">NOTHING FOUND</div><div>Try a different keyword.</div></div>`;
+  const body=G('pkbody');
+  body.innerHTML=html;
+  body.querySelectorAll('.di,.pchip').forEach(el=>el.addEventListener('click',()=>selItem(el.dataset.c,el.dataset.i)));
+}
+function selItem(cid,iid){
+  const cat=CAT.find(c=>c.id===cid);if(!cat)return;
+  const item=cat.items.find(i=>i.id===iid);if(!item)return;
+  CUR_SUB={...item,catId:cid,catCl:cat.cl,catLb:cat.lb};
+  G('sh-em').textContent=item.em;G('sh-nm').textContent=item.nm;G('sh-cat').textContent=cat.lb.toUpperCase();
+  G('cvwm').textContent=item.nm;G('s-nm').value=item.nm+' Design';G('s-cat').value=cid;
+  G('sc-em').textContent=item.em;G('sc-nm').textContent=item.nm;G('sc-ds').textContent=item.ds;
+  go('sheet');toast('Workspace ready for '+item.nm,'inf');
+}
+
+/* ════════════ THREE.JS ════════════ */
+function initThree(){
+  if(threeOK){updCam();return;}threeOK=true;
+  const wrap=G('cvwrap'),cv=G('cv');
+  scene=new THREE.Scene();
+  scene.background=new THREE.Color(0x07070e);
+  scene.fog=new THREE.FogExp2(0x07070e,.016);
+  camera=new THREE.PerspectiveCamera(45,wrap.clientWidth/wrap.clientHeight,.1,200);
+  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
+  renderer.setSize(wrap.clientWidth,wrap.clientHeight);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;
+  ambL=new THREE.AmbientLight(0xffffff,.4);scene.add(ambL);
+  sunL=new THREE.DirectionalLight(0xffffff,1.2);sunL.position.set(8,14,6);sunL.castShadow=true;
+  sunL.shadow.mapSize.set(2048,2048);sunL.shadow.camera.near=.1;sunL.shadow.camera.far=60;
+  sunL.shadow.camera.left=sunL.shadow.camera.bottom=-15;sunL.shadow.camera.right=sunL.shadow.camera.top=15;
+  scene.add(sunL);
+  const fl2=new THREE.DirectionalLight(0x00d4ff,.26);fl2.position.set(-6,-2,-5);scene.add(fl2);
+  const rl=new THREE.DirectionalLight(0xff3c00,.16);rl.position.set(0,-6,5);scene.add(rl);
+  gridMesh=new THREE.GridHelper(24,24,0x242434,0x181825);scene.add(gridMesh);
+  floorMesh=new THREE.Mesh(new THREE.PlaneGeometry(24,24),new THREE.MeshStandardMaterial({color:0x0b0b13,roughness:.9,metalness:.1}));
+  floorMesh.rotation.x=-Math.PI/2;floorMesh.receiveShadow=true;scene.add(floorMesh);
+  updCam();
+  cv.addEventListener('mousedown',onMD);
+  cv.addEventListener('mousemove',onMM);
+  cv.addEventListener('mouseup',onMU);
+  cv.addEventListener('wheel',onWH,{passive:false});
+  cv.addEventListener('contextmenu',e=>e.preventDefault());
+  cv.addEventListener('touchstart',onTS,{passive:false});
+  cv.addEventListener('touchmove',onTM,{passive:false});
+  cv.addEventListener('touchend',onTU,{passive:false});
+  window.addEventListener('resize',()=>{
+    camera.aspect=wrap.clientWidth/wrap.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(wrap.clientWidth,wrap.clientHeight);
+    updHandles();
+  });
+  (function loop(){requestAnimationFrame(loop);renderer.render(scene,camera);updHandles();})();
+}
+
+/* ════════════ CAMERA ════════════ */
+function updCam(){
+  const x=C.r*Math.sin(C.p)*Math.sin(C.t),y=C.r*Math.cos(C.p),z=C.r*Math.sin(C.p)*Math.cos(C.t);
+  camera.position.set(C.tx+x,C.ty+y,C.tz+z);camera.lookAt(C.tx,C.ty,C.tz);
+}
+function camP(n){
+  const P={front:{t:0,p:Math.PI/2},top:{t:0,p:.01},side:{t:Math.PI/2,p:Math.PI/2},iso:{t:Math.PI/4,p:Math.PI/4}};
+  const p=P[n]||P.iso;C.t=p.t;C.p=p.p;updCam();
+}
+function resetCam(){C.t=.72;C.p=.62;C.r=11;C.tx=0;C.ty=0;C.tz=0;updCam();}
+
+/* ════════════ MOUSE / TOUCH ════════════ */
+let dragPlane=null,dragOff=null,isDrag=false;
+
+function cvPos(e){
+  const cv=G('cv'),r=cv.getBoundingClientRect();
+  return new THREE.Vector2(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
+}
+function onMD(e){
+  const mp=cvPos(e);
+  if(e.button===2){MO.dn=true;MO.pan=true;MO.x=e.clientX;MO.y=e.clientY;return;}
+  if(moveMode&&SEL&&e.button===0){
+    ray.setFromCamera(mp,camera);
+    dragPlane=new THREE.Plane(new THREE.Vector3(0,1,0),-SEL.position.y);
+    const pt=new THREE.Vector3();
+    if(ray.ray.intersectPlane(dragPlane,pt)){
+      dragOff=pt.clone().sub(SEL.position);isDrag=true;
+      G('cvwrap').style.cursor='grabbing';
+    }
+    return;
+  }
+  if(e.button===0){MO.dn=true;MO.pan=false;MO.x=e.clientX;MO.y=e.clientY;pick(e);}
+}
+function onMM(e){
+  if(isDrag&&SEL){
+    const mp=cvPos(e);ray.setFromCamera(mp,camera);
+    const pt=new THREE.Vector3();
+    if(ray.ray.intersectPlane(dragPlane,pt)){
+      SEL.position.copy(pt.sub(dragOff));
+      syncProps();updHandles();
+    }
+    return;
+  }
+  if(!MO.dn)return;
+  const dx=e.clientX-MO.x,dy=e.clientY-MO.y;
+  if(MO.pan){
+    const sp=.005*C.r,rv=new THREE.Vector3();
+    rv.crossVectors(camera.getWorldDirection(new THREE.Vector3()),camera.up).normalize();
+    C.tx-=rv.x*dx*sp;C.tz-=rv.z*dx*sp;C.ty+=dy*sp;
+  }else{C.t-=dx*.007;C.p=Math.max(.05,Math.min(Math.PI-.05,C.p-dy*.007));}
+  updCam();MO.x=e.clientX;MO.y=e.clientY;
+}
+function onMU(){
+  MO.dn=false;MO.pan=false;
+  if(isDrag){isDrag=false;dragPlane=null;dragOff=null;G('cvwrap').style.cursor=moveMode?'move':'crosshair';toast('Position updated','inf');}
+}
+function onWH(e){e.preventDefault();C.r=Math.max(1.5,Math.min(40,C.r+e.deltaY*.012));updCam();}
+function onTS(e){
+  e.preventDefault();
+  if(e.touches.length===1){MO.dn=true;MO.pan=false;MO.x=e.touches[0].clientX;MO.y=e.touches[0].clientY;}
+  else if(e.touches.length===2)tDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+}
+function onTM(e){
+  e.preventDefault();
+  if(e.touches.length===1&&MO.dn){
+    const dx=e.touches[0].clientX-MO.x,dy=e.touches[0].clientY-MO.y;
+    C.t-=dx*.007;C.p=Math.max(.05,Math.min(Math.PI-.05,C.p-dy*.007));
+    updCam();MO.x=e.touches[0].clientX;MO.y=e.touches[0].clientY;
+  }else if(e.touches.length===2){
+    const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    C.r=Math.max(1.5,Math.min(40,C.r*(tDist/d)));tDist=d;updCam();
+  }
+}
+function onTU(){MO.dn=false;isDrag=false;}
+
+/* ════════════ PICK / SELECT ════════════ */
+function pick(e){
+  ray.setFromCamera(cvPos(e),camera);
+  const hits=ray.intersectObjects(OBJS);
+  hits.length?doSel(hits[0].object):doDesel();
+}
+function doSel(o){
+  doDesel();SEL=o;
+  const out=new THREE.Mesh(o.geometry.clone(),new THREE.MeshBasicMaterial({color:0x00d4ff,side:THREE.BackSide}));
+  out.scale.multiplyScalar(1.07);out.userData.isOut=true;o.add(out);
+  syncProps();
+  const cs=G('cvsel');cs.textContent='✦ '+o.userData.nm;cs.classList.add('hi');
+  rList();updHandles();
+}
+function doDesel(){
+  if(SEL)SEL.children.filter(c=>c.userData.isOut).forEach(c=>SEL.remove(c));
+  SEL=null;
+  const cs=G('cvsel');cs.textContent='Nothing selected';cs.classList.remove('hi');
+  rList();clrHandles();
+}
+function syncProps(){
+  if(!SEL)return;
+  const o=SEL;
+  G('px').value=o.position.x.toFixed(2);G('py').value=o.position.y.toFixed(2);G('pz').value=o.position.z.toFixed(2);
+  G('sx').value=o.scale.x.toFixed(2);G('sy').value=o.scale.y.toFixed(2);G('sz').value=o.scale.z.toFixed(2);
+  G('rx').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.x));
+  G('ry').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.y));
+  G('rz').value=Math.round(THREE.MathUtils.radToDeg(o.rotation.z));
+  G('mc').value='#'+o.material.color.getHexString();
+  G('mm').value=o.material.metalness.toFixed(2);G('mr').value=o.material.roughness.toFixed(2);G('mop').value=o.material.opacity.toFixed(2);
+  const av=((o.scale.x+o.scale.y+o.scale.z)/3).toFixed(2);
+  G('svlbl').textContent=av;G('sslider').value=av;
+}
+
+/* ════════════ HANDLE OVERLAY ════════════ */
+function w2s(v3){
+  const v=v3.clone().project(camera);
+  const w=G('cvwrap');
+  return{x:(v.x*.5+.5)*w.clientWidth,y:(-.5*v.y+.5)*w.clientHeight};
+}
+function updHandles(){
+  if(!SEL||!camera||!renderer){clrHandles();return;}
+  const bb=new THREE.Box3().setFromObject(SEL);
+  const pts=[
+    new THREE.Vector3(bb.min.x,bb.max.y,bb.min.z),
+    new THREE.Vector3(bb.max.x,bb.max.y,bb.min.z),
+    new THREE.Vector3(bb.min.x,bb.max.y,bb.max.z),
+    new THREE.Vector3(bb.max.x,bb.max.y,bb.max.z),
+  ].map(w2s).filter(Boolean);
+  if(!pts.length){clrHandles();return;}
+  const xs=pts.map(p=>p.x),ys=pts.map(p=>p.y);
+  const mnX=Math.min(...xs),mxX=Math.max(...xs),mnY=Math.min(...ys),mxY=Math.max(...ys);
+  const cx=(mnX+mxX)/2,cy=(mnY+mxY)/2;
+  G('hov').innerHTML=`
+    <div class="hmove" style="left:${cx}px;top:${cy}px" title="Drag to move" onmousedown="hMove(event)">✥</div>
+    <div class="hscale tl" style="left:${mnX}px;top:${mnY}px" onmousedown="hScale(event,'ul')"></div>
+    <div class="hscale tr" style="left:${mxX}px;top:${mnY}px" onmousedown="hScale(event,'ur')"></div>
+    <div class="hscale bl" style="left:${mnX}px;top:${mxY}px" onmousedown="hScale(event,'ll')"></div>
+    <div class="hscale br" style="left:${mxX}px;top:${mxY}px" onmousedown="hScale(event,'lr')"></div>
+    <div class="hscale tm" style="left:${cx}px;top:${mnY}px"  onmousedown="hScale(event,'tm')"></div>
+    <div class="hscale bm" style="left:${cx}px;top:${mxY}px"  onmousedown="hScale(event,'bm')"></div>
+    <div class="hscale lm" style="left:${mnX}px;top:${cy}px"  onmousedown="hScale(event,'lm')"></div>
+    <div class="hscale rm" style="left:${mxX}px;top:${cy}px"  onmousedown="hScale(event,'rm')"></div>
+  `;
+}
+function clrHandles(){G('hov').innerHTML='';}
+
+/* Move handle drag */
+let hmSt=null;
+function hMove(e){
+  e.stopPropagation();if(!SEL)return;
+  hmSt={mx:e.clientX,my:e.clientY,px:SEL.position.x,pz:SEL.position.z};
+  const onM=ev=>{
+    if(!hmSt||!SEL)return;
+    const dx=(ev.clientX-hmSt.mx)*C.r*.004;
+    const dz=(ev.clientY-hmSt.my)*C.r*.004;
+    SEL.position.x=hmSt.px+dx;SEL.position.z=hmSt.pz+dz;
+    syncProps();updHandles();
+  };
+  const onU=()=>{hmSt=null;document.removeEventListener('mousemove',onM);document.removeEventListener('mouseup',onU);toast('Moved!','inf');};
+  document.addEventListener('mousemove',onM);document.addEventListener('mouseup',onU);
+}
+
+/* Scale handle drag */
+let hsSt=null;
+function hScale(e,corner){
+  e.stopPropagation();if(!SEL)return;
+  hsSt={mx:e.clientX,my:e.clientY,sx:SEL.scale.x,sy:SEL.scale.y,sz:SEL.scale.z,corner};
+  const onM=ev=>{
+    if(!hsSt||!SEL)return;
+    const dx=(ev.clientX-hsSt.mx)*.012,dy=(ev.clientY-hsSt.my)*.012;
+    const c=hsSt.corner;
+    let nx=hsSt.sx,ny=hsSt.sy,nz=hsSt.sz;
+    if(c==='ul'||c==='ur'||c==='ll'||c==='lr'){
+      // corner — uniform
+      const delta=c==='ur'||c==='lr'?dx:-dx;
+      const f=Math.max(.05,1+delta);
+      nx=Math.max(.05,hsSt.sx*f);ny=Math.max(.05,hsSt.sy*f);nz=Math.max(.05,hsSt.sz*f);
+    }else if(c==='tm'){ny=Math.max(.05,hsSt.sy-dy);}
+    else if(c==='bm'){ny=Math.max(.05,hsSt.sy+dy);}
+    else if(c==='rm'){nx=Math.max(.05,hsSt.sx+dx);}
+    else if(c==='lm'){nx=Math.max(.05,hsSt.sx-dx);}
+    SEL.scale.set(nx,ny,nz);syncProps();updHandles();
+  };
+  const onU=()=>{hsSt=null;document.removeEventListener('mousemove',onM);document.removeEventListener('mouseup',onU);toast('Resized!','inf');};
+  document.addEventListener('mousemove',onM);document.addEventListener('mouseup',onU);
+}
+
+/* ════════════ ADD SHAPES ════════════ */
+const GEOS={
+  box:()=>new THREE.BoxGeometry(1,1,1),
+  sphere:()=>new THREE.SphereGeometry(.6,32,32),
+  cylinder:()=>new THREE.CylinderGeometry(.5,.5,1.2,32),
+  cone:()=>new THREE.ConeGeometry(.55,1.2,32),
+  torus:()=>new THREE.TorusGeometry(.5,.18,16,64),
+  ring:()=>new THREE.TorusGeometry(.55,.06,8,48),
+  tube:()=>new THREE.CylinderGeometry(.28,.28,1.5,20,1,true),
+  octa:()=>new THREE.OctahedronGeometry(.7),
+  wedge:()=>{
+    const g=new THREE.BufferGeometry();
+    const v=new Float32Array([-1,0,-1,1,0,-1,1,0,1,-1,0,1,-1,1,-1,1,1,-1]);
+    g.setAttribute('position',new THREE.BufferAttribute(v,3));
+    g.setIndex([0,1,2,0,2,3,0,1,5,0,5,4,1,2,5,2,3,7,2,7,6,3,0,4,3,4,7,4,5,6,4,6,7]);
+    g.computeVertexNormals();return g;
+  },
+};
+function add(type){
+  const geo=(GEOS[type]||GEOS.box)();
+  const mat=new THREE.MeshStandardMaterial({color:COLS[CI++%COLS.length],metalness:.3,roughness:.4,transparent:false,opacity:1});
+  const m=new THREE.Mesh(geo,mat);
+  m.position.set((Math.random()-.5)*4,.5+Math.random()*.2,(Math.random()-.5)*4);
+  m.castShadow=true;m.receiveShadow=true;
+  m.userData.nm=type[0].toUpperCase()+type.slice(1)+'_'+(OBJS.length+1);
+  scene.add(m);OBJS.push(m);updCnt();doSel(m);
+  toast('Added '+m.userData.nm,'inf');
+}
+
+/* ════════════ SIZE / POSITION ════════════ */
+function scaleBy(f){
+  if(!SEL){toast('Select an object first','');return;}
+  SEL.scale.multiplyScalar(f);syncProps();updHandles();
+  toast(f>1?'Bigger ×'+f:'Smaller ×'+f,'inf');
+}
+function resetScale(){
+  if(!SEL){toast('Select an object first','');return;}
+  SEL.scale.set(1,1,1);syncProps();updHandles();toast('Scale reset','inf');
+}
+function applySlider(){
+  if(!SEL)return;
+  const v=+G('sslider').value;
+  SEL.scale.set(v,v,v);
+  G('svlbl').textContent=v.toFixed(2);
+  G('sx').value=v;G('sy').value=v;G('sz').value=v;
+  updHandles();
+}
+function mv(dx,dy,dz){
+  if(!SEL){toast('Select an object first','');return;}
+  SEL.position.x+=dx;SEL.position.y+=dy;SEL.position.z+=dz;
+  syncProps();updHandles();
+}
+function toggleMove(){
+  moveMode=!moveMode;
+  const btn=G('movebtn'),wrap=G('cvwrap'),hint=G('cvhint'),lbl=G('modelbl');
+  if(moveMode){
+    btn.textContent='✥ Move: ON';btn.className='btn btn-c';
+    wrap.style.cursor='move';lbl.textContent='Drag-to-Move';
+    hint.textContent='Select an object then DRAG it to any position on the plane';
+  }else{
+    btn.textContent='✥ Move: OFF';btn.className='btn btn-o';
+    wrap.style.cursor='crosshair';lbl.textContent='Orbit';
+    hint.textContent='Left-drag: Orbit · Right-drag: Pan · Scroll: Zoom · Click: Select';
+  }
+}
+
+/* ════════════ TRANSFORM / MATERIAL ════════════ */
+function applyTr(){
+  if(!SEL)return;
+  SEL.position.set(+G('px').value,+G('py').value,+G('pz').value);
+  SEL.scale.set(+G('sx').value,+G('sy').value,+G('sz').value);
+  SEL.rotation.set(
+    THREE.MathUtils.degToRad(+G('rx').value),
+    THREE.MathUtils.degToRad(+G('ry').value),
+    THREE.MathUtils.degToRad(+G('rz').value)
+  );updHandles();
+}
+function applyMat(){
+  if(!SEL)return;
+  SEL.material.color.set(G('mc').value);
+  SEL.material.metalness=+G('mm').value;SEL.material.roughness=+G('mr').value;
+  const op=+G('mop').value;SEL.material.opacity=op;SEL.material.transparent=op<1;
+}
+function applyAll(){
+  OBJS.forEach(o=>{
+    o.material.color.set(G('mc').value);
+    o.material.metalness=+G('mm').value;o.material.roughness=+G('mr').value;
+    const op=+G('mop').value;o.material.opacity=op;o.material.transparent=op<1;
+  });toast('Applied to all','inf');
+}
+function pset(nm){
+  const p=MPRESETS[nm];if(!p)return;
+  G('mc').value=p.color;G('mm').value=p.metalness;G('mr').value=p.roughness;G('mop').value=p.opacity;
+  applyMat();toast('Preset: '+nm,'inf');
+}
+
+/* ════════════ DELETE / CLEAR / DUPE ════════════ */
+function delSel(){
+  if(!SEL){toast('Select an object first','');return;}
+  scene.remove(SEL);OBJS=OBJS.filter(o=>o!==SEL);SEL=null;
+  G('cvsel').textContent='Nothing selected';G('cvsel').classList.remove('hi');
+  updCnt();clrHandles();rList();
+}
+function clearAll(){
+  if(!OBJS.length)return;
+  if(!confirm('Remove all objects?'))return;
+  OBJS.forEach(o=>scene.remove(o));OBJS=[];SEL=null;
+  G('cvsel').textContent='Nothing selected';G('cvsel').classList.remove('hi');
+  updCnt();clrHandles();rList();
+}
+function dupe(){
+  if(!SEL){toast('Select an object to duplicate','');return;}
+  const geo=SEL.geometry.clone(),mat=SEL.material.clone();
+  const cl=new THREE.Mesh(geo,mat);
+  cl.position.copy(SEL.position).add(new THREE.Vector3(.6,0,.6));
+  cl.scale.copy(SEL.scale);cl.rotation.copy(SEL.rotation);
+  cl.castShadow=true;cl.receiveShadow=true;
+  cl.userData.nm=SEL.userData.nm+'_copy';
+  scene.add(cl);OBJS.push(cl);updCnt();doSel(cl);toast('Duplicated!','inf');
+}
+
+/* ════════════ SCENE TOGGLES ════════════ */
+function tGrid(){gridOn=!gridOn;if(gridMesh)gridMesh.visible=gridOn;G('tog-grid').classList.toggle('on',gridOn);}
+function tShad(){shadOn=!shadOn;renderer.shadowMap.enabled=shadOn;G('tog-shad').classList.toggle('on',shadOn);}
+function tFog(){fogOn=!fogOn;scene.fog=fogOn?new THREE.FogExp2(0x07070e,.016):null;G('tog-fog').classList.toggle('on',fogOn);}
+function toggleWire(){
+  WIRE=!WIRE;OBJS.forEach(o=>o.material.wireframe=WIRE);
+  G('wirebtn').textContent=WIRE?'⬡ Solid':'⬡ Wireframe';
+  G('tog-wire').classList.toggle('on',WIRE);
+}
+function applyLgt(){if(ambL)ambL.intensity=+G('amb').value;if(sunL)sunL.intensity=+G('sun').value;}
+function setBg(h){if(scene)scene.background=new THREE.Color(h);}
+
+/* ════════════ OBJECT LIST ════════════ */
+function updCnt(){G('ocnt').textContent=OBJS.length;G('ocnt2').textContent=OBJS.length;}
+function rList(){
+  const ul=G('olist');
+  if(!OBJS.length){ul.innerHTML='<li class="eol"><em>✦</em>Add shapes from the toolbar<br>to start building</li>';return;}
+  ul.innerHTML='';
+  OBJS.forEach((o,i)=>{
+    const li=document.createElement('li');
+    li.className='oi'+(o===SEL?' on':'');
+    li.innerHTML=`<div class="od" style="background:#${o.material.color.getHexString()}"></div><span class="on2">${o.userData.nm}</span><span class="ox">✕</span>`;
+    li.addEventListener('click',()=>doSel(o));
+    li.querySelector('.ox').addEventListener('click',e=>{
+      e.stopPropagation();scene.remove(o);OBJS.splice(i,1);
+      if(SEL===o){SEL=null;G('cvsel').textContent='Nothing selected';G('cvsel').classList.remove('hi');clrHandles();}
+      updCnt();rList();
+    });
+    ul.appendChild(li);
+  });
+}
+
+/* ════════════ PROPS TABS ════════════ */
+function ptab(btn,id){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['pt-o','pt-m','pt-s'].forEach(t=>G(t).style.display=t===id?'block':'none');
+}
+
+/* ════════════ SAVE ════════════ */
+function openSave(){
+  if(!OBJS.length){toast('Add at least one shape before saving!','');return;}
+  G('s-nm').value=(CUR_SUB?CUR_SUB.nm:'')+' Design by '+(ME?ME.n.split(' ')[0]:'User');
+  G('saveov').classList.add('on');
+}
+function closeSave(){G('saveov').classList.remove('on');}
+function doSave(){
+  const nm=G('s-nm').value.trim()||'Untitled',cid=G('s-cat').value;
+  const ds=G('s-ds').value.trim(),pub=G('pubtgl').classList.contains('on');
+  let thumb='';try{thumb=renderer.domElement.toDataURL('image/jpeg',.75);}catch(e){}
+  const d={id:Date.now(),nm,cid,ds,author:ME?ME.n:'Anonymous',pub,thumb,cnt:OBJS.length,sub:CUR_SUB,date:new Date().toLocaleString()};
+  SAVES.unshift(d);SAVE_CNT++;
+  G('stat-n').textContent=SAVE_CNT;closeSave();
+  const cat=CAT.find(c=>c.id===cid)||{ic:'⊞',lb:'Design'};
+  G('sucprev').innerHTML=`
+    <div class="spr"><span class="spl">Design</span><span class="spv">${nm}</span></div>
+    <div class="spr"><span class="spl">Category</span><span class="spv">${cat.ic} ${cat.lb}</span></div>
+    <div class="spr"><span class="spl">Objects</span><span class="spv">${OBJS.length} shape${OBJS.length!==1?'s':''}</span></div>
+    <div class="spr"><span class="spl">Author</span><span class="spv">${d.author}</span></div>
+    <div class="spr"><span class="spl">Saved</span><span class="spv">${d.date}</span></div>
+    <div class="spr"><span class="spl">Visibility</span><span class="spv" style="color:var(--${pub?'grn':'mut'})">${pub?'🌐 Public':'🔒 Private'}</span></div>
+  `;
+  G('sucov').classList.add('on');
+}
+function closeSuc(){G('sucov').classList.remove('on');}
+
+/* ════════════ GALLERY ════════════ */
+function renderGal(){
+  const gg=G('ggrid');
+  if(!SAVES.length){gg.innerHTML='<div class="gemp"><em>🎨</em><strong>NO DESIGNS YET</strong>Create and save your first design.</div>';return;}
+  gg.innerHTML=SAVES.map(d=>{
+    const cat=CAT.find(c=>c.id===d.cid)||{cl:'#888',ic:'⊞',lb:'Design'};
+    return `<div class="gc">
+      <div class="gcth" style="background:linear-gradient(135deg,var(--s2),${cat.cl}20)">
+        ${d.thumb?`<img src="${d.thumb}" alt="${d.nm}"/>`:`<span>${d.sub?.em||cat.ic}</span>`}
+      </div>
+      <div class="gcin">
+        <div class="gcnm">${d.nm}</div>
+        <div class="gcmt"><span>by ${d.author}</span><span>${d.cnt} shape${d.cnt!==1?'s':''}</span></div>
+        <div class="gcbg" style="border-color:${cat.cl};color:${cat.cl}">${cat.ic} ${cat.lb}${d.pub?' · 🌐':''}</div>
+        <div style="font-size:.6rem;color:var(--mut);margin-top:.38rem;font-family:var(--fm)">${d.date}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════ TOAST ════════════ */
+function toast(msg,type){
+  const el=G('toast');el.textContent=msg;
+  el.className='toast on'+(type?' '+type:'');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2800);
+}
+
+/* ════════════ UTIL ════════════ */
+function G(id){return document.getElementById(id);}
+
+/* ════════════ BOOT ════════════ */
+buildPicker();
+</script>
+</body>
+</html>
