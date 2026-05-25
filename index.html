@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/DesignForge/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,75 +23,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 
-/* ══════ AUTH GATE ══════ */
-#auth-gate{
-  position:fixed;inset:0;z-index:9999;
-  display:flex;align-items:center;justify-content:center;
-  background:var(--bg);overflow:auto;padding:1rem;
-}
-#auth-gate.hide{display:none}
-.auth-wrap{
-  width:100%;max-width:440px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:16px;padding:2.2rem 2rem;
-  animation:authIn .38s cubic-bezier(.16,1,.3,1);
-}
-@keyframes authIn{from{opacity:0;transform:translateY(28px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
-.auth-logo{font-family:var(--ff);font-size:2rem;letter-spacing:3px;text-align:center;margin-bottom:.3rem}
-.auth-logo b{color:var(--accent)}
-.auth-tag{font-family:var(--fm);font-size:.62rem;letter-spacing:4px;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:1.8rem}
-.auth-tabs{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:1.6rem}
-.auth-tab{flex:1;padding:.55rem;text-align:center;cursor:pointer;font-weight:600;font-size:.85rem;color:var(--muted);transition:all .18s;background:transparent;border:none;font-family:var(--fb)}
-.auth-tab.on{background:var(--accent);color:#fff}
-.auth-panel{display:none}
-.auth-panel.on{display:block}
-.fg{margin-bottom:.9rem}
-.fl{font-size:.7rem;color:var(--muted);margin-bottom:.3rem;display:block;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase}
-.fi,.fs,.ft{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.58rem .78rem;border-radius:6px;font-family:var(--fb);font-size:.88rem;transition:border-color .2s;outline:none}
-.fi:focus,.fs:focus,.ft:focus{border-color:var(--a2)}
-.fi::placeholder{color:var(--muted)}
-.auth-err{font-size:.78rem;color:var(--accent);margin-bottom:.8rem;min-height:1.1rem;font-family:var(--fm)}
-.auth-submit{width:100%;padding:.72rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:var(--ff);font-size:1.2rem;letter-spacing:2px;cursor:pointer;transition:all .2s;margin-top:.3rem}
-.auth-submit:hover{background:#ff5020;transform:translateY(-1px)}
-.auth-divider{display:flex;align-items:center;gap:.8rem;margin:1.2rem 0;color:var(--muted);font-size:.75rem}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.auth-hint{text-align:center;font-size:.78rem;color:var(--muted);margin-top:1rem}
-.auth-hint b{color:var(--a2);cursor:pointer}
-.auth-hint b:hover{text-decoration:underline}
-/* password strength */
-.pw-strength{height:3px;border-radius:2px;margin-top:.35rem;background:var(--border);overflow:hidden}
-.pw-bar{height:100%;width:0;border-radius:2px;transition:width .3s,background .3s}
-.pw-label{font-size:.62rem;color:var(--muted);font-family:var(--fm);margin-top:.2rem}
-/* avatar picker */
-.avatar-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
-.av{
-  width:40px;height:40px;border-radius:50%;border:2px solid var(--border);
-  cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;
-  transition:all .15s;background:var(--s2);
-}
-.av:hover{border-color:var(--a2)}
-.av.on{border-color:var(--accent);background:rgba(255,60,0,.1)}
-
-/* ══════ TOPBAR ══════ */
+/* ── TOPBAR ── */
 #topbar{
   position:fixed;top:0;left:0;right:0;z-index:900;
   height:var(--nav);display:flex;align-items:center;
   justify-content:space-between;padding:0 1.8rem;
-  background:rgba(8,8,15,.97);backdrop-filter:blur(24px);
+  background:rgba(8,8,15,.96);backdrop-filter:blur(24px);
   border-bottom:1px solid var(--border);
 }
 .logo{font-family:var(--ff);font-size:1.85rem;letter-spacing:3px;cursor:pointer;color:var(--text)}
 .logo b{color:var(--accent)}
 .topbar-r{display:flex;gap:.6rem;align-items:center}
-.user-badge{
-  display:flex;align-items:center;gap:.5rem;
-  padding:.3rem .7rem;background:var(--s2);border:1px solid var(--border);
-  border-radius:20px;font-size:.78rem;cursor:pointer;transition:all .18s;
-}
-.user-badge:hover{border-color:var(--a2)}
-.user-av{font-size:1rem}
 
-/* ══════ BUTTONS ══════ */
+/* ── BUTTONS ── */
 .btn{padding:.4rem 1rem;border-radius:6px;font-family:var(--fb);font-size:.82rem;font-weight:500;cursor:pointer;border:none;transition:all .18s;white-space:nowrap}
 .btn-o{background:transparent;color:var(--muted);border:1px solid var(--border)}
 .btn-o:hover{color:var(--text);border-color:var(--a2)}
@@ -102,11 +47,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .btn-g:hover{opacity:.88;transform:translateY(-1px)}
 .btn-lg{padding:.72rem 1.9rem;font-size:.96rem}
 
-/* ══════ SCREENS ══════ */
+/* ── SCREENS ── */
 .screen{position:fixed;inset:0;top:var(--nav);display:none;flex-direction:column;overflow:hidden}
 .screen.on{display:flex}
 
-/* ══════ HERO ══════ */
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
 #s-hero{align-items:center;justify-content:center;text-align:center;padding:3rem 2rem;overflow:auto}
 .hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,60,0,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,60,0,.05) 1px,transparent 1px);background-size:56px 56px;animation:gm 24s linear infinite}
 @keyframes gm{to{background-position:56px 56px}}
@@ -121,7 +68,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .stat .n{font-family:var(--ff);font-size:2.3rem;color:var(--a2)}
 .stat .l{font-size:.68rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
 
-/* ══════ PICKER ══════ */
+/* ════════════════════════════════
+   PICKER
+════════════════════════════════ */
 #s-picker{overflow:hidden}
 .pk-head{padding:1.3rem 2rem .9rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
 .pk-row1{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:.9rem;gap:.8rem;flex-wrap:wrap}
@@ -131,9 +80,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .pk-back{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .8rem;border-radius:5px;cursor:pointer;font-family:var(--fb);font-size:.8rem;transition:all .17s}
 .pk-back:hover{color:var(--text);border-color:var(--accent)}
 .srch{position:relative;margin-bottom:.85rem}
-.srch span{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
-#srch-input{width:100%;padding:.6rem .9rem .6rem 2.3rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-size:.88rem;font-family:var(--fb);transition:border-color .2s;outline:none}
-#srch-input:focus{border-color:var(--a2)}
+.srch span{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted);font-size:.9rem}
+#srch-input{width:100%;padding:.6rem .9rem .6rem 2.3rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:7px;font-size:.88rem;font-family:var(--fb);transition:border-color .2s}
+#srch-input:focus{outline:none;border-color:var(--a2)}
 #srch-input::placeholder{color:var(--muted)}
 .ftabs{display:flex;gap:.35rem;flex-wrap:wrap}
 .ftab{padding:.26rem .72rem;border-radius:20px;font-size:.72rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--fb);transition:all .14s}
@@ -162,10 +111,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .no-res-em{font-size:2.2rem;margin-bottom:.7rem}
 .no-res-t{font-family:var(--ff);font-size:1.3rem;margin-bottom:.4rem;color:var(--text)}
 
-/* ══════ DESIGN SHEET ══════ */
-#s-sheet{overflow:hidden;animation:sheetIn .38s cubic-bezier(.16,1,.3,1)}
+/* ════════════════════════════════
+   DESIGN SHEET — slides up
+════════════════════════════════ */
+#s-sheet{
+  overflow:hidden;
+  animation:sheetIn .38s cubic-bezier(.16,1,.3,1);
+}
 @keyframes sheetIn{from{opacity:0;transform:translateY(36px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
-.sh-top{display:flex;align-items:center;justify-content:space-between;padding:.65rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;gap:.8rem;flex-wrap:wrap}
+
+/* Sheet Header */
+.sh-top{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.65rem 1.4rem;background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;gap:.8rem;flex-wrap:wrap;
+}
 .sh-left{display:flex;align-items:center;gap:.85rem}
 .sh-bk{background:none;border:1px solid var(--border);color:var(--muted);padding:.32rem .75rem;border-radius:5px;cursor:pointer;font-family:var(--fb);font-size:.78rem;transition:all .17s;flex-shrink:0}
 .sh-bk:hover{color:var(--text);border-color:var(--accent)}
@@ -173,11 +133,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .sh-em{font-size:1.55rem;line-height:1}
 .sh-nm{font-family:var(--ff);font-size:1.25rem;letter-spacing:1px;line-height:1}
 .sh-cat{font-family:var(--fm);font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:.1rem}
-.sh-pill{font-family:var(--fm);font-size:.6rem;letter-spacing:3px;color:var(--a2);text-transform:uppercase;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);padding:.2rem .55rem;border-radius:20px}
+.sh-pill{
+  font-family:var(--fm);font-size:.6rem;letter-spacing:3px;color:var(--a2);
+  text-transform:uppercase;background:rgba(0,212,255,.08);
+  border:1px solid rgba(0,212,255,.2);padding:.2rem .55rem;border-radius:20px;
+}
 .sh-right{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
 
 /* Toolbar */
-.sh-bar{display:flex;align-items:center;gap:.35rem;padding:.48rem 1.2rem;background:rgba(17,17,25,.97);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0}
+.sh-bar{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.48rem 1.2rem;background:rgba(17,17,25,.97);
+  border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;
+}
 .sh-bar::-webkit-scrollbar{height:3px}
 .tsep{width:1px;height:20px;background:var(--border);margin:0 .1rem;flex-shrink:0}
 .tg{display:flex;align-items:center;gap:.3rem;flex-shrink:0}
@@ -185,51 +153,48 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .tb{padding:.3rem .65rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:.76rem;font-family:var(--fb);transition:all .14s;white-space:nowrap;flex-shrink:0}
 .tb:hover,.tb.on{background:var(--accent);border-color:var(--accent);color:#fff}
 .tb.c2{background:var(--a2);border-color:var(--a2);color:#000}
-.tb.cg{background:var(--green);border-color:var(--green);color:#000;font-weight:700}
 
 /* Workspace */
 .sh-ws{flex:1;display:flex;overflow:hidden}
-.cvwrap{flex:1;position:relative;background:radial-gradient(ellipse at 50% 35%,#0e0e1c 0%,#05050c 100%);cursor:crosshair;overflow:hidden}
+
+/* Canvas */
+.cvwrap{
+  flex:1;position:relative;
+  background:radial-gradient(ellipse at 50% 35%,#0e0e1c 0%,#05050c 100%);
+  cursor:crosshair;overflow:hidden;
+}
 #cv{width:100%;height:100%;display:block}
-.cv-wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--ff);font-size:clamp(1.8rem,5vw,4.5rem);letter-spacing:.18em;color:rgba(255,255,255,.025);pointer-events:none;white-space:nowrap;text-transform:uppercase;user-select:none}
-.cv-hint{position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);font-family:var(--fm);font-size:.6rem;color:rgba(255,255,255,.18);pointer-events:none;white-space:nowrap;text-align:center;line-height:1.9}
-.cv-info{position:absolute;top:.85rem;left:.85rem;font-family:var(--fm);font-size:.62rem;color:var(--muted);pointer-events:none;line-height:1.9}
+.cv-wm{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-family:var(--ff);font-size:clamp(1.8rem,5vw,4.5rem);
+  letter-spacing:.18em;color:rgba(255,255,255,.025);
+  pointer-events:none;white-space:nowrap;text-transform:uppercase;user-select:none;
+}
+.cv-hint{
+  position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);
+  font-family:var(--fm);font-size:.6rem;color:rgba(255,255,255,.18);
+  pointer-events:none;white-space:nowrap;text-align:center;line-height:1.9;
+}
+.cv-info{
+  position:absolute;top:.85rem;left:.85rem;
+  font-family:var(--fm);font-size:.62rem;color:var(--muted);
+  pointer-events:none;line-height:1.9;
+}
 .cv-info b{color:var(--a2)}
-.cv-sel{position:absolute;top:.85rem;right:.85rem;font-family:var(--fm);font-size:.62rem;background:rgba(17,17,25,.9);border:1px solid var(--border);padding:.28rem .65rem;border-radius:6px;color:var(--muted);pointer-events:none;transition:all .2s}
+.cv-sel{
+  position:absolute;top:.85rem;right:.85rem;
+  font-family:var(--fm);font-size:.62rem;
+  background:rgba(17,17,25,.9);border:1px solid var(--border);
+  padding:.28rem .65rem;border-radius:6px;color:var(--muted);
+  pointer-events:none;transition:all .2s;
+}
 .cv-sel.hi{border-color:var(--a2);color:var(--a2)}
 
-/* ── TRANSFORM HANDLES OVERLAY ── */
-.handle-overlay{
-  position:absolute;inset:0;pointer-events:none;z-index:10;
-}
-.handle-box{
-  position:absolute;pointer-events:all;
-}
-/* Move handle — center cross */
-.h-move{
-  position:absolute;transform:translate(-50%,-50%);
-  width:28px;height:28px;border-radius:50%;
-  background:rgba(0,212,255,.15);border:2px solid var(--a2);
-  cursor:move;display:flex;align-items:center;justify-content:center;
-  font-size:.85rem;transition:background .15s;
-}
-.h-move:hover{background:rgba(0,212,255,.35)}
-/* Scale handle corners */
-.h-scale{
-  position:absolute;width:14px;height:14px;
-  background:var(--a2);border:2px solid #fff;border-radius:3px;
-  transform:translate(-50%,-50%);
-}
-.h-scale.tl{cursor:nwse-resize}
-.h-scale.tr{cursor:nesw-resize}
-.h-scale.bl{cursor:nesw-resize}
-.h-scale.br{cursor:nwse-resize}
-.h-scale.tm,.h-scale.bm{cursor:ns-resize;width:18px;height:10px}
-.h-scale.lm,.h-scale.rm{cursor:ew-resize;width:10px;height:18px}
-.h-scale:hover{background:#fff;border-color:var(--a2)}
-
 /* Props Panel */
-.pp{width:268px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+.pp{
+  width:268px;background:var(--surface);border-left:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
+}
 .pp-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0}
 .ptab{flex:1;padding:.5rem .3rem;font-size:.68rem;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase;cursor:pointer;color:var(--muted);border:none;background:none;border-bottom:2px solid transparent;transition:all .14s}
 .ptab:hover{color:var(--text)}
@@ -239,26 +204,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .ph:first-child{margin-top:0}
 .pr{display:flex;align-items:center;gap:.38rem;margin-bottom:.42rem}
 .pl{font-size:.72rem;color:var(--muted);width:50px;flex-shrink:0}
-.pi{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.25rem .4rem;border-radius:3px;font-size:.72rem;font-family:var(--fm);width:100%;transition:border-color .2s;outline:none}
-.pi:focus{border-color:var(--a2)}
+.pi{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.25rem .4rem;border-radius:3px;font-size:.72rem;font-family:var(--fm);width:100%;transition:border-color .2s}
+.pi:focus{outline:none;border-color:var(--a2)}
 .cp{width:100%;height:30px;border-radius:3px;border:1px solid var(--border);cursor:pointer;background:none}
 .sc{display:flex;align-items:center;gap:.55rem;padding:.5rem .6rem;background:linear-gradient(135deg,var(--s2),rgba(0,212,255,.04));border:1px solid rgba(0,212,255,.15);border-radius:8px;margin-bottom:.55rem}
 .sc-em{font-size:1.4rem;line-height:1}
 .sc-nm{font-weight:600;font-size:.8rem}
 .sc-ds{font-size:.65rem;color:var(--muted);margin-top:.08rem}
-/* Size quick controls */
-.size-ctrl{display:flex;align-items:center;gap:.3rem;margin-bottom:.42rem}
-.size-lbl{font-size:.72rem;color:var(--muted);width:50px;flex-shrink:0}
-.size-btns{display:flex;gap:.3rem;flex:1}
-.szb{flex:1;padding:.3rem;background:var(--s2);border:1px solid var(--border);color:var(--text);border-radius:4px;cursor:pointer;font-size:.75rem;font-weight:700;text-align:center;transition:all .14s}
-.szb:hover{background:var(--a2);border-color:var(--a2);color:#000}
-.szb.big{color:var(--green);border-color:var(--green)}
-.szb.big:hover{background:var(--green);color:#000}
-.szb.sml{color:var(--accent);border-color:var(--accent)}
-.szb.sml:hover{background:var(--accent);color:#fff}
-/* Size slider */
-.size-slider{width:100%;height:4px;appearance:none;background:var(--border);border-radius:2px;margin-bottom:.5rem;cursor:pointer;outline:none}
-.size-slider::-webkit-slider-thumb{appearance:none;width:16px;height:16px;border-radius:50%;background:var(--a2);border:2px solid #fff;cursor:pointer}
 .ol{list-style:none}
 .oi{display:flex;align-items:center;gap:.4rem;padding:.3rem .48rem;border-radius:4px;cursor:pointer;font-size:.76rem;transition:background .14s;border:1px solid transparent;margin-bottom:.22rem}
 .oi:hover{background:var(--s2)}
@@ -279,7 +231,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .tog::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform .18s}
 .tog.on::after{transform:translateX(16px)}
 
-/* ══════ SAVE MODAL ══════ */
+/* ════════════════════════════════
+   SAVE MODAL
+════════════════════════════════ */
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);z-index:950;display:none;align-items:center;justify-content:center}
 .ov.on{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.9rem;width:92%;max-width:450px;animation:mIn .26s ease}
@@ -287,14 +241,22 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .modal-em{font-size:2.5rem;text-align:center;margin-bottom:.5rem}
 .modal-t{font-family:var(--ff);font-size:1.9rem;letter-spacing:2px;text-align:center;margin-bottom:.25rem}
 .modal-sub{font-size:.8rem;color:var(--muted);text-align:center;margin-bottom:1.4rem}
+.fg{margin-bottom:.8rem}
+.fl{font-size:.7rem;color:var(--muted);margin-bottom:.3rem;display:block;font-family:var(--fm);letter-spacing:1px;text-transform:uppercase}
+.fi,.fs,.ft{width:100%;background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.52rem .72rem;border-radius:5px;font-family:var(--fb);font-size:.86rem;transition:border-color .2s}
+.fi:focus,.fs:focus,.ft:focus{outline:none;border-color:var(--accent)}
+.fs option{background:var(--surface)}
+.ft{resize:vertical;min-height:65px}
+.trow{display:flex;align-items:center;justify-content:space-between}
 .stgl{width:42px;height:22px;background:var(--s2);border-radius:11px;cursor:pointer;position:relative;border:1px solid var(--border);transition:background .18s;flex-shrink:0}
 .stgl.on{background:var(--green);border-color:var(--green)}
 .stgl::after{content:'';position:absolute;top:2px;left:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:transform .18s}
 .stgl.on::after{transform:translateX(20px)}
-.trow{display:flex;align-items:center;justify-content:space-between}
 .ma{display:flex;gap:.65rem;margin-top:1.3rem;justify-content:flex-end}
 
-/* ══════ SUCCESS ══════ */
+/* ════════════════════════════════
+   SUCCESS SCREEN
+════════════════════════════════ */
 #success-ov{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(14px);z-index:960;display:none;align-items:center;justify-content:center}
 #success-ov.on{display:flex}
 .suc-box{background:var(--surface);border:1px solid var(--green);border-radius:16px;padding:2.4rem 2rem;width:92%;max-width:400px;text-align:center;animation:mIn .3s ease}
@@ -307,7 +269,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .sp-v{color:var(--text);font-weight:600}
 .suc-acts{display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap}
 
-/* ══════ GALLERY ══════ */
+/* ════════════════════════════════
+   GALLERY
+════════════════════════════════ */
 #s-gallery{overflow-y:auto;padding:2rem}
 .s-tag{font-family:var(--fm);font-size:.64rem;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:.38rem}
 .s-title{font-family:var(--ff);font-size:2.7rem;letter-spacing:2px;margin-bottom:1.8rem}
@@ -324,7 +288,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 .gEmpty em{font-size:3rem;display:block;margin-bottom:.8rem;font-style:normal}
 .gEmpty strong{font-family:var(--ff);font-size:1.7rem;display:block;margin-bottom:.4rem;color:var(--text)}
 
-/* ══════ TOAST ══════ */
+/* ── TOAST ── */
 .toast{position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:.65rem 1.05rem;border-radius:7px;font-size:.8rem;transform:translateY(65px);opacity:0;transition:all .26s;pointer-events:none}
 .toast.on{transform:translateY(0);opacity:1}
 .toast.ok{border-left-color:var(--green)}
@@ -342,807 +306,17 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb)}
 </head>
 <body>
 
-<!-- ══════════════════════════════════
-     AUTH GATE — Sign Up / Login
-══════════════════════════════════ -->
-<div id="auth-gate">
-  <div class="auth-wrap">
-    <div class="auth-logo">DESIGN<b>FORGE</b></div>
-    <div class="auth-tag">// 3D Product Design Platform</div>
-
-    <div class="auth-tabs">
-      <button class="auth-tab on" onclick="authTab('signup')">Create Account</button>
-      <button class="auth-tab"    onclick="authTab('login')">Sign In</button>
-    </div>
-
-    <!-- SIGN UP -->
-    <div class="auth-panel on" id="ap-signup">
-      <div style="margin-bottom:.9rem">
-        <div class="fl">Choose your avatar</div>
-        <div class="avatar-row" id="av-row">
-          <div class="av on" data-av="🧑‍💻" onclick="pickAv(this)">🧑‍💻</div>
-          <div class="av" data-av="👩‍🎨" onclick="pickAv(this)">👩‍🎨</div>
-          <div class="av" data-av="👨‍🔧" onclick="pickAv(this)">👨‍🔧</div>
-          <div class="av" data-av="👩‍🚀" onclick="pickAv(this)">👩‍🚀</div>
-          <div class="av" data-av="🧑‍🏭" onclick="pickAv(this)">🧑‍🏭</div>
-          <div class="av" data-av="👨‍🎓" onclick="pickAv(this)">👨‍🎓</div>
-          <div class="av" data-av="🦸" onclick="pickAv(this)">🦸</div>
-          <div class="av" data-av="🤖" onclick="pickAv(this)">🤖</div>
-        </div>
-      </div>
-      <div class="fg">
-        <label class="fl">Full Name</label>
-        <input class="fi" id="su-name" placeholder="e.g. John Doe" oninput="clearAuthErr()"/>
-      </div>
-      <div class="fg">
-        <label class="fl">Email Address</label>
-        <input class="fi" id="su-email" type="email" placeholder="you@example.com" oninput="clearAuthErr()"/>
-      </div>
-      <div class="fg">
-        <label class="fl">Password</label>
-        <input class="fi" id="su-pw" type="password" placeholder="Min. 6 characters" oninput="checkPwStrength()"/>
-        <div class="pw-strength"><div class="pw-bar" id="pw-bar"></div></div>
-        <div class="pw-label" id="pw-label">Enter a password</div>
-      </div>
-      <div class="fg">
-        <label class="fl">Confirm Password</label>
-        <input class="fi" id="su-pw2" type="password" placeholder="Repeat password" oninput="clearAuthErr()"/>
-      </div>
-      <div class="auth-err" id="su-err"></div>
-      <button class="auth-submit" onclick="doSignUp()">CREATE ACCOUNT →</button>
-      <div class="auth-hint">Already have an account? <b onclick="authTab('login')">Sign In</b></div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="auth-panel" id="ap-login">
-      <div class="fg">
-        <label class="fl">Email Address</label>
-        <input class="fi" id="li-email" type="email" placeholder="you@example.com" oninput="clearAuthErr()"/>
-      </div>
-      <div class="fg">
-        <label class="fl">Password</label>
-        <input class="fi" id="li-pw" type="password" placeholder="Your password" oninput="clearAuthErr()"/>
-      </div>
-      <div class="auth-err" id="li-err"></div>
-      <button class="auth-submit" onclick="doLogin()">SIGN IN →</button>
-      <div class="auth-divider">or</div>
-      <button class="auth-submit" style="background:var(--s2);color:var(--text);border:1px solid var(--border);font-family:var(--fb);font-size:.9rem;letter-spacing:0" onclick="demoLogin()">
-        🚀 Try Demo (No Account Needed)
-      </button>
-      <div class="auth-hint">No account? <b onclick="authTab('signup')">Create one free</b></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ TOP BAR ══════ -->
+<!-- TOP BAR -->
 <div id="topbar">
   <div class="logo" onclick="goTo('hero')">DESIGN<b>FORGE</b></div>
   <div class="topbar-r">
     <button class="btn btn-o" onclick="goTo('gallery')">🌐 Gallery</button>
     <button class="btn btn-o" onclick="goTo('picker')">⊞ Browse</button>
     <button class="btn btn-r" onclick="goTo('picker')">＋ New Design</button>
-    <div class="user-badge" onclick="signOut()">
-      <span class="user-av" id="user-av">🧑‍💻</span>
-      <span id="user-name">User</span>
-      <span style="color:var(--muted);font-size:.7rem">· Sign out</span>
-    </div>
   </div>
 </div>
 
-<!-- ══════ HERO ══════ -->
+<!-- ════ HERO ════ -->
 <div id="s-hero" class="screen on">
   <div class="hgrid"></div>
-  <div class="hglow"></div>
-  <div class="hero-inner">
-    <div class="htag">// Professional 3D Design Platform</div>
-    <h1 class="htitle">DESIGN<br><em>FORGE</em></h1>
-    <p class="hsub">Pick what you want to build — a full 3D workspace opens instantly. Move, resize, and design your product, then save it.</p>
-    <div class="hbtns">
-      <button class="btn btn-r btn-lg" onclick="goTo('picker')">🚀 Start Designing</button>
-      <button class="btn btn-o btn-lg" onclick="goTo('gallery')">View Gallery →</button>
-    </div>
-    <div class="hstats">
-      <div class="stat"><div class="n" id="stat-n">0</div><div class="l">Saved</div></div>
-      <div class="stat"><div class="n">10</div><div class="l">Categories</div></div>
-      <div class="stat"><div class="n">70+</div><div class="l">Design Types</div></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ PICKER ══════ -->
-<div id="s-picker" class="screen">
-  <div class="pk-head">
-    <div class="pk-row1">
-      <div>
-        <div class="pk-tag">// Step 1 — Pick what you want to design</div>
-        <div class="pk-title">WHAT ARE YOU <span>DESIGNING?</span></div>
-      </div>
-      <button class="pk-back" onclick="goTo('hero')">← Home</button>
-    </div>
-    <div class="srch">
-      <span>🔍</span>
-      <input id="srch-input" placeholder="Search — car, robot, sneaker, rocket…" oninput="renderPicker()" autocomplete="off"/>
-    </div>
-    <div class="ftabs" id="ftabs"></div>
-  </div>
-  <div class="pk-body" id="pk-body"></div>
-</div>
-
-<!-- ══════ DESIGN SHEET ══════ -->
-<div id="s-sheet" class="screen">
-  <div class="sh-top">
-    <div class="sh-left">
-      <button class="sh-bk" onclick="goTo('picker')">← Pick Another</button>
-      <div class="sh-subj">
-        <div class="sh-em" id="sh-em">🎨</div>
-        <div>
-          <div class="sh-nm" id="sh-nm">Design</div>
-          <div class="sh-cat" id="sh-cat">Category</div>
-        </div>
-      </div>
-      <div class="sh-pill">Step 2 — Design Your Product</div>
-    </div>
-    <div class="sh-right">
-      <button class="btn btn-o" onclick="resetCam()">⊙ Reset View</button>
-      <button class="btn btn-o" id="wire-btn" onclick="toggleWire()">⬡ Wireframe</button>
-      <button class="btn btn-o" id="move-btn" onclick="toggleMoveMode()">✥ Move Mode: OFF</button>
-      <button class="btn btn-o" style="color:#ff8080" onclick="delSel()">✕ Delete</button>
-      <button class="btn btn-g btn-lg" onclick="openSave()">💾 Save Design</button>
-    </div>
-  </div>
-
-  <!-- Toolbar -->
-  <div class="sh-bar">
-    <div class="tg-lbl">ADD SHAPE</div>
-    <div class="tg">
-      <button class="tb" onclick="add('box')">□ Box</button>
-      <button class="tb" onclick="add('sphere')">○ Sphere</button>
-      <button class="tb" onclick="add('cylinder')">⬤ Cylinder</button>
-      <button class="tb" onclick="add('cone')">△ Cone</button>
-      <button class="tb" onclick="add('torus')">◎ Torus</button>
-      <button class="tb" onclick="add('ring')">⊚ Ring</button>
-      <button class="tb" onclick="add('tube')">⌀ Tube</button>
-      <button class="tb" onclick="add('octa')">◈ Octa</button>
-      <button class="tb" onclick="add('wedge')">▷ Wedge</button>
-    </div>
-    <div class="tsep"></div>
-    <div class="tg-lbl">SIZE</div>
-    <div class="tg">
-      <button class="tb cg" onclick="scaleStep(1.2)" title="Make bigger">＋ Bigger</button>
-      <button class="tb" style="border-color:#ff8080;color:#ff8080" onclick="scaleStep(0.8)" title="Make smaller">－ Smaller</button>
-      <button class="tb" onclick="scaleStep(2)" title="Double size">×2</button>
-      <button class="tb" onclick="scaleStep(0.5)" title="Half size">÷2</button>
-    </div>
-    <div class="tsep"></div>
-    <div class="tg-lbl">POSITION</div>
-    <div class="tg">
-      <button class="tb" onclick="moveStep(-1,0,0)">← X</button>
-      <button class="tb" onclick="moveStep(1,0,0)">→ X</button>
-      <button class="tb" onclick="moveStep(0,0.5,0)">↑ Y</button>
-      <button class="tb" onclick="moveStep(0,-0.5,0)">↓ Y</button>
-      <button class="tb" onclick="moveStep(0,0,-1)">↑ Z</button>
-      <button class="tb" onclick="moveStep(0,0,1)">↓ Z</button>
-    </div>
-    <div class="tsep"></div>
-    <div class="tg-lbl">EDIT</div>
-    <div class="tg">
-      <button class="tb" onclick="dupeSel()">⧉ Dupe</button>
-      <button class="tb" onclick="clearAll()" style="color:#ff9090">✕ Clear</button>
-    </div>
-    <div class="tsep"></div>
-    <div class="tg-lbl">CAMERA</div>
-    <div class="tg">
-      <button class="tb" onclick="camPreset('front')">Front</button>
-      <button class="tb" onclick="camPreset('top')">Top</button>
-      <button class="tb" onclick="camPreset('side')">Side</button>
-      <button class="tb" onclick="camPreset('iso')">Iso</button>
-    </div>
-  </div>
-
-  <!-- Workspace -->
-  <div class="sh-ws">
-    <div class="cvwrap" id="cvwrap">
-      <canvas id="cv"></canvas>
-      <div class="cv-wm" id="cv-wm"></div>
-      <div class="cv-hint" id="cv-hint">
-        Left-drag: Orbit &nbsp;·&nbsp; Right-drag: Pan &nbsp;·&nbsp; Scroll: Zoom &nbsp;·&nbsp; Click: Select
-      </div>
-      <div class="cv-info">
-        Objects: <b id="ocount">0</b> &nbsp;·&nbsp; Mode: <b id="mode-lbl">Orbit</b>
-      </div>
-      <div class="cv-sel" id="cv-sel">Nothing selected</div>
-      <!-- handle overlay rendered by JS -->
-      <div class="handle-overlay" id="handle-overlay"></div>
-    </div>
-
-    <!-- Properties Panel -->
-    <div class="pp">
-      <div class="pp-tabs">
-        <button class="ptab on" onclick="ptab(this,'pt-obj')">Objects</button>
-        <button class="ptab"    onclick="ptab(this,'pt-mat')">Material</button>
-        <button class="ptab"    onclick="ptab(this,'pt-scene')">Scene</button>
-      </div>
-
-      <!-- Objects Tab -->
-      <div class="pp-body" id="pt-obj">
-        <div class="sc" id="sc-card">
-          <div class="sc-em" id="sc-em">🎨</div>
-          <div>
-            <div class="sc-nm" id="sc-nm">Design</div>
-            <div class="sc-ds" id="sc-ds">Add shapes to start building</div>
-          </div>
-        </div>
-
-        <!-- Quick size controls -->
-        <div class="ph">// Quick Size</div>
-        <div style="display:flex;gap:.4rem;margin-bottom:.5rem">
-          <button class="szb big" style="flex:1;padding:.45rem" onclick="scaleStep(1.2)">＋ Bigger</button>
-          <button class="szb sml" style="flex:1;padding:.45rem" onclick="scaleStep(0.8)">－ Smaller</button>
-        </div>
-        <div style="display:flex;gap:.4rem;margin-bottom:.7rem">
-          <button class="szb" style="flex:1;padding:.38rem;border-color:var(--a2);color:var(--a2)" onclick="scaleStep(2)">×2</button>
-          <button class="szb" style="flex:1;padding:.38rem;border-color:var(--muted)" onclick="scaleStep(0.5)">÷2</button>
-          <button class="szb" style="flex:1;padding:.38rem;border-color:var(--border)" onclick="resetScale()">Reset</button>
-        </div>
-        <div class="pr" style="flex-direction:column;align-items:flex-start;gap:.3rem">
-          <span class="pl" style="width:auto">Uniform Scale: <b id="scale-val" style="color:var(--a2)">1.0</b></span>
-          <input type="range" class="size-slider" id="scale-slider" min="0.1" max="5" step="0.05" value="1" oninput="applySlider()"/>
-        </div>
-
-        <!-- Position -->
-        <div class="ph">// Position</div>
-        <div class="pr"><span class="pl">X</span><input class="pi" id="px" type="number" step=".1" value="0" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Y</span><input class="pi" id="py" type="number" step=".1" value="0" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Z</span><input class="pi" id="pz" type="number" step=".1" value="0" oninput="applyTr()"></div>
-        <div class="ph">// Scale</div>
-        <div class="pr"><span class="pl">X</span><input class="pi" id="sx" type="number" step=".05" value="1" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Y</span><input class="pi" id="sy" type="number" step=".05" value="1" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Z</span><input class="pi" id="sz" type="number" step=".05" value="1" oninput="applyTr()"></div>
-        <div class="ph">// Rotation (°)</div>
-        <div class="pr"><span class="pl">X</span><input class="pi" id="rx" type="number" step="5" value="0" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Y</span><input class="pi" id="ry" type="number" step="5" value="0" oninput="applyTr()"></div>
-        <div class="pr"><span class="pl">Z</span><input class="pi" id="rz" type="number" step="5" value="0" oninput="applyTr()"></div>
-
-        <div class="ph">// Objects (<span id="ocount2">0</span>)</div>
-        <ul class="ol" id="olist">
-          <li class="empty-ol"><em>✦</em>Add shapes from the toolbar<br>to start building</li>
-        </ul>
-      </div>
-
-      <!-- Material Tab -->
-      <div class="pp-body" id="pt-mat" style="display:none">
-        <div class="ph">// Color & Surface</div>
-        <div class="pr"><span class="pl">Color</span><input class="cp" type="color" id="mc" value="#4d9fff" oninput="applyMat()"></div>
-        <div class="pr"><span class="pl">Metalness</span><input class="pi" id="mm" type="number" step=".05" min="0" max="1" value=".3" oninput="applyMat()"></div>
-        <div class="pr"><span class="pl">Roughness</span><input class="pi" id="mr" type="number" step=".05" min="0" max="1" value=".4" oninput="applyMat()"></div>
-        <div class="pr"><span class="pl">Opacity</span><input class="pi" id="mop" type="number" step=".05" min="0" max="1" value="1" oninput="applyMat()"></div>
-        <div class="ph">// Material Presets</div>
-        <div class="preset-grid">
-          <button class="preset-btn" onclick="preset('chrome')">🔩 Chrome</button>
-          <button class="preset-btn" onclick="preset('gold')">✨ Gold</button>
-          <button class="preset-btn" onclick="preset('plastic')">🔴 Plastic</button>
-          <button class="preset-btn" onclick="preset('glass')">🔵 Glass</button>
-          <button class="preset-btn" onclick="preset('rubber')">⚫ Rubber</button>
-          <button class="preset-btn" onclick="preset('wood')">🪵 Wood</button>
-          <button class="preset-btn" onclick="preset('carbon')">◼ Carbon</button>
-          <button class="preset-btn" onclick="preset('neon')">💚 Neon</button>
-          <button class="preset-btn" onclick="preset('copper')">🟤 Copper</button>
-          <button class="preset-btn" onclick="preset('ice')">🩵 Ice</button>
-        </div>
-        <div class="ph" style="margin-top:.8rem">// Apply To</div>
-        <button class="tb c2" style="width:100%;padding:.45rem" onclick="applyAll()">Apply to ALL objects</button>
-      </div>
-
-      <!-- Scene Tab -->
-      <div class="pp-body" id="pt-scene" style="display:none">
-        <div class="ph">// Display</div>
-        <div class="srow"><span class="slabel">Grid</span><div class="tog on" id="tog-grid" onclick="toggleGrid()"></div></div>
-        <div class="srow"><span class="slabel">Shadows</span><div class="tog on" id="tog-shad" onclick="toggleShad()"></div></div>
-        <div class="srow"><span class="slabel">Fog</span><div class="tog on" id="tog-fog"  onclick="toggleFog()"></div></div>
-        <div class="srow"><span class="slabel">Wireframe</span><div class="tog" id="tog-wire" onclick="toggleWire()"></div></div>
-        <div class="ph">// Lighting</div>
-        <div class="pr"><span class="pl" style="width:62px">Ambient</span><input class="pi" id="amb" type="number" step=".05" min="0" max="2" value=".4" oninput="applyLight()"></div>
-        <div class="pr"><span class="pl" style="width:62px">Sun</span><input class="pi" id="sun" type="number" step=".05" min="0" max="3" value="1.2" oninput="applyLight()"></div>
-        <div class="ph">// Background</div>
-        <div class="preset-grid">
-          <button class="preset-btn" onclick="setBg(0x07070e)">🌑 Dark</button>
-          <button class="preset-btn" onclick="setBg(0x000814)">🌃 Midnight</button>
-          <button class="preset-btn" onclick="setBg(0x1a1a2e)">🌆 Studio</button>
-          <button class="preset-btn" onclick="setBg(0x020209)">🌌 Space</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ GALLERY ══════ -->
-<div id="s-gallery" class="screen">
-  <div class="s-tag">// My Designs</div>
-  <div class="s-title">SAVED DESIGNS</div>
-  <div class="gg" id="gg">
-    <div class="gEmpty"><em>🎨</em><strong>NO DESIGNS YET</strong>Create and save your first design to see it here.</div>
-  </div>
-</div>
-
-<!-- ══════ SAVE MODAL ══════ -->
-<div class="ov" id="save-ov">
-  <div class="modal">
-    <div class="modal-em">💾</div>
-    <div class="modal-t">SAVE YOUR DESIGN</div>
-    <div class="modal-sub">Name your creation and save it</div>
-    <div class="fg"><label class="fl">Design Name</label><input class="fi" id="s-name" placeholder="e.g. Sports Car Model v1"></div>
-    <div class="fg"><label class="fl">Category</label><select class="fs" id="s-cat"></select></div>
-    <div class="fg"><label class="fl">Description</label><textarea class="ft" id="s-desc" placeholder="What did you design?"></textarea></div>
-    <div class="fg">
-      <div class="trow">
-        <label class="fl" style="margin:0">Share Publicly</label>
-        <div class="stgl" id="pub-tgl" onclick="this.classList.toggle('on')"></div>
-      </div>
-    </div>
-    <div class="ma">
-      <button class="btn btn-o" onclick="closeSave()">Cancel</button>
-      <button class="btn btn-g" onclick="doSave()">✅ Save Design</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══════ SUCCESS ══════ -->
-<div id="success-ov">
-  <div class="suc-box">
-    <div class="suc-em">🎉</div>
-    <div class="suc-t">DESIGN SAVED!</div>
-    <div class="suc-sub">Your design has been saved to the gallery.</div>
-    <div class="suc-preview" id="suc-preview"></div>
-    <div class="suc-acts">
-      <button class="btn btn-o" onclick="closeSuc();goTo('picker')">← New Design</button>
-      <button class="btn btn-r" onclick="closeSuc()">Continue Editing</button>
-      <button class="btn btn-c" onclick="closeSuc();goTo('gallery')">View Gallery →</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-'use strict';
-
-/* ══════════════════════════════════════
-   AUTH
-══════════════════════════════════════ */
-const USERS = []; // in-memory user store
-let curUser = null;
-let selAvatar = '🧑‍💻';
-
-function authTab(t) {
-  document.querySelectorAll('.auth-tab').forEach((b,i)=>b.classList.toggle('on',i===(t==='signup'?0:1)));
-  document.getElementById('ap-signup').classList.toggle('on', t==='signup');
-  document.getElementById('ap-login').classList.toggle('on',  t==='login');
-  clearAuthErr();
-}
-
-function pickAv(el) {
-  document.querySelectorAll('.av').forEach(a=>a.classList.remove('on'));
-  el.classList.add('on');
-  selAvatar = el.dataset.av;
-}
-
-function clearAuthErr() {
-  document.getElementById('su-err').textContent = '';
-  document.getElementById('li-err').textContent = '';
-}
-
-function checkPwStrength() {
-  const pw = document.getElementById('su-pw').value;
-  const bar = document.getElementById('pw-bar');
-  const lbl = document.getElementById('pw-label');
-  let score = 0;
-  if (pw.length >= 6) score++;
-  if (pw.length >= 10) score++;
-  if (/[A-Z]/.test(pw)) score++;
-  if (/[0-9]/.test(pw)) score++;
-  if (/[^A-Za-z0-9]/.test(pw)) score++;
-  const colors = ['#ff3c00','#ff8c00','#ffd200','#a0e040','#00e676'];
-  const labels = ['Too short','Weak','Fair','Good','Strong'];
-  const pct    = Math.min(score / 5 * 100, 100);
-  bar.style.width = pct + '%';
-  bar.style.background = colors[Math.min(score-1, 4)] || '#ff3c00';
-  lbl.textContent = pw.length === 0 ? 'Enter a password' : labels[Math.min(score-1, 4)] || labels[0];
-  lbl.style.color = colors[Math.min(score-1, 4)] || 'var(--muted)';
-}
-
-function doSignUp() {
-  const name  = document.getElementById('su-name').value.trim();
-  const email = document.getElementById('su-email').value.trim().toLowerCase();
-  const pw    = document.getElementById('su-pw').value;
-  const pw2   = document.getElementById('su-pw2').value;
-  const err   = document.getElementById('su-err');
-
-  if (!name)             { err.textContent='Please enter your name.'; return; }
-  if (!email||!email.includes('@')) { err.textContent='Please enter a valid email.'; return; }
-  if (pw.length < 6)    { err.textContent='Password must be at least 6 characters.'; return; }
-  if (pw !== pw2)        { err.textContent='Passwords do not match.'; return; }
-  if (USERS.find(u=>u.email===email)) { err.textContent='An account with this email already exists.'; return; }
-
-  const user = { name, email, pw, avatar: selAvatar };
-  USERS.push(user);
-  loginAs(user);
-}
-
-function doLogin() {
-  const email = document.getElementById('li-email').value.trim().toLowerCase();
-  const pw    = document.getElementById('li-pw').value;
-  const err   = document.getElementById('li-err');
-
-  if (!email) { err.textContent='Please enter your email.'; return; }
-  if (!pw)    { err.textContent='Please enter your password.'; return; }
-
-  const user = USERS.find(u=>u.email===email && u.pw===pw);
-  if (!user)  { err.textContent='Incorrect email or password.'; return; }
-  loginAs(user);
-}
-
-function demoLogin() {
-  const demo = { name:'Demo User', email:'demo@designforge.app', pw:'demo', avatar:'🚀' };
-  if (!USERS.find(u=>u.email===demo.email)) USERS.push(demo);
-  loginAs(demo);
-}
-
-function loginAs(user) {
-  curUser = user;
-  document.getElementById('auth-gate').classList.add('hide');
-  document.getElementById('user-av').textContent   = user.avatar;
-  document.getElementById('user-name').textContent = user.name.split(' ')[0];
-  toast('Welcome, ' + user.name.split(' ')[0] + '! 🎉', 'ok');
-}
-
-function signOut() {
-  if (!confirm('Sign out of DesignForge?')) return;
-  curUser = null;
-  document.getElementById('auth-gate').classList.remove('hide');
-  goTo('hero');
-}
-
-/* ══════════════════════════════════════
-   CATALOG DATA
-══════════════════════════════════════ */
-const CATALOG=[
-  {id:'vehicles',label:'Vehicles',icon:'🚗',color:'#FF4D4D',items:[
-    {id:'car',name:'Car / Sedan',em:'🚗',desc:'Body, chassis, interior',badge:'hot'},
-    {id:'supercar',name:'Supercar',em:'🏎️',desc:'Aerodynamic performance build',badge:'hot'},
-    {id:'suv',name:'SUV / Truck',em:'🛻',desc:'Large body, off-road builds',badge:''},
-    {id:'motorcycle',name:'Motorcycle',em:'🏍️',desc:'Frame, engine, fairings',badge:''},
-    {id:'bicycle',name:'Bicycle',em:'🚲',desc:'Frame geometry & components',badge:''},
-    {id:'boat',name:'Boat / Yacht',em:'⛵',desc:'Hull, deck, cabin layout',badge:''},
-    {id:'aircraft',name:'Aircraft',em:'✈️',desc:'Fuselage, wings, tail',badge:'pro'},
-    {id:'spaceship',name:'Spacecraft',em:'🚀',desc:'Capsule, propulsion, payload',badge:'pro'},
-  ]},
-  {id:'electronics',label:'Electronics',icon:'⚡',color:'#FFD700',items:[
-    {id:'smartphone',name:'Smartphone',em:'📱',desc:'Body, screen, port layout',badge:'hot'},
-    {id:'laptop',name:'Laptop',em:'💻',desc:'Chassis, keyboard, hinge',badge:'hot'},
-    {id:'drone',name:'Drone',em:'🚁',desc:'Frame, motors, payload bay',badge:'new'},
-    {id:'robot',name:'Robot / Bot',em:'🤖',desc:'Joints, chassis, actuators',badge:'new'},
-    {id:'pcb',name:'PCB Board',em:'🔌',desc:'Circuit layout, components',badge:'pro'},
-    {id:'smartwatch',name:'Smartwatch',em:'⌚',desc:'Case, band, display face',badge:''},
-    {id:'speaker',name:'Speaker / Audio',em:'🔊',desc:'Enclosure, driver, port',badge:''},
-    {id:'camera',name:'Camera Body',em:'📷',desc:'Body, lens mount, ergonomics',badge:''},
-  ]},
-  {id:'architecture',label:'Architecture',icon:'🏛️',color:'#50C878',items:[
-    {id:'house',name:'House / Villa',em:'🏠',desc:'Floor plan, facade, roof',badge:'hot'},
-    {id:'interior',name:'Interior Space',em:'🪴',desc:'Room layout, furniture, light',badge:'hot'},
-    {id:'skyscraper',name:'Skyscraper',em:'🏙️',desc:'Tower structure & facade',badge:'pro'},
-    {id:'bridge',name:'Bridge',em:'🌉',desc:'Span, supports, road deck',badge:''},
-    {id:'stadium',name:'Stadium / Arena',em:'🏟️',desc:'Seating, roof, field layout',badge:'pro'},
-    {id:'temple',name:'Temple / Monument',em:'🕌',desc:'Columns, dome, ornaments',badge:''},
-  ]},
-  {id:'3dprint',label:'3D Printing',icon:'🖨️',color:'#4D9FFF',items:[
-    {id:'figurine',name:'Figurine / Statue',em:'🗿',desc:'Sculpted character & base',badge:'hot'},
-    {id:'miniature',name:'Miniature Model',em:'🏰',desc:'Scale replica for display',badge:'hot'},
-    {id:'enclosure',name:'Device Enclosure',em:'📦',desc:'Snap-fit box, lid, cutouts',badge:''},
-    {id:'prosthetic',name:'Prosthetic Part',em:'🦾',desc:'Medical-grade limb component',badge:'new'},
-    {id:'art3d',name:'Abstract Art Piece',em:'🎨',desc:'Freeform sculptural object',badge:'new'},
-    {id:'tooling',name:'Jig / Fixture',em:'🔧',desc:'Alignment & assembly tool',badge:''},
-  ]},
-  {id:'furniture',label:'Furniture',icon:'🪑',color:'#FF8C42',items:[
-    {id:'chair',name:'Chair / Seat',em:'🪑',desc:'Frame, cushion, ergonomics',badge:''},
-    {id:'table',name:'Table / Desk',em:'🗄️',desc:'Top, legs, joinery details',badge:''},
-    {id:'shelf',name:'Shelf / Storage',em:'📚',desc:'Modular shelving system',badge:'hot'},
-    {id:'sofa',name:'Sofa / Couch',em:'🛋️',desc:'Frame, foam, upholstery form',badge:''},
-    {id:'lamp',name:'Lamp / Lighting',em:'💡',desc:'Base, shade, mounting',badge:'new'},
-    {id:'kitchen',name:'Kitchen Unit',em:'🍳',desc:'Cabinets, countertop, layout',badge:''},
-  ]},
-  {id:'industrial',label:'Industrial',icon:'⚙️',color:'#A0A0B8',items:[
-    {id:'engine',name:'Engine / Motor',em:'🔩',desc:'Block, pistons, crankshaft',badge:'pro'},
-    {id:'gear',name:'Gear / Mechanism',em:'⚙️',desc:'Spur, helical, planetary gears',badge:''},
-    {id:'turbine',name:'Turbine Blade',em:'🌀',desc:'Aerofoil profile, root, tip',badge:'pro'},
-    {id:'mold',name:'Injection Mold',em:'🏭',desc:'Core, cavity, runner system',badge:'pro'},
-    {id:'bracket',name:'Bracket / Mount',em:'📐',desc:'Structural support component',badge:''},
-    {id:'tank',name:'Storage Tank',em:'🛢️',desc:'Shell, nozzle, support legs',badge:''},
-  ]},
-  {id:'fashion',label:'Fashion',icon:'👟',color:'#FF69B4',items:[
-    {id:'shoe',name:'Shoe / Sneaker',em:'👟',desc:'Last, sole, upper structure',badge:'hot'},
-    {id:'helmet',name:'Helmet',em:'⛑️',desc:'Shell, liner, visor mount',badge:''},
-    {id:'glasses',name:'Eyewear Frame',em:'👓',desc:'Front, temples, bridge',badge:'new'},
-    {id:'bag',name:'Bag / Backpack',em:'🎒',desc:'Shell, compartments, straps',badge:''},
-    {id:'watchcase',name:'Watch Case',em:'🕰️',desc:'Case, bezel, lugs, crown',badge:''},
-  ]},
-  {id:'aerospace',label:'Aerospace',icon:'🛸',color:'#BF5FFF',items:[
-    {id:'rocket2',name:'Rocket / Launch',em:'🚀',desc:'Stage, nozzle, fairing',badge:'pro'},
-    {id:'satellite',name:'Satellite',em:'🛰️',desc:'Bus, solar panels, antenna',badge:'pro'},
-    {id:'uav',name:'UAV / Fixed Wing',em:'✈️',desc:'Wing, fuselage, payload pod',badge:'new'},
-    {id:'spacesuit',name:'Space Suit',em:'👨‍🚀',desc:'Suit layers, helmet, PLSS',badge:'pro'},
-  ]},
-  {id:'medical',label:'Medical',icon:'🏥',color:'#00CED1',items:[
-    {id:'implant',name:'Implant / Device',em:'🦴',desc:'Bone scaffold, lattice struct',badge:'pro'},
-    {id:'organ',name:'Organ Model',em:'🫀',desc:'Anatomical replica, education',badge:'new'},
-    {id:'brace',name:'Orthopaedic Brace',em:'🦿',desc:'Custom-fit support shell',badge:'new'},
-    {id:'surgical',name:'Surgical Tool',em:'🔬',desc:'Handle, tip, grip geometry',badge:'pro'},
-  ]},
-  {id:'art',label:'Art & Sculpture',icon:'🎨',color:'#FF8C42',items:[
-    {id:'sculpture',name:'Sculpture',em:'🗽',desc:'Abstract or figurative form',badge:''},
-    {id:'trophy',name:'Trophy / Award',em:'🏆',desc:'Base, stem, topper form',badge:'hot'},
-    {id:'coin',name:'Coin / Medal',em:'🥇',desc:'Relief artwork, edge detail',badge:''},
-    {id:'install',name:'Art Installation',em:'🖼️',desc:'Large-scale interactive piece',badge:'new'},
-  ]},
-];
-
-const POPULAR=[
-  {em:'🏎️',name:'Supercar',catId:'vehicles',id:'supercar'},
-  {em:'📱',name:'Smartphone',catId:'electronics',id:'smartphone'},
-  {em:'🏠',name:'House',catId:'architecture',id:'house'},
-  {em:'🤖',name:'Robot',catId:'electronics',id:'robot'},
-  {em:'👟',name:'Sneaker',catId:'fashion',id:'shoe'},
-  {em:'🚀',name:'Rocket',catId:'aerospace',id:'rocket2'},
-  {em:'🏆',name:'Trophy',catId:'art',id:'trophy'},
-  {em:'⚙️',name:'Gear',catId:'industrial',id:'gear'},
-  {em:'🦾',name:'Prosthetic',catId:'3dprint',id:'prosthetic'},
-  {em:'🛰️',name:'Satellite',catId:'aerospace',id:'satellite'},
-];
-
-const FILTERS=['All','Vehicles','Electronics','Architecture','3D Printing','Furniture','Industrial','Fashion','Aerospace','Medical','Art'];
-const FMAP={All:'',Vehicles:'vehicles',Electronics:'electronics',Architecture:'architecture','3D Printing':'3dprint',Furniture:'furniture',Industrial:'industrial',Fashion:'fashion',Aerospace:'aerospace',Medical:'medical',Art:'art'};
-
-const PRESETS={
-  chrome:{color:'#c8d0d8',metalness:1,roughness:.05,opacity:1},
-  gold:  {color:'#ffd700',metalness:1,roughness:.15,opacity:1},
-  plastic:{color:'#ee4444',metalness:0,roughness:.6,opacity:1},
-  glass: {color:'#aaddff',metalness:0,roughness:0,opacity:.28},
-  rubber:{color:'#222233',metalness:0,roughness:.95,opacity:1},
-  wood:  {color:'#8B5E3C',metalness:0,roughness:.85,opacity:1},
-  carbon:{color:'#1a1a22',metalness:.4,roughness:.3,opacity:1},
-  neon:  {color:'#00ffcc',metalness:0,roughness:.4,opacity:1},
-  copper:{color:'#b87333',metalness:.9,roughness:.25,opacity:1},
-  ice:   {color:'#cce8ff',metalness:0,roughness:.08,opacity:.6},
-};
-
-/* ══════════════════════════════════════
-   APP STATE
-══════════════════════════════════════ */
-let curFilter='All', curSubject=null, saves=[], saveCount=0;
-let threeOk=false;
-let scene,camera,renderer,gridMesh,floorMesh,ambL,sunL;
-let objs=[],selObj=null,wireMode=false,colorIdx=0;
-let fogOn=true,shadowOn=true,gridOn=true;
-let moveMode=false;
-
-const CAM={theta:.72,phi:.62,r:11,tx:0,ty:0,tz:0};
-const MO={down:false,pan:false,x:0,y:0};
-let tDist=0;
-const COLORS=['#4d9fff','#ff4d4d','#50c878','#ffd700','#ff8c42','#bf5fff','#00ced1','#ff3c00','#ffffff','#f0a500'];
-
-// Drag-to-move state
-let isDraggingObj=false;
-let dragPlane=null, dragOffset=null;
-const raycaster=new THREE.Raycaster();
-const tmpMouse=new THREE.Vector2();
-
-/* ══════════════════════════════════════
-   NAV
-══════════════════════════════════════ */
-function goTo(name){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  document.getElementById('s-'+name).classList.add('on');
-  if(name==='sheet') initThree();
-  if(name==='gallery') renderGallery();
-}
-
-/* ══════════════════════════════════════
-   PICKER
-══════════════════════════════════════ */
-function buildPicker(){
-  document.getElementById('ftabs').innerHTML=FILTERS.map(f=>
-    `<button class="ftab${f===curFilter?' on':''}" onclick="setFilter(this,'${f}')">${f}</button>`
-  ).join('');
-  document.getElementById('s-cat').innerHTML=CATALOG.map(c=>
-    `<option value="${c.id}">${c.icon} ${c.label}</option>`
-  ).join('');
-  renderPicker();
-}
-
-function setFilter(btn,f){
-  curFilter=f;
-  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('on'));
-  btn.classList.add('on');
-  renderPicker();
-}
-
-function renderPicker(){
-  const q=(document.getElementById('srch-input').value||'').toLowerCase().trim();
-  const tid=FMAP[curFilter]||'';
-  let html='',total=0;
-  if(!q&&curFilter==='All'){
-    html+=`<div style="font-family:var(--fm);font-size:.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem">⚡ Popular picks</div>
-    <div class="pop-row">${POPULAR.map(p=>`<div class="pop-chip" data-c="${p.catId}" data-i="${p.id}">${p.em} ${p.name}</div>`).join('')}</div>`;
-  }
-  CATALOG.forEach(sec=>{
-    if(tid&&sec.id!==tid) return;
-    const items=sec.items.filter(it=>!q||(it.name+' '+it.desc+' '+sec.label).toLowerCase().includes(q));
-    if(!items.length) return;
-    total+=items.length;
-    html+=`<div class="shd" style="color:${sec.color}">${sec.icon} ${sec.label.toUpperCase()}</div><div class="igrid">`;
-    items.forEach(it=>{
-      const b=it.badge==='hot'?`<span class="badge bh">🔥 Popular</span>`:it.badge==='new'?`<span class="badge bn">✨ New</span>`:it.badge==='pro'?`<span class="badge bp">⭐ Pro</span>`:'';
-      html+=`<div class="di" data-c="${sec.id}" data-i="${it.id}"
-        onmouseenter="this.style.borderColor='${sec.color}'"
-        onmouseleave="this.style.borderColor='transparent'">
-        <div class="di-glow" style="background:${sec.color}14"></div>
-        <div class="di-em">${it.em}</div><div class="di-nm">${it.name}</div>
-        <div class="di-ds">${it.desc}</div>${b}</div>`;
-    });
-    html+=`</div>`;
-  });
-  if(!total) html=`<div class="no-res"><div class="no-res-em">🤔</div><div class="no-res-t">NOTHING FOUND</div><div>Try a different keyword.</div></div>`;
-  const body=document.getElementById('pk-body');
-  body.innerHTML=html;
-  body.querySelectorAll('.di,.pop-chip').forEach(el=>el.addEventListener('click',()=>selectItem(el.dataset.c,el.dataset.i)));
-}
-
-function selectItem(catId,itemId){
-  const cat=CATALOG.find(c=>c.id===catId); if(!cat) return;
-  const item=cat.items.find(i=>i.id===itemId); if(!item) return;
-  curSubject={...item,catId,catColor:cat.color,catLabel:cat.label};
-  g('sh-em').textContent=item.em; g('sh-nm').textContent=item.name; g('sh-cat').textContent=cat.label.toUpperCase();
-  g('cv-wm').textContent=item.name; g('s-name').value=item.name+' Design'; g('s-cat').value=catId;
-  g('sc-em').textContent=item.em; g('sc-nm').textContent=item.name; g('sc-ds').textContent=item.desc;
-  goTo('sheet');
-  toast('Workspace opened for '+item.name,'inf');
-}
-
-/* ══════════════════════════════════════
-   THREE.JS INIT
-══════════════════════════════════════ */
-function initThree(){
-  if(threeOk){updateCam();return;}
-  threeOk=true;
-  const wrap=document.getElementById('cvwrap');
-  const cv=document.getElementById('cv');
-  scene=new THREE.Scene();
-  scene.background=new THREE.Color(0x07070e);
-  scene.fog=new THREE.FogExp2(0x07070e,.016);
-  camera=new THREE.PerspectiveCamera(45,wrap.clientWidth/wrap.clientHeight,.1,200);
-  renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,preserveDrawingBuffer:true});
-  renderer.setSize(wrap.clientWidth,wrap.clientHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-  renderer.shadowMap.enabled=true;
-  renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-  renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1.2;
-  ambL=new THREE.AmbientLight(0xffffff,.4); scene.add(ambL);
-  sunL=new THREE.DirectionalLight(0xffffff,1.2);
-  sunL.position.set(8,14,6);sunL.castShadow=true;
-  sunL.shadow.mapSize.set(2048,2048);
-  sunL.shadow.camera.near=.1;sunL.shadow.camera.far=60;
-  sunL.shadow.camera.left=sunL.shadow.camera.bottom=-15;
-  sunL.shadow.camera.right=sunL.shadow.camera.top=15;
-  scene.add(sunL);
-  const fl2=new THREE.DirectionalLight(0x00d4ff,.26);fl2.position.set(-6,-2,-5);scene.add(fl2);
-  const rl=new THREE.DirectionalLight(0xff3c00,.16);rl.position.set(0,-6,5);scene.add(rl);
-  gridMesh=new THREE.GridHelper(24,24,0x252535,0x191926);scene.add(gridMesh);
-  floorMesh=new THREE.Mesh(
-    new THREE.PlaneGeometry(24,24),
-    new THREE.MeshStandardMaterial({color:0x0b0b13,roughness:.9,metalness:.1})
-  );
-  floorMesh.rotation.x=-Math.PI/2;floorMesh.receiveShadow=true;scene.add(floorMesh);
-  updateCam();
-  cv.addEventListener('mousedown',onMD);
-  cv.addEventListener('mousemove',onMM);
-  cv.addEventListener('mouseup',onMU);
-  cv.addEventListener('wheel',onWH,{passive:false});
-  cv.addEventListener('contextmenu',e=>e.preventDefault());
-  cv.addEventListener('touchstart',onTS,{passive:false});
-  cv.addEventListener('touchmove',onTM,{passive:false});
-  cv.addEventListener('touchend',onTU,{passive:false});
-  window.addEventListener('resize',()=>{
-    camera.aspect=wrap.clientWidth/wrap.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(wrap.clientWidth,wrap.clientHeight);
-    updateHandles();
-  });
-  (function loop(){requestAnimationFrame(loop);renderer.render(scene,camera);updateHandles();})();
-}
-
-/* ══════════════════════════════════════
-   CAMERA
-══════════════════════════════════════ */
-function updateCam(){
-  const x=CAM.r*Math.sin(CAM.phi)*Math.sin(CAM.theta);
-  const y=CAM.r*Math.cos(CAM.phi);
-  const z=CAM.r*Math.sin(CAM.phi)*Math.cos(CAM.theta);
-  camera.position.set(CAM.tx+x,CAM.ty+y,CAM.tz+z);
-  camera.lookAt(CAM.tx,CAM.ty,CAM.tz);
-}
-
-function camPreset(n){
-  const P={front:{theta:0,phi:Math.PI/2},top:{theta:0,phi:.01},side:{theta:Math.PI/2,phi:Math.PI/2},iso:{theta:Math.PI/4,phi:Math.PI/4}};
-  const p=P[n]||P.iso;CAM.theta=p.theta;CAM.phi=p.phi;updateCam();
-}
-function resetCam(){CAM.theta=.72;CAM.phi=.62;CAM.r=11;CAM.tx=0;CAM.ty=0;CAM.tz=0;updateCam();}
-
-/* ══════════════════════════════════════
-   MOUSE / TOUCH EVENTS
-══════════════════════════════════════ */
-function getCanvasPos(e){
-  const cv=document.getElementById('cv'),rect=cv.getBoundingClientRect();
-  return {
-    x:((e.clientX-rect.left)/rect.width)*2-1,
-    y:-((e.clientY-rect.top)/rect.height)*2+1,
-  };
-}
-
-function onMD(e){
-  const pos=getCanvasPos(e);
-  tmpMouse.set(pos.x,pos.y);
-
-  if(e.button===2){MO.down=true;MO.pan=true;MO.x=e.clientX;MO.y=e.clientY;return;}
-
-  // Move mode: drag selected object
-  if(moveMode && selObj && e.button===0){
-    raycaster.setFromCamera(tmpMouse,camera);
-    // drag plane at object's Y
-    dragPlane=new THREE.Plane(new THREE.Vector3(0,1,0),-selObj.position.y);
-    const pt=new THREE.Vector3();
-    if(raycaster.ray.intersectPlane(dragPlane,pt)){
-      dragOffset=pt.clone().sub(selObj.position);
-      isDraggingObj=true;
-      document.getElementById('cvwrap').style.cursor='grabbing';
-    }
-    return;
-  }
-
-  if(e.button===0){MO.down=true;MO.pan=false;MO.x=e.clientX;MO.y=e.clientY;pick(e);}
-}
-
-function onMM(e){
-  // Dragging object in move mode
-  if(isDraggingObj&&selObj){
-    const pos=getCanvasPos(e);
-    tmpMouse.set(pos.x,pos.y);
-    raycaster.setFromCamera(tmpMouse,camera);
-    const pt=new THREE.Vector3();
-    if(raycaster.ray.intersectPlane(dragPlane,pt)){
-      selObj.position.copy(pt.sub(dragOffset));
-      updatePropsFromSel();
-      updateHandles();
-    }
-    return;
-  }
-
-  if(!MO.down) return;
-  const dx=e.clientX-MO.x,dy=e.clientY-MO.y;
-  if(MO.pan){
-    const sp=.005*CAM.r,r=new THREE.Vector3();
-    r.crossVectors(camera.getWorldDirection(new THREE.Vector3()),camera.up).normalize();
-    CAM.tx-=r.x*dx*sp;CAM.tz-=r.z*dx*sp;CAM.ty+=dy*sp;
-  }else{
-    CAM.theta-=dx*.007;
-    CAM.phi=Math.max(.05,Math.min(Math.PI-.05,CAM.phi-dy*.007));
-  }
-  updateCam();MO.x=e.clientX;MO.y=e.clientY;
-}
-
-function onMU(){
-  MO.down=false;MO.pan=false;
-  if(isDraggingObj){
-    isDraggingObj=false;
-    dragPlane=null;dragOffset=null;
-    document.getElementById('c
+  <di
